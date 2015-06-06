@@ -34,7 +34,7 @@ module Swagger
     def to_swagger
       {
           name: @name,
-          url: @url.url,
+          url: @url.to_swagger,
           email: @email
       }
     end

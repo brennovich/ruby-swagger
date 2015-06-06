@@ -18,5 +18,9 @@ module Swagger::Data
       false
     end
 
+    def to_swagger
+      url
+    end
+
   end
 end
