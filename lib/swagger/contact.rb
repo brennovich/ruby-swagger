@@ -58,6 +58,8 @@ module Swagger
       self
     end
 
+    private
+
     def validate_url!
       raise (ArgumentError.new('contact url is invalid')) unless @url.valid?
     end
