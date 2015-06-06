@@ -4,7 +4,18 @@ require 'swagger/data/url'
 
 module Swagger
   class Contact
+
+    DEFAULT_NAME = 'John Doe'
+    DEFAULT_EMAIL = 'john.doe@example.com'
+    DEFAULT_URL = 'https://google.com/?q=john%20doe'
+
     attr_accessor :name, :email
+
+    def initialize
+      @name = DEFAULT_NAME
+      @email = DEFAULT_EMAIL
+      @url = Swagger::Data::Url.new DEFAULT_URL
+    end
 
     def self.parse(contact)
       raise (ArgumentError.new('contact object is nil')) unless contact
