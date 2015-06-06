@@ -10,6 +10,8 @@ This is the engine used in other gems to translate API definitions (grape, rails
   s.files     = `git ls-files | grep lib`.split("\n")
   s.license   = 'MIT'
 
+  s.add_dependency 'addressable'
+
  # s.add_dependency 'nokogiri', '>= 1.5.5'
  # s.add_dependency "httparty", ">= 0.9.0"
 #  s.add_dependency 'feed-normalizer', ">= 1.5.2"

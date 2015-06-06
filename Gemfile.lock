@@ -2,10 +2,12 @@ PATH
   remote: .
   specs:
     ruby-swagger (0.0.1)
+      addressable
 
 GEM
   remote: https://rubygems.org/
   specs:
+    addressable (2.3.8)
     diff-lcs (1.2.5)
     rake (10.4.2)
     rspec (3.2.0)
