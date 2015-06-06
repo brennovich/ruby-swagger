@@ -1,0 +1,17 @@
+PATH
+  remote: .
+  specs:
+    ruby-swagger ()
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  ruby-swagger!
+
+BUNDLED WITH
+   1.10.0.rc
