@@ -1,19 +1,37 @@
+require 'swagger/data/url'
+
 module Swagger
   class License  #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#license-object
 
     DEFAULT_NAME = 'Apache 2.0'
     DEFAULT_URL = 'http://www.apache.org/licenses/LICENSE-2.0.html'
 
-    attr_accessor :name
+    attr_reader :name
 
     def initialize
       @name = DEFAULT_NAME
-      @url = Swagger::Data::URL.new(DEFAULT_URL)
+      @url = Swagger::Data::Url.new(DEFAULT_URL)
+    end
+
+    def self.parse(license)
+      raise (ArgumentError.new('license object is nil')) unless license
+
+      l = Swagger::License.new
+      l.name = license['name']
+      l.url = license['url']
+
+      l
+    end
+
+    def name=(new_name)
+      raise (ArgumentError.new("license name is invalid [#{name_desc}]")) if new_name.nil? || new_name.empty?
+      @name = new_name
     end
 
     def url=(url)
       @url = Swagger::Data::Url.new(url)
       validate_url!
+      @url
     end
 
     def url
@@ -37,6 +55,20 @@ module Swagger
           name: @name,
           url: @url.to_swagger
       }
+    end
+
+    def name_desc
+      'Swagger::Licence#desc - Required. The license name used for the API. See https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#fixed-fields-3'
+    end
+
+    def url_desc
+      'Swagger::Licence#url - A URL to the license used for the API. MUST be in the format of a URL. See https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#fixed-fields-3'
+    end
+
+    private
+
+    def validate_url!
+      raise (ArgumentError.new("contact url is invalid [#{url_desc}]")) unless @url.valid?
     end
 
   end
