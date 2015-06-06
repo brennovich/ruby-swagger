@@ -1,15 +1,16 @@
 require 'json'
 require 'yaml'
 require 'swagger/data/url'
+require 'swagger/object'
 
 module Swagger
-  class Contact
+  class Contact < Swagger::Object
 
     DEFAULT_NAME = 'John Doe'
     DEFAULT_EMAIL = 'john.doe@example.com'
     DEFAULT_URL = 'https://google.com/?q=john%20doe'
 
-    attr_accessor :name, :email
+    attr_swagger :name, :email, :url
 
     def initialize
       @name = DEFAULT_NAME
@@ -20,23 +21,12 @@ module Swagger
     def self.parse(contact)
       raise (ArgumentError.new("contact object is nil [#{Swagger::Contact._desc}]")) unless contact
 
-      Swagger::Contact.new._init(contact['name'], contact['url'], contact['email'])
-    end
+      c = Swagger::Contact.new
 
-    def to_json
-      to_swagger.to_json
-    end
+      c.name, c.url, c.email = contact['name'], contact['url'], contact['email']
+      c.validate_url!
 
-    def to_yaml
-      to_swagger.to_yaml
-    end
-
-    def to_swagger
-      {
-          name: @name,
-          url: @url.to_swagger,
-          email: @email
-      }
+      c
     end
 
     def url=(url)
@@ -48,14 +38,8 @@ module Swagger
       @url.url
     end
 
-    def _init(name, url, email)
-      @name = name
-      @url = Swagger::Data::Url.new(url)
-      @email = email
-
-      validate_url!
-
-      self
+    def valid?
+      true
     end
 
     def self._desc
@@ -73,8 +57,6 @@ module Swagger
     def self.email_desc
       'Swagger::Contact#name - The email address of the contact person/organization. MUST be in the format of an email address. See https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#fixed-fields-3'
     end
-
-    private
 
     def validate_url!
       raise (ArgumentError.new("contact url is invalid [#{Swagger::Contact.url_desc}]")) unless @url.valid?

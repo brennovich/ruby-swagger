@@ -1,12 +1,13 @@
 require 'swagger/data/url'
+require 'swagger/object'
 
 module Swagger
-  class License  #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#license-object
+  class License < Swagger::Object #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#license-object
 
     DEFAULT_NAME = 'Apache 2.0'
     DEFAULT_URL = 'http://www.apache.org/licenses/LICENSE-2.0.html'
 
-    attr_reader :name
+    attr_swagger :name, :url
 
     def initialize
       @name = DEFAULT_NAME
@@ -40,21 +41,6 @@ module Swagger
 
     def valid?
       @url.valid?
-    end
-
-    def to_json
-      to_swagger.to_json
-    end
-
-    def to_yaml
-      to_swagger.to_yaml
-    end
-
-    def to_swagger
-      {
-          name: @name,
-          url: @url.to_swagger
-      }
     end
 
     def self._desc
