@@ -27,7 +27,7 @@ module Swagger
 
       @@swagger_attribs[self.class.to_s].each do |property|
         obj = self.send(property)
-        obj.to_swagger if obj.respond_to?(:to_swagger)
+        obj = obj.to_swagger if obj.respond_to?(:to_swagger)
 
         swagger[property] = obj if !obj.nil?
       end
