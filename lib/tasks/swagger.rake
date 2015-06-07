@@ -17,15 +17,15 @@ namespace :swagger do
       puts "You should check your swagger meta documentation under #{Swagger::IO::FileSystem.default_path}"
     end
 
-    desc 'Generate a swagger 2.0-compatible documentation from the metadata stored into doc/swagger'
-    task :compile_doc do
-      puts "Compiling documentation"
+  end
 
-      Swagger::IO::FileSystem.new(Swagger::IO::FileSystem.read).compile!
+  desc 'Generate a swagger 2.0-compatible documentation from the metadata stored into doc/swagger'
+  task :compile_doc do
+    puts "Compiling documentation"
 
-      puts "Done. Your documentation file is #{Swagger::IO::FileSystem.default_path}swagger.json"
-    end
+    Swagger::IO::FileSystem.new(Swagger::IO::FileSystem.read).compile!
 
+    puts "Done. Your documentation file is #{Swagger::IO::FileSystem.default_path}swagger.json"
   end
 
 end
