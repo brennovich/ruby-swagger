@@ -6,7 +6,7 @@ module Swagger
   class Info < Swagger::Object  #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#info-object
 
     DEFAULT_TITLE = 'My uber-duper API'
-    DEFAULT_DESCRIPTION = 'Mu uber-duper API description'
+    DEFAULT_DESCRIPTION = 'My uber-duper API description'
     DEFAULT_VERSION = '0.1'
 
     attr_swagger :title, :description, :termsOfService, :contact, :license, :version
