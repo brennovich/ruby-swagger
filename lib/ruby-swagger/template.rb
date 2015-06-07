@@ -16,12 +16,14 @@ module Swagger
 
       swagger_doc.host = 'localhost:80'
       swagger_doc.basePath = '/api/v1'
+
       swagger_doc.schemes = ['https', 'http']
       swagger_doc.produces = ['application/json']
       swagger_doc.consumes = ['application/json']
 
       swagger_doc.info.contact = Swagger::Contact.new
       swagger_doc.info.license = Swagger::License.new
+      swagger_doc.info.termsOfService = 'https://localhost/tos.html'
 
       swagger_doc
     end

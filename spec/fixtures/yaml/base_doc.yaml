@@ -1,0 +1,22 @@
+---
+swagger: '2.0'
+info:
+  title: Swagger Petstore
+  description: A sample API that uses a petstore as an example to demonstrate features in the swagger-2.0 specification
+  termsOfService: http://swagger.io/terms/
+  contact:
+    name: Swagger API Team
+    email: apiteam@swagger.io
+    url: http://swagger.io
+  license:
+    name: MIT
+    url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
+  version: '1.0.0'
+host: petstore.swagger.io
+basePath: "/api"
+schemes:
+  - http
+produces:
+  - application/json
+consumes:
+  - application/json
