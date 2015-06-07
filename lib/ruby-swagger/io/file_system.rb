@@ -9,22 +9,15 @@ module Swagger::IO
       @@default_path = new_path
     end
 
-    def initialize(swagger_doc, format = :yaml)
+    def initialize(swagger_doc)
       @doc = swagger_doc
-      @format = case format
-        when 'yaml', :yaml
-          :yaml
-        when 'json', :json
-          :json
-        else
-          raise ArgumentError.new("Unrecognized format [#{format}]")
-      end
     end
 
     def write!
-      FileUtils.mkdir_p(@@default_path) unless Dir.exists?(@@default_path)
+      init_fs_structure
 
-      #@doc.swagger
+      swagger = @doc.to_swagger
+      write_file(swagger.to_yaml, 'base_doc.yaml')
     end
 
     def read
@@ -33,6 +26,23 @@ module Swagger::IO
 
     def compile!
       raise "not implemented"
+    end
+
+    private
+
+    def init_fs_structure
+      FileUtils.mkdir_p(@@default_path) unless Dir.exists?(@@default_path)
+    end
+
+    def write_file(content, location, overwrite = false)
+      file_path = @@default_path + '/' + location
+
+      return if !overwrite && File.exists?(file_path)
+
+      dir_path = File.dirname(file_path);
+
+      FileUtils.mkdir_p(dir_path) unless Dir.exists?(dir_path)
+      File.open(file_path, 'w') {|f| f.write(content) }
     end
 
   end
