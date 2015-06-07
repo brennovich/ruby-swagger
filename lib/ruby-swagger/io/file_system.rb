@@ -9,6 +9,10 @@ module Swagger::IO
       @@default_path = new_path
     end
 
+    def self.default_path
+      @@default_path
+    end
+
     def initialize(swagger_doc)
       @doc = swagger_doc
     end
