@@ -1,4 +1,5 @@
 require 'ruby-swagger/object'
+require 'ruby-swagger/document'
 
 module Swagger::IO
   class FileSystem
@@ -25,11 +26,13 @@ module Swagger::IO
     end
 
     def self.read
-      raise "not implemented"
+      base_doc = YAML::load_file("#{@@default_path}/base_doc.yaml")
+
+      Swagger::Document.parse(base_doc)
     end
 
     def compile!
-      raise "not implemented"
+      write_file(JSON.pretty_generate(@doc), 'swagger.json', true)
     end
 
     private

@@ -8,8 +8,8 @@ module Swagger
       @@swagger_attribs[self.to_s] = *attributes
     end
 
-    def to_json
-      to_swagger.to_json
+    def to_json(options = nil)
+      to_swagger.to_json(options)
     end
 
     def to_yaml
@@ -29,7 +29,7 @@ module Swagger
         obj = self.send(property)
         obj = obj.to_swagger if obj.respond_to?(:to_swagger)
 
-        swagger[property] = obj if !obj.nil?
+        swagger[property.to_s] = obj if !obj.nil?
       end
 
       swagger

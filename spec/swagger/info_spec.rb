@@ -74,8 +74,8 @@ describe Swagger::Info do
       expect(obj.title).to eq "API Support"
       expect(obj.description).to eq "Bazinga!"
       expect(obj.version).to eq "7.4"
-      expect(obj.license[:name]).to eq 'MIT'
-      expect(obj.license[:url]).to eq 'http://mit.com/mit.html'
+      expect(obj.license['name']).to eq 'MIT'
+      expect(obj.license['url']).to eq 'http://mit.com/mit.html'
     end
   end
 
