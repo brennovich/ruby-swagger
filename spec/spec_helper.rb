@@ -1,1 +1,1 @@
-require 'swagger'
+require 'ruby-swagger'
