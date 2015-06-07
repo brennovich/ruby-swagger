@@ -34,6 +34,8 @@ describe Swagger::Document do
         expect(doc.info.contact.url).to eq "http://swagger.io"
         expect(doc.info.license.name).to eq "MIT"
         expect(doc.info.license.url).to eq "http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT"
+        expect(doc.host).to eq 'petstore.swagger.io'
+        expect(doc.basePath).to eq '/api'
       end
 
       context 'with an invalid title' do
