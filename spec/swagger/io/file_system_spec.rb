@@ -35,6 +35,10 @@ describe Swagger::IO::FileSystem do
       expect(swagger_doc['host']).to eq 'petstore.swagger.io'
       expect(swagger_doc['basePath']).to eq '/api'
 
+      expect(swagger_doc['schemes']).to eq ['http']
+      expect(swagger_doc['consumes']).to eq ['application/json']
+      expect(swagger_doc['produces']).to eq ['application/json']
+
       expect(swagger_doc['info']['version']).to eq "1.0.0"
 
       expect(swagger_doc['info']['license']['name']).to eq "MIT"
