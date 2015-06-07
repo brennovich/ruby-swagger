@@ -2,11 +2,13 @@ require 'spec_helper'
 require 'yaml'
 require 'ruby-swagger/io/file_system'
 
-module Swagger::IO
-
-end
-
 describe Swagger::IO::FileSystem do
+
+  DOC_PATH = "#{File.dirname(__FILE__)}/../../doc/"
+
+  before do
+    Swagger::IO::FileSystem.default_path = DOC_PATH
+  end
 
   context 'with invalid format' do
     it 'should raise an argument error' do
@@ -20,7 +22,7 @@ describe Swagger::IO::FileSystem do
     end
 
     after do
-      FileUtils.rm_rf('./doc') if Dir.exists?('./doc') #cleanup
+      FileUtils.rm_rf(DOC_PATH) if Dir.exists?(DOC_PATH) #cleanup
     end
 
     let(:filesystem) { Swagger::IO::FileSystem.new(document) }
@@ -28,7 +30,7 @@ describe Swagger::IO::FileSystem do
     it 'should convert the document into a folder/file structure' do
       filesystem.write!
 
-      expect(Dir.exists?('./doc')).to be_truthy
+      expect(Dir.exists?(DOC_PATH)).to be_truthy
     end
   end
 

@@ -3,7 +3,11 @@ require 'ruby-swagger/object'
 module Swagger::IO
   class FileSystem
 
-    DEFAULT_PATH = './doc/swagger'
+    @@default_path = './doc/swagger'
+
+    def self.default_path=(new_path)
+      @@default_path = new_path
+    end
 
     def initialize(swagger_doc, format = :yaml)
       @doc = swagger_doc
@@ -18,9 +22,9 @@ module Swagger::IO
     end
 
     def write!
-      Dir.mkdir(DEFAULT_PATH) unless Dir.exists?(DEFAULT_PATH)
+      FileUtils.mkdir_p(@@default_path) unless Dir.exists?(@@default_path)
 
-      @doc.swagger
+      #@doc.swagger
     end
 
     def read
