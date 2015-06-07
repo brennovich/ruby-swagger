@@ -1,5 +1,7 @@
-module Swagger
-  class IO::Writer
+require 'ruby-swagger/object'
+
+module Swagger::IO
+  class FileSystem
 
     DEFAULT_PATH = './doc/swagger'
 
@@ -16,7 +18,9 @@ module Swagger
     end
 
     def write!
-      raise "not implemented"
+      Dir.mkdir(DEFAULT_PATH) unless Dir.exists?(DEFAULT_PATH)
+
+      @doc.swagger
     end
 
     def read
