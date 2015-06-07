@@ -14,6 +14,8 @@ module Swagger
         swagger_doc.info.description = Rails.application.class.name.split('::').first.underscore
       end
 
+      swagger_doc.host = 'localhost:80'
+      swagger_doc.basePath = '/api/v1'
       swagger_doc.info.contact = Swagger::Contact.new
       swagger_doc.info.license = Swagger::License.new
 
