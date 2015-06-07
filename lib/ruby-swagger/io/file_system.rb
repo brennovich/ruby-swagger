@@ -24,7 +24,7 @@ module Swagger::IO
       write_file(swagger.to_yaml, 'base_doc.yaml')
     end
 
-    def read
+    def self.read
       raise "not implemented"
     end
 
