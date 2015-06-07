@@ -1,7 +1,7 @@
 require 'json'
 require 'yaml'
-require 'swagger/data/url'
-require 'swagger/object'
+require 'ruby-swagger/data/url'
+require 'ruby-swagger/object'
 
 module Swagger
   class Contact < Swagger::Object

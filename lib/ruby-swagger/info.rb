@@ -1,6 +1,6 @@
-require 'swagger/object'
-require 'swagger/contact'
-require 'swagger/license'
+require 'ruby-swagger/object'
+require 'ruby-swagger/contact'
+require 'ruby-swagger/license'
 
 module Swagger
   class Info < Swagger::Object  #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#info-object

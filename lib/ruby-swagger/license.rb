@@ -1,5 +1,5 @@
-require 'swagger/data/url'
-require 'swagger/object'
+require 'ruby-swagger/data/url'
+require 'ruby-swagger/object'
 
 module Swagger
   class License < Swagger::Object #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#license-object
