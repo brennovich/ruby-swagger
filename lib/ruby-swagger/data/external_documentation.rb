@@ -12,9 +12,7 @@ module Swagger::Data
     def self.parse(external)
       return nil unless external
 
-      ext = Swagger::Data::ExternalDocumentation.new
-      ext.bulk_set(external)
-      ext
+      Swagger::Data::ExternalDocumentation.new.bulk_set(external)
     end
 
     def url=(new_url)
