@@ -1,7 +1,7 @@
 require 'ruby-swagger/object'
 require 'ruby-swagger/data/schema'
 require 'ruby-swagger/data/headers'
-require 'ruby-swagger/data/examples'
+require 'ruby-swagger/data/example'
 
 module Swagger::Data
   class Response < Swagger::Object # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#responseObject
