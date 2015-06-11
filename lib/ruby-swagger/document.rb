@@ -2,6 +2,7 @@ require 'json'
 require 'ruby-swagger/object'
 require 'ruby-swagger/info'
 require 'ruby-swagger/data/mime'
+require 'ruby-swagger/operations/paths'
 
 module Swagger
   class Document < Swagger::Object  #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#swagger-object
@@ -9,12 +10,13 @@ module Swagger
     SPEC_VERSION = '2.0'  #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#fixed-fields
     DEFAULT_HOST = 'localhost:80'
 
-    attr_swagger :swagger, :info, :host, :basePath, :schemes, :consumes, :produces
+    attr_swagger :swagger, :info, :host, :basePath, :schemes, :consumes, :produces, :paths
 
     # create an empty document
     def initialize
       @swagger = '2.0'
       @info = Swagger::Info.new
+      @paths = Swagger::Operations::Paths.new
     end
 
     # parse an hash document into a set of Swagger objects
@@ -30,6 +32,7 @@ module Swagger
       d.schemes = document['schemes']
       d.consumes = document['consumes']
       d.produces = document['produces']
+      d.paths = Swagger::Operations::Paths.parse(document['paths'])
 
       d
     end
@@ -124,6 +127,10 @@ module Swagger
 
     def self.produces_desc
       'Swagger::Licence#produces - A list of MIME types the APIs can produce. This is global to all APIs but can be overridden on specific API calls. Value MUST be as described under Mime Types.'
+    end
+
+    def self.paths_desc
+      'Swagger::Licence#paths - Holds the relative paths to the individual endpoints. The path is appended to the basePath in order to construct the full URL. The Paths may be empty, due to ACL constraints.'
     end
 
   end
