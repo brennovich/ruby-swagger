@@ -1,6 +1,6 @@
 require 'json'
 require 'ruby-swagger/object'
-require 'ruby-swagger/info'
+require 'ruby-swagger/data/info'
 require 'ruby-swagger/data/mime'
 require 'ruby-swagger/data/paths'
 
@@ -15,7 +15,7 @@ module Swagger
     # create an empty document
     def initialize
       @swagger = '2.0'
-      @info = Swagger::Info.new
+      @info = Swagger::Data::Info.new
       @paths = Swagger::Data::Paths.new
     end
 
@@ -26,7 +26,7 @@ module Swagger
       raise (ArgumentError.new("the document is not a swagger #{SPEC_VERSION} version [#{Swagger::Document._desc}]")) unless document['swagger'] && "2.0" == document['swagger']
 
       d = Swagger::Document.new
-      d.info = Swagger::Info.parse(document['info'])
+      d.info = Swagger::Data::Info.parse(document['info'])
       d.host = document['host']
       d.basePath = document['basePath']
       d.schemes = document['schemes']
