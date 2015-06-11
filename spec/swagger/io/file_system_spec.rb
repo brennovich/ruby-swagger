@@ -19,7 +19,7 @@ describe Swagger::IO::FileSystem do
       FileUtils.rm_rf(DOC_PATH) if Dir.exists?(DOC_PATH) #cleanup
     end
 
-    let(:filesystem) { Swagger::IO::FileSystem.new(Swagger::Document.parse(JSON.parse(document))) }
+    let(:filesystem) { Swagger::IO::FileSystem.new(Swagger::Data::Document.parse(JSON.parse(document))) }
 
     it 'should convert the document into a folder/file structure' do
       filesystem.write!
@@ -105,7 +105,7 @@ describe Swagger::IO::FileSystem do
     it 'should generate a valid swagger document' do
       Swagger::IO::FileSystem.new(Swagger::IO::FileSystem.read).compile!
 
-      doc = Swagger::Document.parse(JSON.parse(File.open("#{DOC_PATH}/swagger.json", 'r').read))
+      doc = Swagger::Data::Document.parse(JSON.parse(File.open("#{DOC_PATH}/swagger.json", 'r').read))
 
       expect(doc).not_to be_nil
       expect(doc.swagger).to eq "2.0"

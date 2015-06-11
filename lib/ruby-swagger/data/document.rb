@@ -1,0 +1,92 @@
+require 'json'
+require 'ruby-swagger/object'
+require 'ruby-swagger/data/info'
+require 'ruby-swagger/data/mime'
+require 'ruby-swagger/data/paths'
+
+module Swagger::Data
+  class Document < Swagger::Object  #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#swagger-object
+
+    SPEC_VERSION = '2.0'  #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#fixed-fields
+    DEFAULT_HOST = 'localhost:80'
+
+    attr_swagger :swagger, :info, :host, :basePath, :schemes, :consumes, :produces, :paths
+
+    # create an empty document
+    def initialize
+      @swagger = '2.0'
+      @info = Swagger::Data::Info.new
+      @paths = Swagger::Data::Paths.new
+    end
+
+    # parse an hash document into a set of Swagger objects
+    #   document is a hash
+    def self.parse(document)
+      raise (ArgumentError.new("Swagger::Document#parse - document object is nil")) unless document
+
+      Swagger::Data::Document.new.bulk_set(document)
+    end
+
+    def swagger=(new_swagger)
+      raise (ArgumentError.new("Swagger::Document#swagger= - the document is not a swagger #{SPEC_VERSION} version")) unless "2.0" == new_swagger
+      @swagger = new_swagger
+    end
+
+    def info=(new_info)
+      raise (ArgumentError.new("Swagger::Document#info= - info object is nil")) unless new_info
+
+      new_info = Swagger::Data::Info.parse(new_info) unless new_info.is_a?(Swagger::Data::Info)
+
+      @info = new_info
+    end
+
+    def basePath=(new_path)
+      new_path = new_path.nil? ? '/' : new_path
+
+      if !(new_path =~ /^\/.+$/)
+        new_path = "/#{new_path}" #new path must start with a /
+      end
+
+      @basePath ||= new_path
+    end
+
+    def schemes=(new_schemes)
+      return nil unless new_schemes
+
+      new_schemes.each do |scheme|
+        raise (ArgumentError.new("Swagger::Data::Document#schemes= - unrecognized scheme #{scheme}")) unless %w(http https ws wss).include?(scheme)
+      end
+
+      @schemes = new_schemes
+    end
+
+    def produces=(new_produces)
+      return nil unless new_produces
+
+      new_produces.each do |produce|
+        raise (ArgumentError.new("Swagger::Data::Document#produces= - unrecognized produce type #{produce}")) unless Swagger::Data::Mime.valid?(produce)
+      end
+
+      @produces = new_produces
+    end
+
+    def consumes=(new_consumes)
+      return nil unless new_consumes
+
+      new_consumes.each do |consume|
+        raise (ArgumentError.new("Swagger::Data::Document#consumes= - unrecognized consume type #{consume}]")) unless Swagger::Data::Mime.valid?(consume)
+      end
+
+      @consumes= new_consumes
+    end
+
+    def paths=(new_paths)
+      raise ArgumentError.new("Swagger::Data::Document#paths= - paths is nil") unless paths
+
+      new_paths = Swagger::Data::Paths.parse(new_paths) if(!new_paths.is_a?(Swagger::Data::Paths))
+
+      @paths = new_paths
+    end
+
+  end
+end

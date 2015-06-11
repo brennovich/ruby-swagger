@@ -1,5 +1,5 @@
 require 'ruby-swagger/object'
-require 'ruby-swagger/document'
+require 'ruby-swagger/data/document'
 
 module Swagger::IO
   class FileSystem
@@ -28,7 +28,7 @@ module Swagger::IO
     def self.read
       base_doc = YAML::load_file("#{@@default_path}/base_doc.yaml")
 
-      Swagger::Document.parse(base_doc)
+      Swagger::Data::Document.parse(base_doc)
     end
 
     def compile!
