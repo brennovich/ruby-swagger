@@ -21,6 +21,12 @@ module Swagger::Data
       sc
     end
 
+    def ref=(new_ref)
+      return nil unless new_ref
+
+      @ref = new_ref
+    end
+
     def as_swagger
       res = super
       res['$ref'] = @ref if @ref
