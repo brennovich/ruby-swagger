@@ -2,7 +2,7 @@ require 'json'
 require 'ruby-swagger/object'
 require 'ruby-swagger/info'
 require 'ruby-swagger/data/mime'
-require 'ruby-swagger/operations/paths'
+require 'ruby-swagger/data/paths'
 
 module Swagger
   class Document < Swagger::Object  #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#swagger-object
