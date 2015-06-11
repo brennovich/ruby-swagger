@@ -4,6 +4,7 @@ require 'ruby-swagger/data/info'
 require 'ruby-swagger/data/mime'
 require 'ruby-swagger/data/paths'
 require 'ruby-swagger/data/definitions'
+require 'ruby-swagger/data/parameters'
 
 module Swagger::Data
   class Document < Swagger::Object  #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#swagger-object
@@ -11,7 +12,7 @@ module Swagger::Data
     SPEC_VERSION = '2.0'  #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#fixed-fields
     DEFAULT_HOST = 'localhost:80'
 
-    attr_swagger :swagger, :info, :host, :basePath, :schemes, :consumes, :produces, :paths, :definitions
+    attr_swagger :swagger, :info, :host, :basePath, :schemes, :consumes, :produces, :paths, :definitions, :parameters
 
     # create an empty document
     def initialize
@@ -97,6 +98,16 @@ module Swagger::Data
       end
 
       @definitions = new_definitions
+    end
+
+    def parameters=(new_parameters)
+      return nil unless new_parameters
+
+      if (!new_parameters.is_a?(Swagger::Data::Parameters))
+        new_parameters = Swagger::Data::Parameters.parse(new_parameters)
+      end
+
+      @parameters = new_parameters
     end
 
   end
