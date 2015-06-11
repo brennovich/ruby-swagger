@@ -9,6 +9,7 @@ require 'ruby-swagger/data/responses'
 require 'ruby-swagger/data/security_definitions'
 require 'ruby-swagger/data/security_requirement'
 require 'ruby-swagger/data/tag'
+require 'ruby-swagger/data/external_documentation'
 
 module Swagger::Data
   class Document < Swagger::Object  #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#swagger-object
@@ -18,7 +19,7 @@ module Swagger::Data
 
     attr_swagger :swagger, :info, :host, :basePath, :schemes, :consumes,
                  :produces, :paths, :definitions, :parameters, :responses, :securityDefinitions,
-                 :security, :tags
+                 :security, :tags, :externalDocs
 
     # create an empty document
     def initialize
@@ -164,6 +165,16 @@ module Swagger::Data
       end
 
       @tags.push(new_tag)
+    end
+
+    def externalDocs=(new_externalDocs)
+      return nil unless new_externalDocs
+
+      if (!new_externalDocs.is_a?(Swagger::Data::ExternalDocumentation))
+        new_externalDocs = Swagger::Data::ExternalDocumentation.parse(new_externalDocs)
+      end
+
+      @externalDocs = new_externalDocs
     end
 
   end
