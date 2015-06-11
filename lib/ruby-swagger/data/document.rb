@@ -8,6 +8,7 @@ require 'ruby-swagger/data/parameters'
 require 'ruby-swagger/data/responses'
 require 'ruby-swagger/data/security_definitions'
 require 'ruby-swagger/data/security_requirement'
+require 'ruby-swagger/data/tag'
 
 module Swagger::Data
   class Document < Swagger::Object  #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#swagger-object
@@ -17,7 +18,7 @@ module Swagger::Data
 
     attr_swagger :swagger, :info, :host, :basePath, :schemes, :consumes,
                  :produces, :paths, :definitions, :parameters, :responses, :securityDefinitions,
-                 :security
+                 :security, :tags
 
     # create an empty document
     def initialize
@@ -143,6 +144,26 @@ module Swagger::Data
       end
 
       @security = new_security
+    end
+
+    def tags=(new_tags)
+      return nil unless new_tags
+
+      @tags = []
+
+      new_tags.each do |tag|
+        add_tag(tag)
+      end
+    end
+
+    def add_tag(new_tag)
+      return nil unless new_tag
+
+      if (!new_tag.is_a?(Swagger::Data::Tag))
+        new_tag = Swagger::Data::Tag.parse(new_tag)
+      end
+
+      @tags.push(new_tag)
     end
 
   end
