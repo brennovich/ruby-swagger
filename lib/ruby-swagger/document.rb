@@ -16,7 +16,7 @@ module Swagger
     def initialize
       @swagger = '2.0'
       @info = Swagger::Info.new
-      @paths = Swagger::Operations::Paths.new
+      @paths = Swagger::Data::Paths.new
     end
 
     # parse an hash document into a set of Swagger objects
@@ -32,7 +32,7 @@ module Swagger
       d.schemes = document['schemes']
       d.consumes = document['consumes']
       d.produces = document['produces']
-      d.paths = Swagger::Operations::Paths.parse(document['paths'])
+      d.paths = Swagger::Data::Paths.parse(document['paths'])
 
       d
     end

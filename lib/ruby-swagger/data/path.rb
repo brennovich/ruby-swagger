@@ -3,7 +3,7 @@ require 'ruby-swagger/data/operation'
 require 'ruby-swagger/data/parameter'
 require 'ruby-swagger/data/reference'
 
-module Swagger::Operations
+module Swagger::Data
   class Path < Swagger::Object #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#path-item-object
 
     attr_swagger :get, :put, :post, :delete, :options, :head, :patch, :parameters #and $ref
@@ -12,7 +12,7 @@ module Swagger::Operations
     def self.parse(path)
       raise (ArgumentError.new("Swagger::Data::Path - path is nil")) unless path
 
-      res = Swagger::Operations::Path.new.bulk_set(path)
+      res = Swagger::Data::Path.new.bulk_set(path)
       res.ref= path['$ref'] if path['$ref']
       res
     end
