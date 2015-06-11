@@ -26,7 +26,7 @@ module Swagger
 
     def bulk_set(object)
       swagger_attributes.each do |attribute|
-        self.send("#{attribute}=", object[attribute])
+        self.send("#{attribute}=", object[attribute.to_s])
       end
 
       self
