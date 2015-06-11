@@ -7,6 +7,7 @@ require 'ruby-swagger/data/definitions'
 require 'ruby-swagger/data/parameters'
 require 'ruby-swagger/data/responses'
 require 'ruby-swagger/data/security_definitions'
+require 'ruby-swagger/data/security_requirement'
 
 module Swagger::Data
   class Document < Swagger::Object  #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#swagger-object
@@ -14,7 +15,9 @@ module Swagger::Data
     SPEC_VERSION = '2.0'  #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#fixed-fields
     DEFAULT_HOST = 'localhost:80'
 
-    attr_swagger :swagger, :info, :host, :basePath, :schemes, :consumes, :produces, :paths, :definitions, :parameters, :responses, :securityDefinitions
+    attr_swagger :swagger, :info, :host, :basePath, :schemes, :consumes,
+                 :produces, :paths, :definitions, :parameters, :responses, :securityDefinitions,
+                 :security
 
     # create an empty document
     def initialize
@@ -130,6 +133,16 @@ module Swagger::Data
       end
 
       @securityDefinitions= newSecurityDef
+    end
+
+    def security=(new_security)
+      return nil unless new_security
+
+      if (!new_security.is_a?(Swagger::Data::SecurityRequirement))
+        new_security = Swagger::Data::SecurityRequirement.parse(new_security)
+      end
+
+      @security = new_security
     end
 
   end
