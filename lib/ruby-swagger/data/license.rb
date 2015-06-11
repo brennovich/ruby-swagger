@@ -15,7 +15,7 @@ module Swagger::Data
     end
 
     def self.parse(license)
-      raise (ArgumentError.new("Swagger::Data::License - license object is nil")) unless license
+      return nil unless license
 
       Swagger::Data::License.new.bulk_set(license)
     end

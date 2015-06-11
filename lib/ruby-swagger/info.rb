@@ -1,5 +1,5 @@
 require 'ruby-swagger/object'
-require 'ruby-swagger/contact'
+require 'ruby-swagger/data/contact'
 require 'ruby-swagger/data/license'
 
 module Swagger
@@ -25,7 +25,7 @@ module Swagger
       i.title = info['title']
       i.description = info['description']
       i.termsOfService = info['termsOfService']
-      i.contact = Swagger::Contact.parse(info['contact'])
+      i.contact = Swagger::Data::Contact.parse(info['contact'])
       i.license = Swagger::Data::License.parse(info['license'])
       i.version = info['version']
 
@@ -43,7 +43,7 @@ module Swagger
     end
 
     def contact=(new_contact)
-      raise (ArgumentError.new("contact is invalid [#{Swagger::Info.contact_desc}]")) if new_contact.nil? || !new_contact.is_a?(Swagger::Contact)
+      raise (ArgumentError.new("contact is invalid [#{Swagger::Info.contact_desc}]")) if new_contact.nil? || !new_contact.is_a?(Swagger::Data::Contact)
       @contact = new_contact
     end
 
