@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'yaml'
 
-describe Swagger::License do
+describe Swagger::Data::License do
 
   let(:payload) do
     {
@@ -12,7 +12,7 @@ describe Swagger::License do
 
   context 'with no options' do
     it 'should create a default license' do
-      license = Swagger::License.parse(payload)
+      license = Swagger::Data::License.parse(payload)
 
       expect(license.name).to eq 'Apache 2.0'
       expect(license.url).to eq 'http://www.apache.org/licenses/LICENSE-2.0.html'
@@ -20,8 +20,8 @@ describe Swagger::License do
   end
 
   context 'when parsing' do
-    it 'should create a valid Swagger::License' do
-      license = Swagger::License.parse(payload)
+    it 'should create a valid Swagger::Data::License' do
+      license = Swagger::Data::License.parse(payload)
 
       expect(license.name).to eq 'Apache 2.0'
       expect(license.url).to eq 'http://www.apache.org/licenses/LICENSE-2.0.html'
@@ -31,14 +31,14 @@ describe Swagger::License do
       before { payload['url'] = 'bazinga!' }
 
       it 'should raise an error' do
-        expect { Swagger::License.parse(payload) }.to raise_error(ArgumentError)
+        expect { Swagger::Data::License.parse(payload) }.to raise_error(ArgumentError)
       end
     end
   end
 
   context 'when creating the object' do
     let(:license) do
-      l = Swagger::License.new
+      l = Swagger::Data::License.new
       l.name = "MIT"
       l.url = "http://mit.com/mit.html"
       l

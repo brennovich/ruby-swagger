@@ -51,7 +51,7 @@ describe Swagger::Info do
       i.title = "API Support"
       i.description = "Bazinga!"
       i.version = "7.4"
-      i.license = Swagger::License.new
+      i.license = Swagger::Data::License.new
       i.license.name = "MIT"
       i.license.url = "http://mit.com/mit.html"
 

@@ -1,6 +1,6 @@
 require 'ruby-swagger/object'
 require 'ruby-swagger/contact'
-require 'ruby-swagger/license'
+require 'ruby-swagger/data/license'
 
 module Swagger
   class Info < Swagger::Object  #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#info-object
@@ -26,7 +26,7 @@ module Swagger
       i.description = info['description']
       i.termsOfService = info['termsOfService']
       i.contact = Swagger::Contact.parse(info['contact'])
-      i.license = Swagger::License.parse(info['license'])
+      i.license = Swagger::Data::License.parse(info['license'])
       i.version = info['version']
 
       i
@@ -48,7 +48,7 @@ module Swagger
     end
 
     def license=(new_license)
-      raise (ArgumentError.new("license is invalid [#{Swagger::Info.license_desc}]")) if new_license.nil? || !new_license.is_a?(Swagger::License)
+      raise (ArgumentError.new("license is invalid [#{Swagger::Info.license_desc}]")) if new_license.nil? || !new_license.is_a?(Swagger::Data::License)
       @license = new_license
     end
 
