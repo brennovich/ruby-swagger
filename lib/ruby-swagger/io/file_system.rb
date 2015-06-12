@@ -22,6 +22,13 @@ module Swagger::IO
       init_fs_structure
 
       swagger = @doc.to_swagger
+
+      write_paths(swagger.delete('paths'))
+
+      %w(responses securityDefinitions security tags).each do |doc_part|
+        write_subpart(swagger.delete(doc_part))
+      end
+
       write_file(swagger.to_yaml, 'base_doc.yaml')
     end
 
@@ -39,6 +46,19 @@ module Swagger::IO
 
     def init_fs_structure
       FileUtils.mkdir_p(@@default_path) unless Dir.exists?(@@default_path)
+    end
+
+    def write_paths(paths)
+      paths.each do |path, path_obj|
+        path_obj.each do |action, action_obj|
+          write_file(action_obj.to_yaml, "paths/#{path}/#{action}.yaml")
+        end
+      end
+    end
+
+    def write_subpart(subpart)
+      return unless subpart
+      write_file(subpart.to_yaml, "#{subpart}.yaml")
     end
 
     def write_file(content, location, overwrite = false)
