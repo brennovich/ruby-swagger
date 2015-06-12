@@ -35,7 +35,7 @@ module Swagger::Data
     def to_swagger
       swag_obj = {}
 
-      swag_obj.each do |path, path_obj|
+      @paths.each do |path, path_obj|
         swag_obj[path] = path_obj.to_swagger
       end
 
