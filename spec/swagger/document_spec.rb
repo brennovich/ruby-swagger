@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Swagger::Document do
+describe Swagger::Data::Document do
 
   context 'as an empty document' do
-    subject { OpenStruct.new(JSON.parse(Swagger::Document.new.to_json)) } #encoding and decoding - like a client would
+    subject { OpenStruct.new(JSON.parse(Swagger::Data::Document.new.to_json)) } #encoding and decoding - like a client would
 
     it 'should have a valid version' do
       expect(subject.swagger).to eq '2.0'
@@ -20,8 +20,8 @@ describe Swagger::Document do
     end
 
     context 'when parsing' do
-      it 'should create a valid Swagger::Document' do
-        doc = Swagger::Document.parse(payload)
+      it 'should create a valid Swagger::Data::Document' do
+        doc = Swagger::Data::Document.parse(payload)
 
         expect(doc.swagger).to eq "2.0"
         expect(doc.schemes).to eq ['http']
@@ -47,7 +47,7 @@ describe Swagger::Document do
         before { payload['info']['title'] = '' }
 
         it 'should raise an error' do
-          expect { Swagger::Document.parse(payload) }.to raise_error(ArgumentError)
+          expect { Swagger::Data::Document.parse(payload) }.to raise_error(ArgumentError)
         end
       end
     end

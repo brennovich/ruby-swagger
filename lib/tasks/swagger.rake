@@ -9,7 +9,7 @@ namespace :swagger do
     task :generate_doc do
       puts "Exporting from Grape"
 
-      swagger_doc = Swagger::Template.generate
+      swagger_doc = Swagger::Data::Template.generate
 
       # Get path data from Grape
 

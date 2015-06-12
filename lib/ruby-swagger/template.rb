@@ -1,13 +1,10 @@
-require 'ruby-swagger/document'
-require 'ruby-swagger/contact'
-require 'ruby-swagger/info'
-require 'ruby-swagger/license'
+require 'ruby-swagger/data/document'
 
 module Swagger
   class Template
 
     def self.generate
-      swagger_doc = Swagger::Document.new
+      swagger_doc = Swagger::Data::Document.new
 
       if defined?(Rails)
         swagger_doc.info.title = Rails.application.class.name.split('::').first.underscore
@@ -21,8 +18,8 @@ module Swagger
       swagger_doc.produces = ['application/json']
       swagger_doc.consumes = ['application/json']
 
-      swagger_doc.info.contact = Swagger::Contact.new
-      swagger_doc.info.license = Swagger::License.new
+      swagger_doc.info.contact = Swagger::Data::Contact.new
+      swagger_doc.info.license = Swagger::Data::License.new
       swagger_doc.info.termsOfService = 'https://localhost/tos.html'
 
       swagger_doc

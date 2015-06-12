@@ -1,0 +1,125 @@
+---
+swagger: '2.0'
+info:
+  title: Swagger Petstore
+  description: A sample API that uses a petstore as an example to demonstrate features
+    in the swagger-2.0 specification
+  termsOfService: http://swagger.io/terms/
+  contact:
+    name: Swagger API Team
+    email: apiteam@swagger.io
+    url: http://swagger.io
+  license:
+    name: MIT
+    url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
+  version: 1.0.0
+host: petstore.swagger.io
+basePath: "/api"
+schemes:
+- http
+consumes:
+- application/json
+produces:
+- application/json
+definitions:
+  Pet: !ruby/object:Swagger::Data::Schema
+    format: 
+    title: 
+    description: 
+    default: 
+    multipleOf: 
+    maximum: 
+    exclusiveMaximum: 
+    minimum: 
+    exclusiveMinimum: 
+    maxLength: 
+    minLength: 
+    pattern: 
+    maxItems: 
+    minItems: 
+    uniqueItems: 
+    maxProperties: 
+    minProperties: 
+    required:
+    - id
+    - name
+    enum: 
+    type: object
+    items: 
+    allOf: 
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      tag:
+        type: string
+    additionalProperties: 
+  NewPet: !ruby/object:Swagger::Data::Schema
+    format: 
+    title: 
+    description: 
+    default: 
+    multipleOf: 
+    maximum: 
+    exclusiveMaximum: 
+    minimum: 
+    exclusiveMinimum: 
+    maxLength: 
+    minLength: 
+    pattern: 
+    maxItems: 
+    minItems: 
+    uniqueItems: 
+    maxProperties: 
+    minProperties: 
+    required: 
+    enum: 
+    type: object
+    items: 
+    allOf:
+    - "$ref": "#/definitions/Pet"
+    - required:
+      - name
+      properties:
+        id:
+          type: integer
+          format: int64
+    properties: 
+    additionalProperties: 
+  ErrorModel: !ruby/object:Swagger::Data::Schema
+    format: 
+    title: 
+    description: 
+    default: 
+    multipleOf: 
+    maximum: 
+    exclusiveMaximum: 
+    minimum: 
+    exclusiveMinimum: 
+    maxLength: 
+    minLength: 
+    pattern: 
+    maxItems: 
+    minItems: 
+    uniqueItems: 
+    maxProperties: 
+    minProperties: 
+    required:
+    - code
+    - message
+    enum: 
+    type: object
+    items: 
+    allOf: 
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+    additionalProperties: 
+externalDocs:
+  url: http://localhost
+  description: find more info here

@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'yaml'
 
-describe Swagger::Info do
+describe Swagger::Data::Info do
 
   let(:payload) do
     {
@@ -22,8 +22,8 @@ describe Swagger::Info do
   end
 
   context 'when parsing' do
-    it 'should create a valid Swagger::Info' do
-      info = Swagger::Info.parse(payload)
+    it 'should create a valid Swagger::Data::Info' do
+      info = Swagger::Data::Info.parse(payload)
 
       expect(info.title).to eq "Swagger Sample App"
       expect(info.description).to eq "This is a sample server Petstore server."
@@ -40,18 +40,18 @@ describe Swagger::Info do
       before { payload['title'] = '' }
 
       it 'should raise an error' do
-        expect { Swagger::Info.parse(payload) }.to raise_error(ArgumentError)
+        expect { Swagger::Data::Info.parse(payload) }.to raise_error(ArgumentError)
       end
     end
   end
 
   context 'when creating the object' do
     let(:info) do
-      i = Swagger::Info.new
+      i = Swagger::Data::Info.new
       i.title = "API Support"
       i.description = "Bazinga!"
       i.version = "7.4"
-      i.license = Swagger::License.new
+      i.license = Swagger::Data::License.new
       i.license.name = "MIT"
       i.license.url = "http://mit.com/mit.html"
 

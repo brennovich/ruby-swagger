@@ -19,7 +19,7 @@ describe Swagger::IO::FileSystem do
       FileUtils.rm_rf(DOC_PATH) if Dir.exists?(DOC_PATH) #cleanup
     end
 
-    let(:filesystem) { Swagger::IO::FileSystem.new(Swagger::Document.parse(JSON.parse(document))) }
+    let(:filesystem) { Swagger::IO::FileSystem.new(Swagger::Data::Document.parse(JSON.parse(document))) }
 
     it 'should convert the document into a folder/file structure' do
       filesystem.write!
@@ -57,9 +57,8 @@ describe Swagger::IO::FileSystem do
   context 'when loading data' do
     before do
       #stubbing the base_doc
-      content = File.open("#{File.dirname(__FILE__)}/../../fixtures/yaml/base_doc.yaml", 'r').read
       FileUtils.mkdir_p(DOC_PATH);
-      File.open("#{DOC_PATH}/base_doc.yaml", 'w'){|f| f.write(content)}
+      `cp -R #{File.dirname(__FILE__)}/../../fixtures/doc/* #{DOC_PATH}/`
     end
 
     after do
@@ -93,9 +92,8 @@ describe Swagger::IO::FileSystem do
   context 'when compiling data' do
     before do
       #stubbing the base_doc
-      content = File.open("#{File.dirname(__FILE__)}/../../fixtures/yaml/base_doc.yaml", 'r').read
       FileUtils.mkdir_p(DOC_PATH);
-      File.open("#{DOC_PATH}/base_doc.yaml", 'w'){|f| f.write(content)}
+      `cp -R #{File.dirname(__FILE__)}/../../fixtures/doc/* #{DOC_PATH}/`
     end
 
     after do
@@ -105,7 +103,7 @@ describe Swagger::IO::FileSystem do
     it 'should generate a valid swagger document' do
       Swagger::IO::FileSystem.new(Swagger::IO::FileSystem.read).compile!
 
-      doc = Swagger::Document.parse(JSON.parse(File.open("#{DOC_PATH}/swagger.json", 'r').read))
+      doc = Swagger::Data::Document.parse(JSON.parse(File.open("#{DOC_PATH}/swagger.json", 'r').read))
 
       expect(doc).not_to be_nil
       expect(doc.swagger).to eq "2.0"

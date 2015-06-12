@@ -8,6 +8,10 @@ module Swagger
       @@swagger_attribs[self.to_s] = *attributes
     end
 
+    def swagger_attributes
+      @@swagger_attribs[self.class.to_s]
+    end
+
     def to_json(options = nil)
       to_swagger.to_json(options)
     end
@@ -20,12 +24,20 @@ module Swagger
       as_swagger
     end
 
+    def bulk_set(object)
+      swagger_attributes.each do |attribute|
+        self.send("#{attribute}=", object[attribute.to_s])
+      end
+
+      self
+    end
+
     protected
 
     def as_swagger
       swagger = {}
 
-      @@swagger_attribs[self.class.to_s].each do |property|
+      swagger_attributes.each do |property|
         obj = self.send(property)
         obj = obj.to_swagger if obj.respond_to?(:to_swagger)
 

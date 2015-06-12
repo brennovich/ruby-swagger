@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'yaml'
 
-describe Swagger::Contact do
+describe Swagger::Data::Contact do
 
   let(:payload) do
     {
@@ -12,8 +12,8 @@ describe Swagger::Contact do
   end
 
   context 'when parsing' do
-    it 'should create a valid Swagger::Contact' do
-      contact = Swagger::Contact.parse(payload)
+    it 'should create a valid Swagger::Data::Contact' do
+      contact = Swagger::Data::Contact.parse(payload)
 
       expect(contact.name).to eq 'API Support'
       expect(contact.url).to eq 'http://www.swagger.io/support'
@@ -24,14 +24,14 @@ describe Swagger::Contact do
       before { payload['url'] = 'bazinga!' }
 
       it 'should raise an error' do
-        expect { Swagger::Contact.parse(payload) }.to raise_error(ArgumentError)
+        expect { Swagger::Data::Contact.parse(payload) }.to raise_error(ArgumentError)
       end
     end
   end
 
   context 'when creating the object' do
     let(:contact) do
-      c = Swagger::Contact.new
+      c = Swagger::Data::Contact.new
       c.name = "API Support"
       c.url = "http://www.swagger.io/support"
       c.email = "support@swagger.io"
