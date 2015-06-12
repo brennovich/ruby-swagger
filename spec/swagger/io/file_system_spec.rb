@@ -57,9 +57,8 @@ describe Swagger::IO::FileSystem do
   context 'when loading data' do
     before do
       #stubbing the base_doc
-      content = File.open("#{File.dirname(__FILE__)}/../../fixtures/yaml/base_doc.yaml", 'r').read
       FileUtils.mkdir_p(DOC_PATH);
-      File.open("#{DOC_PATH}/base_doc.yaml", 'w'){|f| f.write(content)}
+      `cp -R #{File.dirname(__FILE__)}/../../fixtures/doc/* #{DOC_PATH}/`
     end
 
     after do
@@ -93,9 +92,8 @@ describe Swagger::IO::FileSystem do
   context 'when compiling data' do
     before do
       #stubbing the base_doc
-      content = File.open("#{File.dirname(__FILE__)}/../../fixtures/yaml/base_doc.yaml", 'r').read
       FileUtils.mkdir_p(DOC_PATH);
-      File.open("#{DOC_PATH}/base_doc.yaml", 'w'){|f| f.write(content)}
+      `cp -R #{File.dirname(__FILE__)}/../../fixtures/doc/* #{DOC_PATH}/`
     end
 
     after do
