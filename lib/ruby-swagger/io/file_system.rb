@@ -5,6 +5,7 @@ module Swagger::IO
   class FileSystem
 
     @@default_path = './doc/swagger'
+    DOC_SUBPARTS = %w(responses securityDefinitions security tags)
 
     def self.default_path=(new_path)
       @@default_path = new_path
@@ -25,7 +26,7 @@ module Swagger::IO
 
       write_paths(swagger.delete('paths'))
 
-      %w(responses securityDefinitions security tags).each do |doc_part|
+      DOC_SUBPARTS.each do |doc_part|
         write_subpart(swagger.delete(doc_part))
       end
 
@@ -33,9 +34,16 @@ module Swagger::IO
     end
 
     def self.read
-      base_doc = YAML::load_file("#{@@default_path}/base_doc.yaml")
+      doc = YAML::load_file("#{@@default_path}/base_doc.yaml")
 
-      Swagger::Data::Document.parse(base_doc)
+      DOC_SUBPARTS.each do |doc_part|
+        file_path = "#{@@default_path}/#{doc_part}.yaml"
+        doc[doc_part] = YAML::load_file(file_path) if File.exists?(file_path)
+      end
+
+      doc['paths'] = read_paths("#{@@default_path}/paths/")
+ 
+      Swagger::Data::Document.parse(doc)
     end
 
     def compile!
@@ -46,6 +54,19 @@ module Swagger::IO
 
     def init_fs_structure
       FileUtils.mkdir_p(@@default_path) unless Dir.exists?(@@default_path)
+    end
+
+    def self.read_paths(base)
+      paths = {}
+      all_files = Dir["#{base}/**/*.yaml"]
+      l = base.length
+
+      all_files.each do |file|
+        content = YAML::load_file(file)
+        paths[File.dirname(file[l..file.length])] = content
+      end
+
+      paths
     end
 
     def write_paths(paths)
