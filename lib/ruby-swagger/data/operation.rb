@@ -74,5 +74,32 @@ module Swagger::Data
       @parameters.push(new_parameter)
     end
 
+    def self.from_grape(route_name, route)
+      operation = Swagger::Data::Operation.new
+      operation.tags = grape_tags(route_name)
+      operation.description = route.route_description.truncate(120)
+      operation.summary = route.route_description
+      #operation.parameters
+      #operation.responses
+      operation.deprecated = route.route_deprecated if route.route_deprecated  #grape extension
+
+      if route.route_scopes #grape extensions
+        security = Swagger::Data::SecurityRequirement.new
+        route.route_scopes.each do |name, requirements|
+          security.add_requirement(name, requirements)
+        end
+
+        operations.security = route.route_scopes
+      end
+      operation
+    end
+
+    private
+
+    def self.grape_tags(route_name)
+      [route_name.split('/')[1]]
+    end
+
+
   end
 end
