@@ -51,7 +51,7 @@ module Swagger::Data
 
       @parameters = []
 
-      path['parameters'].each do |parameter|
+      newParams.each do |parameter|
         add_parameter(parameter)
       end
     end
@@ -61,12 +61,12 @@ module Swagger::Data
 
       if new_parameter.is_a?(Hash)
 
-        new_parameter = if parameter['$ref']
+        new_parameter = if new_parameter['$ref']
                             #it's a reference object
-                            Swagger::Data::Reference.parse(parameter)
+                            Swagger::Data::Reference.parse(new_parameter)
                         else
                             #it's a parameter object
-                            Swagger::Data::Parameter.parse(parameter)
+                            Swagger::Data::Parameter.parse(new_parameter)
                         end
 
       end
@@ -79,6 +79,24 @@ module Swagger::Data
       operation.tags = grape_tags(route_name)
       operation.description = route.route_description.truncate(120)
       operation.summary = route.route_description
+
+      params = {}
+      route_name.scan(/\{[a-zA-Z0-9\-\_]+\}/).each do |parameter| #scan all parameters in the url
+        param_name = parameter[1..parameter.length-2]
+        params[param_name] = {'name' => param_name, 'in' => 'path', 'required' => true, 'type' => 'string'}
+      end
+
+      route.route_params.each do |parameter|
+        swag_param = Swagger::Data::Parameter.from_grape(parameter)
+        next unless swag_param
+
+        params[parameter.first.to_s] = swag_param
+      end
+
+      params.each do |param_name, parameter|
+        operation.add_parameter(parameter)
+      end
+
       #operation.parameters
       #operation.responses
       operation.deprecated = route.route_deprecated if route.route_deprecated  #grape extension
@@ -91,6 +109,7 @@ module Swagger::Data
 
         operations.security = route.route_scopes
       end
+
       operation
     end
 
