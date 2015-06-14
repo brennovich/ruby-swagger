@@ -97,7 +97,6 @@ module Swagger::Data
         operation.add_parameter(parameter)
       end
 
-      #operation.parameters
       #operation.responses
       operation.deprecated = route.route_deprecated if route.route_deprecated  #grape extension
 

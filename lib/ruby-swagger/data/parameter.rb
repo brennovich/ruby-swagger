@@ -66,6 +66,12 @@ module Swagger::Data
       parameter.description = grape_parameter.last[:desc]
       grape_type_to_swagger(parameter, grape_parameter.last[:type] || 'string')
 
+      if parameter.type == 'array'
+        items = Swagger::Data::Items.new
+        items.type = 'string'
+        parameter.items = items
+      end
+
       parameter.type.nil? ? nil : parameter
     rescue => e
       puts "error processing parameter #{grape_parameter} [#{e}]"
