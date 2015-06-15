@@ -5,12 +5,14 @@ require 'ruby-swagger/data/response'
 module Swagger::Data
   class Responses < Swagger::Object # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#responsesObject
 
-    @responses = {}
+    def initialize
+      @responses = {}
+    end
 
     def self.parse(responses)
       return nil unless responses
 
-      r = Swagger::Operations::Responses.new
+      r = Swagger::Data::Responses.new
 
       responses.each do |response_key, response_value|
         response = if response_value['$ref']
@@ -32,7 +34,7 @@ module Swagger::Data
     end
 
     def as_swagger
-      res = super
+      res = {}
 
       @responses.each do |other_name, other_value|
         res[other_name] = other_value.to_swagger
