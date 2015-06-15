@@ -17,7 +17,7 @@ module Swagger::Data
       return nil if schema.nil?
 
       sc = Swagger::Data::Schema.new.bulk_set(schema)
-      sc.ref= Swagger::Data::Reference.parse(schema['$ref'])
+      sc.ref= schema['$ref']
       sc
     end
 
