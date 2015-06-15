@@ -3,7 +3,9 @@ require 'ruby-swagger/object'
 module Swagger::Data
   class SecurityRequirement < Swagger::Object #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#securityRequirementObject
 
-    @requirements = {}
+    def initialize
+      @requirements = {}
+    end
 
     def self.parse(security)
       return nil unless security
@@ -21,6 +23,9 @@ module Swagger::Data
       @requirements[key] = requirements
     end
 
+    def [](key)
+      @requirements[key]
+    end
 
     def as_swagger
       @requirements
