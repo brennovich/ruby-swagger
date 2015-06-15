@@ -97,7 +97,12 @@ module Swagger::Data
         operation.add_parameter(parameter)
       end
 
-      #operation.responses
+      operation.responses = Swagger::Data::Responses.new
+
+      #Long TODO - document here all the possible responses
+      operation.responses.add_response('200', Swagger::Data::Response.parse({'description' => 'Successful operation'}))
+      operation.responses.add_response('default', Swagger::Data::Response.parse({'description' => 'Unexpected error'}))
+
       operation.deprecated = route.route_deprecated if route.route_deprecated  #grape extension
 
       if route.route_scopes #grape extensions
