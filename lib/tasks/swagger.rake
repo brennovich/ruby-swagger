@@ -31,7 +31,7 @@ namespace :swagger do
 
     Swagger::IO::FileSystem.new(Swagger::IO::FileSystem.read).compile!
 
-    puts "Done. Your documentation file is #{Swagger::IO::FileSystem.default_path}swagger.json"
+    puts "Done. Your documentation file is #{Swagger::IO::FileSystem.default_path}/swagger.json"
   end
 
 end
