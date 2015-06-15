@@ -26,6 +26,10 @@ module Swagger::Data
       @scopes[scope_name] = scope_value
     end
 
+    def [](scope)
+      @scopes[scope]
+    end
+
     def as_swagger
       swagger_scopes = {}
 
