@@ -50,7 +50,4 @@ describe Swagger::Data::Tag do
     end
   end
 
-
-
-
 end
