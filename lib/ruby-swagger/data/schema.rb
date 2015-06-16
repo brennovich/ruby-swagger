@@ -13,6 +13,8 @@ module Swagger::Data
 
     @ref = nil
 
+    attr_reader :ref
+
     def self.parse(schema)
       return nil if schema.nil?
 

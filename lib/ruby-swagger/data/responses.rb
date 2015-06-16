@@ -15,22 +15,25 @@ module Swagger::Data
       r = Swagger::Data::Responses.new
 
       responses.each do |response_key, response_value|
-        response = if response_value['$ref']
-                       #it's a reference object
-                       Swagger::Data::Reference.parse(response_value)
-                     else
-                       #it's a parameter object
-                       Swagger::Data::Response.parse(response_value)
-                     end
-
-        r.add_response(response_key, response)
+        r.add_response(response_key, response_value)
       end
 
       r
     end
 
     def add_response(response_code, response)
+      raise ArgumentError.new('Swagger::Data::Responses#add_response - response is nil') unless response
+
+      if !response.is_a?(Swagger::Data::Reference) && !response.is_a?(Swagger::Data::Response)
+        # it's a reference object or it's a parameter object
+        response = response['$ref'] ? Swagger::Data::Reference.parse(response) : Swagger::Data::Response.parse(response)
+      end
+
       @responses[response_code] = response
+    end
+
+    def [](key)
+      @responses[key]
     end
 
     def as_swagger
