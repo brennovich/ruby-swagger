@@ -19,38 +19,43 @@ module Swagger::Data
     end
 
     def name=(new_name)
-      raise ArgumentError.new("Security::Data::SecurityScheme#name= - name is nil") unless new_name
+      raise ArgumentError.new("Security::Data::SecurityScheme#name= - name is nil") if @type == 'apiKey' && !new_name
 
       @name = new_name
     end
 
     def in=(new_in)
-      raise ArgumentError.new("Security::Data::SecurityScheme#in= - in is nil") unless new_in
-      raise ArgumentError.new("Security::Data::SecurityScheme#in= - unrecognized in #{new_in}") unless %w(query header).include?(new_in)
+      if @type == 'apiKey'
+        raise ArgumentError.new("Security::Data::SecurityScheme#in= - in is nil") if !new_in
+        raise ArgumentError.new("Security::Data::SecurityScheme#in= - unrecognized in #{new_in}") unless %w(query header).include?(new_in)
+      end
 
       @in = new_in
     end
 
     def flow=(new_flow)
-      raise ArgumentError.new("Security::Data::SecurityScheme#flow= - flow is nil") unless new_flow
+      if @type == 'oauth2'
+        raise ArgumentError.new("Security::Data::SecurityScheme#flow= - flow is nil")  if !new_flow
+        raise ArgumentError.new("Security::Data::SecurityScheme#flow= - unrecognized flow #{new_flow}") unless %w(implicit password application accessCode).include?(new_flow)
+      end
 
       @flow = new_flow
     end
 
     def authorizationUrl=(new_authorizationUrl)
-      raise ArgumentError.new("Security::Data::SecurityScheme#authorizationUrl= - authorizationUrl is nil") unless new_authorizationUrl
+      raise ArgumentError.new("Security::Data::SecurityScheme#authorizationUrl= - authorizationUrl is nil") if @type == 'oauth2' && (@flow == 'implicit' || @flow == 'accessCode') && !new_authorizationUrl
 
       @authorizationUrl = new_authorizationUrl
     end
 
     def tokenUrl=(new_tokenUrl)
-      raise ArgumentError.new("Security::Data::SecurityScheme#tokenUrl= - tokenUrl is nil") unless new_tokenUrl
+      raise ArgumentError.new("Security::Data::SecurityScheme#tokenUrl= - tokenUrl is nil") if @type == 'oauth2' && (@flow == 'password' || @flow == 'application' || @flow == 'accessCode') && new_tokenUrl
 
       @tokenUrl = new_tokenUrl
     end
 
     def scopes=(new_scopes)
-      raise ArgumentError.new("Security::Data::SecurityScheme#scopes= - scopes is nil") unless new_scopes
+      raise ArgumentError.new("Security::Data::SecurityScheme#scopes= - scopes is nil") if @type == 'oauth2' && !new_scopes
 
       new_scopes = Swagger::Data::Scopes.parse(new_scopes) if(!new_scopes.is_a?(Swagger::Data::Scopes))
 
