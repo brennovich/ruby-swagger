@@ -37,6 +37,8 @@ module Swagger
     def as_swagger
       swagger = {}
 
+      return swagger unless swagger_attributes
+
       swagger_attributes.each do |property|
         obj = self.send(property)
         obj = swaggerify(obj)
