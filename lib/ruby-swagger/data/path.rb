@@ -79,9 +79,9 @@ module Swagger::Data
       return nil unless new_parameters
       raise (ArgumentError.new("Swagger::Data::Path#parameters= - parameters is not an array")) unless new_parameters.is_a?(Array)
 
-      @parameters ||= []
+      @parameters = []
 
-      path['parameters'].each do |parameter|
+      new_parameters.each do |parameter|
         new_param = if parameter['$ref']
                       #it's a reference object
                       Swagger::Data::Reference.parse(parameter)
@@ -90,15 +90,9 @@ module Swagger::Data
                       Swagger::Data::Parameter.parse(parameter)
                     end
 
-        parameters.push(new_param)
+        @parameters.push(new_param)
       end
 
-      res.parameters=parameters
-
-      path['parameters'] if path['parameters']
-
-
-      @parameters= new_parameters
     end
 
     def ref=(new_ref)
