@@ -31,11 +31,15 @@ module Swagger::Data
       @definitions[definition_name] = definition_value
     end
 
+    def [](key)
+      @definitions[key]
+    end
+
     def as_swagger
       swagger_defs = {}
 
       @definitions.each do |def_k, def_v|
-        swagger_defs[def_k] = def_v
+        swagger_defs[def_k] = def_v.to_swagger
       end
 
       swagger_defs
