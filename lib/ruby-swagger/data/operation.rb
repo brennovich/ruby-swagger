@@ -39,11 +39,15 @@ module Swagger::Data
     def security=(newSecurity)
       return nil unless newSecurity
 
-      unless newSecurity.is_a?(Swagger::Data::SecurityRequirement)
-        newSecurity = Swagger::Data::SecurityRequirement.parse(newSecurity)
-      end
+      @security = []
 
-      @security = newSecurity
+      newSecurity.each do |sec_object|
+        unless sec_object.is_a?(Swagger::Data::SecurityRequirement)
+          sec_object = Swagger::Data::SecurityRequirement.parse(sec_object)
+        end
+
+        @security.push(sec_object)
+      end
     end
 
     def parameters=(newParams)
