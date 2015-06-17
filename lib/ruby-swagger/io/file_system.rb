@@ -63,7 +63,8 @@ module Swagger::IO
 
       all_files.each do |file|
         content = YAML::load_file(file)
-        paths[File.dirname(file[l..file.length])] = content
+        paths[File.dirname(file[l..file.length])] ||= {}
+        paths[File.dirname(file[l..file.length])][File.basename(file, ".yaml")] = content
       end
 
       paths

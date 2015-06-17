@@ -3,7 +3,9 @@ require 'ruby-swagger/object'
 module Swagger::Data
   class SecurityRequirement < Swagger::Object #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#securityRequirementObject
 
-    @requirements = {}
+    def initialize
+      @requirements = {}
+    end
 
     def self.parse(security)
       return nil unless security
@@ -14,13 +16,16 @@ module Swagger::Data
     end
 
     def add_requirement(key, requirements)
-      raise (ArgumentError.new("key is nil [#{Swagger::Data::SecurityRequirement._desc}]")) unless key
-      raise (ArgumentError.new("requirements is nil [#{Swagger::Data::SecurityRequirement._desc}]")) unless requirements
-      raise (ArgumentError.new("requirements is not an array [#{Swagger::Data::SecurityRequirement._desc}]")) unless requirements.is_a?(Array)
+      raise (ArgumentError.new("Swagger::Data::SecurityRequirement#add_requirement - key is nil")) unless key
+      raise (ArgumentError.new("Swagger::Data::SecurityRequirement#add_requirement - requirements is nil")) unless requirements
+      raise (ArgumentError.new("Swagger::Data::SecurityRequirement#add_requirement - requirements is not an array")) unless requirements.is_a?(Array)
 
       @requirements[key] = requirements
     end
 
+    def [](key)
+      @requirements[key]
+    end
 
     def as_swagger
       @requirements

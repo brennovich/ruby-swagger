@@ -37,7 +37,7 @@ module Swagger::Data
 
     def collectionFormat=(new_collection_format)
       return nil unless new_collection_format
-      raise ArgumentError.new("collectionFormat #{new_collection_format} is invalid [#{Swagger::Data::Items.collectionFormat_desc}]") unless %w(csv ssv tsv pipes).include?(new_collection_format)
+      raise ArgumentError.new("Swagger::Data::Items#collectionFormat= - collectionFormat #{new_collection_format} is invalid") unless %w(csv ssv tsv pipes).include?(new_collection_format)
       @collectionFormat = new_collection_format
     end
 

@@ -17,7 +17,7 @@ module Swagger::Data
 
     def url=(new_url)
       raise (ArgumentError.new("Swagger::Data::ExternalDocumentation#url - url is nil")) unless new_url
-      @url = url
+      @url = new_url
     end
 
   end

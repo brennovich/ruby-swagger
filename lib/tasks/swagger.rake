@@ -1,15 +1,21 @@
 require 'ruby-swagger/io/file_system'
-require 'ruby-swagger/template'
+require 'ruby-swagger/grape_template'
 
 namespace :swagger do
 
   namespace :grape do
 
     desc 'Generate a swagger meta documentation from Grape API definition and store it under doc/swagger'
-    task :generate_doc do
-      puts "Exporting from Grape"
+    task :generate_doc, [:base_class] => :environment do |t, args|
+      if args[:base_class].nil?
+        STDERR.puts "You need to pass a base class for your API"
+        STDERR.puts "For example: rake 'swagger:grape:generate_doc[ApiBase]'"
+        exit -1
+      end
 
-      swagger_doc = Swagger::Data::Template.generate
+      puts "Exporting from Grape - base class #{args[:base_class]}"
+
+      swagger_doc = Swagger::GrapeTemplate.generate(Module.const_get(args[:base_class]))
 
       # Get path data from Grape
 
@@ -25,7 +31,7 @@ namespace :swagger do
 
     Swagger::IO::FileSystem.new(Swagger::IO::FileSystem.read).compile!
 
-    puts "Done. Your documentation file is #{Swagger::IO::FileSystem.default_path}swagger.json"
+    puts "Done. Your documentation file is #{Swagger::IO::FileSystem.default_path}/swagger.json"
   end
 
 end

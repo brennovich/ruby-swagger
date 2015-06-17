@@ -32,6 +32,10 @@ module Swagger::Data
       @paths[path] = path_obj
     end
 
+    def [](path)
+      @paths[path]
+    end
+
     def to_swagger
       swag_obj = {}
 

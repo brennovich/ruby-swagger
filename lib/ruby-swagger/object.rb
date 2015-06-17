@@ -37,14 +37,30 @@ module Swagger
     def as_swagger
       swagger = {}
 
+      return swagger unless swagger_attributes
+
       swagger_attributes.each do |property|
         obj = self.send(property)
-        obj = obj.to_swagger if obj.respond_to?(:to_swagger)
+        obj = swaggerify(obj)
 
         swagger[property.to_s] = obj if !obj.nil?
       end
 
       swagger
+    end
+
+    def swaggerify(object)
+      return nil if object.nil?
+
+      return object.to_swagger if object.respond_to?(:to_swagger)
+
+      if object.is_a?(Array)
+        object.map! do |element|
+          swaggerify(element)
+        end
+      end
+
+      object
     end
 
   end

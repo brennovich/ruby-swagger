@@ -2,7 +2,7 @@ require 'ruby-swagger/object'
 require 'ruby-swagger/data/parameter'
 
 module Swagger::Data
-  class Parameters < Swagger::Object #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#parametersDefinitionsObject
+  class Parameters < Swagger::Object # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#parametersDefinitionsObject
 
     def initialize
       @parameters = {}
@@ -11,7 +11,7 @@ module Swagger::Data
     def self.parse(parameters)
       return nil unless parameters
 
-      params = Swagger::Data::Definitions.new
+      params = Swagger::Data::Parameters.new
 
       parameters.each do |pname, pvalue|
         params.add_param(pname, pvalue)
@@ -31,11 +31,19 @@ module Swagger::Data
       @parameters[pname] = pvalue
     end
 
+    def [](pname)
+      @parameters[pname]
+    end
+
+    def params
+      @parameters.keys
+    end
+
     def as_swagger
       swagger_params = {}
 
       @parameters.each do |p_k, p_v|
-        swagger_params[p_k] = p_v
+        swagger_params[p_k] = p_v.to_swagger
       end
 
       swagger_params

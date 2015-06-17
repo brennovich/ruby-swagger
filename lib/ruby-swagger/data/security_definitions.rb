@@ -11,7 +11,7 @@ module Swagger::Data
     def self.parse(security)
       return nil unless security
 
-      params = Swagger::Data::Definitions.new
+      params = Swagger::Data::SecurityDefinitions.new
 
       security.each do |pname, pvalue|
         params.add_param(pname, pvalue)
@@ -21,21 +21,25 @@ module Swagger::Data
     end
 
     def add_param(pname, pvalue)
-      raise ArgumentError.new("Swagger::Data::Parameters#add_param - parameter name is nil") unless pname
-      raise ArgumentError.new("Swagger::Data::Parameters#add_param - parameter value is nil") unless pvalue
+      raise ArgumentError.new("Swagger::Data::SecurityDefinitions#add_param - parameter name is nil") unless pname
+      raise ArgumentError.new("Swagger::Data::SecurityDefinitions#add_param - parameter value is nil") unless pvalue
 
-      if !pvalue.is_a?(Swagger::Data::Parameter)
-        pvalue = Swagger::Data::Parameter.parse(pvalue)
+      if !pvalue.is_a?(Swagger::Data::SecurityScheme)
+        pvalue = Swagger::Data::SecurityScheme.parse(pvalue)
       end
 
       @security[pname] = pvalue
+    end
+
+    def [](pname)
+      @security[pname]
     end
 
     def as_swagger
       swagger_params = {}
 
       @security.each do |p_k, p_v|
-        swagger_params[p_k] = p_v
+        swagger_params[p_k] = p_v.to_swagger
       end
 
       swagger_params
