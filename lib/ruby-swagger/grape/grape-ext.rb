@@ -7,8 +7,8 @@ module Grape
 
       module ClassMethods
 
-        def api_desc(description, &block)
-          default_api_options!
+        def api_desc(description, options = {}, &block)
+          default_api_options!(options)
           block.call if block_given?
           desc description, @api_options
         end
@@ -51,12 +51,6 @@ module Grape
           else
             raise ArgumentError.new("Grape::scopes - unrecognized value #{scopes_value} - scopes can either be a string or an array of strings")
           end
-        end
-
-        def permissions(permissions_lambda)
-          raise ArgumentError.new("Grape::permissions - unrecognized value #{permissions_lambda} - permissions can only be a lambda") unless permissions_lambda.is_a?(Proc)
-
-          @api_options[:permissions]= permissions_lambda
         end
 
         def tags(new_tags)
@@ -109,11 +103,6 @@ module Grape
           @@scopes = new_value
         end
 
-        @@permissions = nil
-        def self.permissions=(new_value)
-          @@permissions = new_value
-        end
-
         @@tags = []
         def self.tags=(new_value)
           @@tags = new_value
@@ -134,19 +123,18 @@ module Grape
           @@errors = new_value
         end
 
-        def default_api_options!
+        def default_api_options!(options)
           @api_options = {
               user_authenticated: @@user_authenticated,
               company_authenticated: @@company_authenticated,
               deprecated: @@deprecated,
               hidden: @@hidden,
               scopes: @@scopes,
-              permissions: @@permissions,
               tags: @@tags,
               result: @@result,
               result_root: @@result_root,
               errors: @@errors
-          }
+          }.merge(options)
           @description = ''
         end
       end
