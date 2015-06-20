@@ -15,7 +15,7 @@ describe Swagger::Data::Document do
 
   context 'with a payload' do
     let(:payload) do
-      json = File.open("#{File.dirname(__FILE__)}/../fixtures/petstore/json/petstore-with-external-docs.json", 'r').read
+      json = File.open("#{File.dirname(__FILE__)}/../../fixtures/petstore/json/petstore-with-external-docs.json", 'r').read
       JSON.parse(json)
     end
 
