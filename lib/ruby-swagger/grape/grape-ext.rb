@@ -47,7 +47,7 @@ module Grape
 
             @api_options[:scopes] = scopes_value
           elsif scopes_value.is_a?(String)
-            @api_options[:scopes] = scopes_value
+            @api_options[:scopes] = [scopes_value]
           else
             raise ArgumentError.new("Grape::scopes - unrecognized value #{scopes_value} - scopes can either be a string or an array of strings")
           end
@@ -79,47 +79,47 @@ module Grape
         end
 
         @@user_authenticated = false
-        def self.user_authenticated=(new_value)
+        def default_user_authenticated(new_value)
           @@user_authenticated = new_value
         end
 
         @@company_authenticated = false
-        def self.company_authenticated=(new_value)
+        def default_company_authenticated(new_value)
           @@company_authenticated = new_value
         end
 
         @@deprecated = false
-        def self.deprecated=(new_value)
+        def default_deprecated(new_value)
           @@deprecated = new_value
         end
 
         @@hidden = false
-        def self.hidden=(new_value)
+        def default_hidden(new_value)
           @@hidden = new_value
         end
 
         @@scopes = nil
-        def self.scopes=(new_value)
+        def default_scopes(new_value)
           @@scopes = new_value
         end
 
         @@tags = []
-        def self.tags=(new_value)
+        def default_tags(new_value)
           @@tags = new_value
         end
 
         @@result = nil
-        def self.result=(new_value)
+        def default_result(new_value)
           @@result = new_value
         end
 
         @@result_root = nil
-        def self.result_root=(new_value)
+        def default_result_root(new_value)
           @@result_root = new_value
         end
 
         @@errors = nil
-        def self.errors=(new_value)
+        def default_errors(new_value)
           @@errors = new_value
         end
 
