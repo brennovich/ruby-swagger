@@ -1,7 +1,6 @@
 require 'grape'
 require 'ruby-swagger'
-require 'ruby-swagger/grape/grape_presenter'
-require 'ruby-swagger/grape/grape-ext'
+require 'ruby-swagger/grape/grape'
 
 class ApplicationsAPI < Grape::API
 
