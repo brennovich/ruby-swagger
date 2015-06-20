@@ -16,4 +16,5 @@ This is the engine used in other gems to translate API definitions (grape, rails
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'grape'
   s.add_development_dependency 'grape-entity'
+  s.add_development_dependency 'rack-test'
 end

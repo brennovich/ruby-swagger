@@ -1,7 +1,13 @@
 require 'grape'
+require 'ruby-swagger'
+require 'ruby-swagger/grape/grape_presenter'
 require 'ruby-swagger/grape/grape-ext'
 
 class ApplicationsAPI < Grape::API
+
+  version 'v1'
+  format :json
+  prefix :api
 
   def self.std_errors
     { '300' => 'Redirected',
@@ -33,10 +39,10 @@ class ApplicationsAPI < Grape::API
     end
     get '/' do
       @applications = [
-          OpenStruct.new({id: '123456', name: 'An app', description: 'Great App'}),
-          OpenStruct.new({id: '123456', name: 'Another app', description: 'Another great App'})
+          {id: '123456', name: 'An app', description: 'Great App'},
+          {id: '654321', name: 'Another app', description: 'Another great App'}
       ]
-      api_present @applications
+      api_present(@applications)
     end
 
   end
