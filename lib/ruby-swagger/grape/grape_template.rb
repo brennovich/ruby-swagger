@@ -2,8 +2,8 @@ require 'ruby-swagger/data/document'
 require 'ruby-swagger/template'
 require 'ruby-swagger/grape/routes'
 
-module Swagger
-  class GrapeTemplate
+module Swagger::Grape
+  class Template
 
     def self.generate(base_class)
       swagger_doc = Swagger::Template.generate
