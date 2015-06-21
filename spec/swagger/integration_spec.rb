@@ -11,6 +11,10 @@ describe 'Ruby::Swagger' do
     $stdout = StringIO.new
   end
 
+  def open_yaml(file)
+    YAML::load_file(file)
+  end
+
   before do
     FileUtils.rm_rf("./doc/swagger")
   end
@@ -34,7 +38,7 @@ describe 'Ruby::Swagger' do
     end
 
     it 'base_doc.yaml contains valid information' do
-      base_doc = YAML::load_file("./doc/swagger/base_doc.yaml")
+      base_doc = open_yaml "./doc/swagger/base_doc.yaml"
       expect(base_doc['swagger']).to eq '2.0'
       expect(base_doc['info']['title']).to eq 'My uber-duper API'
       expect(base_doc['info']['description']).to eq 'My uber-duper API description'
@@ -62,6 +66,10 @@ describe 'Ruby::Swagger' do
 
     it 'should generate a ./doc/swagger/paths/applications/get.yaml file' do
       expect(File.exists?('./doc/swagger/paths/applications/get.yaml')).to be_truthy
+    end
+
+    it 'should include information about deprecation' do
+      expect(open_yaml('./doc/swagger/paths/applications/get.yaml')['deprecated']).to be_truthy
     end
 
     # the endpoint is hidden - nothing to see here
