@@ -68,8 +68,20 @@ describe 'Ruby::Swagger' do
       expect(File.exists?('./doc/swagger/paths/applications/get.yaml')).to be_truthy
     end
 
-    it 'should include information about deprecation' do
+    it 'should include information about deprecation in applications/get.yaml' do
       expect(open_yaml('./doc/swagger/paths/applications/get.yaml')['deprecated']).to be_truthy
+    end
+
+    it 'should include tags information in applications/get.yaml' do
+      expect(open_yaml('./doc/swagger/paths/applications/get.yaml')['tags']).to eq(['applications'])
+    end
+
+    it 'should include tags information in applications/{id}/check_access/get.yaml' do
+      expect(open_yaml('./doc/swagger/paths/applications/{id}/check_access/get.yaml')['tags']).to eq(['applications', 'getter'])
+    end
+
+    it 'should include tags information in applications/{id}/post.yaml' do
+      expect(open_yaml('./doc/swagger/paths/applications/{id}/post.yaml')['tags']).to eq(['applications', 'create', 'swag'])
     end
 
     # the endpoint is hidden - nothing to see here

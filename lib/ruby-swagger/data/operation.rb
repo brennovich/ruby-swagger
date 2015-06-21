@@ -80,7 +80,7 @@ module Swagger::Data
 
     def self.from_grape(route_name, route)
       operation = Swagger::Data::Operation.new
-      operation.tags = grape_tags(route_name)
+      operation.tags = grape_tags(route_name, route)
       operation.description = route.route_description.truncate(120)
       operation.summary = route.route_description
 
@@ -123,8 +123,8 @@ module Swagger::Data
 
     private
 
-    def self.grape_tags(route_name)
-      [route_name.split('/')[1]]
+    def self.grape_tags(route_name, route)
+      route.route_tags || [route_name.split('/')[1]]
     end
 
 
