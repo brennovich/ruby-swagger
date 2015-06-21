@@ -12,12 +12,9 @@ This is the engine used in other gems to translate API definitions (grape, rails
 
   s.add_dependency 'addressable'
 
- # s.add_dependency 'nokogiri', '>= 1.5.5'
- # s.add_dependency "httparty", ">= 0.9.0"
-#  s.add_dependency 'feed-normalizer', ">= 1.5.2"
-
   s.add_development_dependency "rake", ">= 0.9.2"
   s.add_development_dependency 'rspec'
-#  s.add_development_dependency 'vcr', '>= 2.3.0'
-#  s.add_development_dependency 'webmock', '>= 1.9.0'
+  s.add_development_dependency 'grape'
+  s.add_development_dependency 'grape-entity'
+  s.add_development_dependency 'rack-test'
 end

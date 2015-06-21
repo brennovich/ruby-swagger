@@ -1,5 +1,5 @@
 require 'ruby-swagger/io/file_system'
-require 'ruby-swagger/grape_template'
+require 'ruby-swagger/grape/grape_template'
 
 namespace :swagger do
 
@@ -15,7 +15,7 @@ namespace :swagger do
 
       puts "Exporting from Grape - base class #{args[:base_class]}"
 
-      swagger_doc = Swagger::GrapeTemplate.generate(Module.const_get(args[:base_class]))
+      swagger_doc = Swagger::Grape::Template.generate(Module.const_get(args[:base_class]))
 
       # Get path data from Grape
 
