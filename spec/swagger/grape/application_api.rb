@@ -30,6 +30,7 @@ class ApplicationsAPI < Grape::API
   resource :applications do
 
     api_desc 'Retrieves applications list' do
+      detail 'This API does this and that and more'
       headers authentication_headers
       scopes 'application:read'
       tags 'applications'

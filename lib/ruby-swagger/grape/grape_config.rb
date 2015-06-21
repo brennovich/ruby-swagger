@@ -37,6 +37,12 @@ module Grape
           @api_options[:hidden] = hidden_value
         end
 
+        def detail(detail_value)
+          raise ArgumentError.new("Grape::detail - unrecognized value #{detail_value} - allowed: String") unless detail_value.is_a?(String)
+
+          @api_options[:detail] = detail_value
+        end
+
         def scopes(scopes_value)
           return if scopes_value.nil?
 
@@ -127,7 +133,8 @@ module Grape
               result: @@result,
               result_root: @@result_root,
               errors: @@errors,
-              api_name: nil
+              api_name: nil,
+              detail: ''
           }.merge(options)
           @description = ''
         end

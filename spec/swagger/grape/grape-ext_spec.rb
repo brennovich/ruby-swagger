@@ -12,6 +12,7 @@ describe Grape::DSL::Configuration do
     it 'should inspect extended parameters for Grape' do
       expect(subject.route_headers).to eq({"Authorization"=>{:description=>"A valid user session token, in the format 'Bearer TOKEN'", :required=>true}})
       expect(subject.route_api_name).to eq 'get_applications'
+      expect(subject.route_detail).to eq 'This API does this and that and more'
       expect(subject.route_scopes).to eq ['application:read']
       expect(subject.route_tags).to eq ['applications']
       expect(subject.route_deprecated).to be_truthy

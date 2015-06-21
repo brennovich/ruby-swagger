@@ -60,6 +60,26 @@ describe 'Ruby::Swagger' do
       expect(Dir.exists?('./doc/swagger/paths')).to be_truthy
     end
 
+    it 'should generate a ./doc/swagger/paths/applications/get.yaml file' do
+      expect(File.exists?('./doc/swagger/paths/applications/get.yaml')).to be_truthy
+    end
+
+    it 'should generate a ./doc/swagger/paths/applications/{id}/get.yaml file' do
+      expect(File.exists?('./doc/swagger/paths/applications/{id}/get.yaml')).to be_truthy
+    end
+
+    it 'should generate a ./doc/swagger/paths/applications/{id}/post.yaml file' do
+      expect(File.exists?('./doc/swagger/paths/applications/{id}/post.yaml')).to be_truthy
+    end
+
+    it 'should generate a ./doc/swagger/paths/applications/{id}/delete.yaml file' do
+      expect(File.exists?('./doc/swagger/paths/applications/{id}/delete.yaml')).to be_truthy
+    end
+
+    it 'should generate a ./doc/swagger/paths/applications/{id}/check_access/get.yaml file' do
+      expect(File.exists?('./doc/swagger/paths/applications/{id}/check_access/get.yaml')).to be_truthy
+    end
+
   end
 
 
