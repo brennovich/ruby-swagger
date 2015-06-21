@@ -116,13 +116,8 @@ namespace :swagger do
       build_client 'android'
     end
 
-    desc 'Build the Javascript API client given the swagger definition in doc/swagger/swagger.json'
-    task :javascript do
-      #todo
-    end
-
     desc 'Build all the API clients'
-    task :all => [:ruby, :java, :python, :python_3, :php, :perl, :objective_c, :c_sharp, :android, :javascript]
+    task :all => [:ruby, :java, :python, :python_3, :php, :perl, :objective_c, :c_sharp, :android]
 
     task :default => [:all]
 
