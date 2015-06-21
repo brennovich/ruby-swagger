@@ -124,6 +124,12 @@ describe 'Ruby::Swagger' do
 
     end
 
+    describe 'operationId' do
+      it 'should include an operationId in applications/get.yaml' do
+        expect(open_yaml('./doc/swagger/paths/applications/get.yaml')['operationId']).to eq "get_applications"
+      end
+    end
+
     describe 'params' do
       it 'should get parameters for applications/get.yaml' do
         doc = open_yaml('./doc/swagger/paths/applications/get.yaml')
