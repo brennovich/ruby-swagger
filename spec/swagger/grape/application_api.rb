@@ -34,6 +34,7 @@ class ApplicationsAPI < Grape::API
       tags 'applications'
       deprecated true
       hidden false
+      api_name 'get_applications'
       result ApplicationEntity
       result_root 'applications'
       errors std_errors.merge("418" => {message: "I'm a teapot", description: "Yes, I am"})
@@ -75,7 +76,6 @@ class ApplicationsAPI < Grape::API
       headers authentication_headers
       scopes 'application:read'
       tags %w(applications getter)
-      api_name 'get_application_by_id'
       result Virtus::Attribute::Boolean
       result_root 'access'
     end

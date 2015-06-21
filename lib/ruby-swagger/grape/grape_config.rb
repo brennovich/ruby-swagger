@@ -19,6 +19,12 @@ module Grape
           @api_options[:headers] = headers_value
         end
 
+        def api_name(name_value)
+          raise ArgumentError.new("Grape::api_name - unrecognized value #{name_value} - allowed: String") unless name_value.is_a?(String)
+
+          @api_options[:api_name] = name_value
+        end
+
         def deprecated(deprecation_value)
           raise ArgumentError.new("Grape::deprecated - unrecognized value #{deprecation_value} - allowed: true|false") unless deprecation_value == true || deprecation_value == false
 
@@ -120,7 +126,8 @@ module Grape
               tags: @@tags,
               result: @@result,
               result_root: @@result_root,
-              errors: @@errors
+              errors: @@errors,
+              api_name: nil
           }.merge(options)
           @description = ''
         end
