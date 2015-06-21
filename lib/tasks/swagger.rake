@@ -40,4 +40,41 @@ namespace :swagger do
     puts "Done. Your documentation file is #{Swagger::IO::FileSystem.default_path}/swagger.json"
   end
 
+  desc 'Build an API client given the swagger definition in doc/swagger/swagger.json'
+  namespace :generate_client do
+
+    def build_client(language)
+      unless File.exists?('./doc/swagger/swagger.json')
+        STDERR.puts "File ./doc/swagger/swagger.json does not exist"
+        exit -1
+      end
+
+      unless File.exists?('vendor/swagger-codegen-cli.jar')
+        STDERR.puts "Swagger codegen does not exist, downloading it now..."
+        Dir.mkdir('./vendor') unless Dir.exists?('./vendor')
+
+        `wget -O ./vendor/swagger-codegen-cli.jar http://central.maven.org/maven2/com/wordnik/swagger-codegen-cli/2.1.0-M2/swagger-codegen-cli-2.1.0-M2.jar`
+      end
+
+      puts "Generating #{language} client (output in api_client/#{language})"
+
+      FileUtils.rm_rf("./api_client/#{language}") if Dir.exists?("./api_client/#{language}")
+
+      `java -jar ./vendor/swagger-codegen-cli.jar generate \
+            -i ./doc/swagger/swagger.json \
+            -l #{language} \
+            -o api_client/#{language}`
+    end
+
+    desc 'Build the Ruby API client given the swagger definition in doc/swagger/swagger.json'
+    task :ruby do
+      build_client 'ruby'
+    end
+
+    desc 'Build all the API clients'
+    task :all => [:ruby]
+
+    task :default => [:all]
+
+  end
 end
