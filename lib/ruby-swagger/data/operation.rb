@@ -132,9 +132,8 @@ module Swagger::Data
     private
 
     def self.grape_tags(route_name, route)
-      route.route_tags || [route_name.split('/')[1]]
+      (route.route_tags && !route.route_tags.empty?) ? route.route_tags : [route_name.split('/')[1]]
     end
-
 
   end
 end
