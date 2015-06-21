@@ -86,6 +86,7 @@ module Swagger::Data
       operation.description = (route.route_detail && route.route_detail.length > 0) ? route.route_detail : route.route_description
 
       params = {}
+      parameter_names = []
 
       if route.route_headers
         route.route_headers.each do |header_key, header_value|
@@ -96,13 +97,37 @@ module Swagger::Data
       route_name.scan(/\{[a-zA-Z0-9\-\_]+\}/).each do |parameter| #scan all parameters in the url
         param_name = parameter[1..parameter.length-2]
         params[param_name] = {'name' => param_name, 'in' => 'path', 'required' => true, 'type' => 'string'}
+
+        parameter_names << param_name
       end
 
-      route.route_params.each do |parameter|
-        swag_param = Swagger::Data::Parameter.from_grape(parameter)
-        next unless swag_param
+      if route.route_params && route.route_params.length > 0
 
-        params[parameter.first.to_s] = swag_param
+        body_param = Swagger::Data::Parameter.parse({'name' => 'body', 'in' => 'body', 'description' => 'the content of the request', 'schema' => {'type' => 'object'}})
+        schema = body_param.schema
+
+        route.route_params.each do |parameter|
+          next if parameter_names.include?(parameter.first)
+
+          if schema.properties.nil?
+            schema.properties = {}
+          end
+
+          schema.properties[parameter.first] = grape_param_to_swagger(parameter)
+
+          if parameter.last[:required] && parameter.last[:required] == true
+
+            if schema.required.nil?
+              schema.required = []
+            end
+
+            schema.required << parameter.first
+          end
+
+        end
+
+        params['body'] = body_param if !schema.properties.nil? && schema.properties.keys.length > 0
+
       end
 
       params.each do |param_name, parameter|
@@ -134,6 +159,35 @@ module Swagger::Data
     def self.grape_tags(route_name, route)
       (route.route_tags && !route.route_tags.empty?) ? route.route_tags : [route_name.split('/')[1]]
     end
+
+
+    def self.grape_param_to_swagger(param)
+      case (param.last[:type] && param.last[:type].downcase) || 'string'
+        when 'string'
+          {'type' => 'string', 'description' => param.last[:desc]}
+        when 'integer'
+          {'type' => 'integer', 'description' => param.last[:desc]}
+        when 'array'
+          {'type' => 'array', 'description' => param.last[:desc]}
+        when 'hash'
+          {'type' => 'object', 'description' => param.last[:desc]}
+        when 'virtus::attribute::boolean'
+          {'type' => 'boolean', 'description' => param.last[:desc]}
+        when 'symbol'
+          {'type' => 'string', 'description' => param.last[:desc]}
+        when 'float'
+          {'format' => 'float', 'type' => 'number', 'description' => param.last[:desc]}
+        when 'rack::multipart::uploadedfile'
+          {'format' => 'file', 'description' => param.last[:desc]}
+        when 'date'
+          {'format' => 'date', 'type' => 'string', 'description' => param.last[:desc]}
+        when 'datetime'
+          {'format' => 'date-time', 'type' => 'string', 'description' => param.last[:desc]}
+        else
+          raise "Don't know how to convert they grape type #{type}"
+      end
+    end
+
 
   end
 end
