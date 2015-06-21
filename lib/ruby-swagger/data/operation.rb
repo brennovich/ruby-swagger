@@ -80,11 +80,19 @@ module Swagger::Data
 
     def self.from_grape(route_name, route)
       operation = Swagger::Data::Operation.new
-      operation.tags = grape_tags(route_name)
-      operation.description = route.route_description.truncate(120)
+      operation.tags = grape_tags(route_name, route)
+      operation.operationId = route.route_api_name if route.route_api_name && route.route_api_name.length > 0
       operation.summary = route.route_description
+      operation.description = (route.route_detail && route.route_detail.length > 0) ? route.route_detail : route.route_description
 
       params = {}
+
+      if route.route_headers
+        route.route_headers.each do |header_key, header_value|
+          params[header_key] = {'name' => header_key, 'in' => 'header', 'required' => (header_value[:required] == true), 'type' => 'string', 'description' => header_value[:description]}
+        end
+      end
+
       route_name.scan(/\{[a-zA-Z0-9\-\_]+\}/).each do |parameter| #scan all parameters in the url
         param_name = parameter[1..parameter.length-2]
         params[param_name] = {'name' => param_name, 'in' => 'path', 'required' => true, 'type' => 'string'}
@@ -109,24 +117,23 @@ module Swagger::Data
 
       operation.deprecated = route.route_deprecated if route.route_deprecated  #grape extension
 
-      if route.route_scopes #grape extensions
-        security = Swagger::Data::SecurityRequirement.new
-        route.route_scopes.each do |name, requirements|
-          security.add_requirement(name, requirements)
-        end
-
-        operations.security = route.route_scopes
-      end
+      # if route.route_scopes #grape extensions
+      #   security = Swagger::Data::SecurityRequirement.new
+      #   route.route_scopes.each do |name, requirements|
+      #     security.add_requirement(name, requirements)
+      #   end
+      #
+      #   operations.security = route.route_scopes
+      # end
 
       operation
     end
 
     private
 
-    def self.grape_tags(route_name)
-      [route_name.split('/')[1]]
+    def self.grape_tags(route_name, route)
+      (route.route_tags && !route.route_tags.empty?) ? route.route_tags : [route_name.split('/')[1]]
     end
-
 
   end
 end

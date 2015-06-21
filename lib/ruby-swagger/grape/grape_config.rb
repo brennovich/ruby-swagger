@@ -13,16 +13,16 @@ module Grape
           desc description, @api_options
         end
 
-        def user_authenticated(auth_value)
-          raise ArgumentError.new("Grape::user_authenticated - unrecognized value #{auth_value} - allowed: true|false") unless auth_value == true || auth_value == false
+        def headers(headers_value)
+          raise ArgumentError.new("Grape::headers - unrecognized value #{headers_value} - allowed: Hash") unless headers_value.is_a?(Hash)
 
-          @api_options[:user_authenticated] = auth_value
+          @api_options[:headers] = headers_value
         end
 
-        def company_authenticated(auth_value)
-          raise ArgumentError.new("Grape::company_authenticated - unrecognized value #{auth_value} - allowed: true|false") unless auth_value == true || auth_value == false
+        def api_name(name_value)
+          raise ArgumentError.new("Grape::api_name - unrecognized value #{name_value} - allowed: String") unless name_value.is_a?(String)
 
-          @api_options[:company_authenticated] = auth_value
+          @api_options[:api_name] = name_value
         end
 
         def deprecated(deprecation_value)
@@ -35,6 +35,12 @@ module Grape
           raise ArgumentError.new("Grape::hidden - unrecognized value #{hidden_value} - allowed: true|false") unless hidden_value == true || hidden_value == false
 
           @api_options[:hidden] = hidden_value
+        end
+
+        def detail(detail_value)
+          raise ArgumentError.new("Grape::detail - unrecognized value #{detail_value} - allowed: String") unless detail_value.is_a?(String)
+
+          @api_options[:detail] = detail_value
         end
 
         def scopes(scopes_value)
@@ -64,7 +70,6 @@ module Grape
         end
 
         def result(new_result)
-          raise ArgumentError.new("Grape::tags - unrecognized value #{new_result} - tags can only be an array of strings") unless true
           @api_options[:result]= new_result
         end
 
@@ -78,14 +83,9 @@ module Grape
           @api_options[:errors]= errors_value
         end
 
-        @@user_authenticated = false
-        def default_user_authenticated(new_value)
-          @@user_authenticated = new_value
-        end
-
-        @@company_authenticated = false
-        def default_company_authenticated(new_value)
-          @@company_authenticated = new_value
+        @@headers = {}
+        def default_headers(new_value)
+          @@headers = new_value
         end
 
         @@deprecated = false
@@ -125,15 +125,16 @@ module Grape
 
         def default_api_options!(options)
           @api_options = {
-              user_authenticated: @@user_authenticated,
-              company_authenticated: @@company_authenticated,
+              headers: @@headers,
               deprecated: @@deprecated,
               hidden: @@hidden,
               scopes: @@scopes,
               tags: @@tags,
               result: @@result,
               result_root: @@result_root,
-              errors: @@errors
+              errors: @@errors,
+              api_name: nil,
+              detail: ''
           }.merge(options)
           @description = ''
         end

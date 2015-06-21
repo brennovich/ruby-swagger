@@ -15,7 +15,9 @@ module Swagger::Grape
 
       @routes.each do |route|
 
-        swagger_path_name = swagger_path_name(route.route_path)
+        next if route.route_hidden == true  #implement custom "hidden" extension
+
+        swagger_path_name = swagger_path_name(route)
         paths[swagger_path_name] ||= Swagger::Grape::RoutePath.new(swagger_path_name)
         paths[swagger_path_name].add_operation(route)
 
@@ -30,9 +32,13 @@ module Swagger::Grape
 
     private
 
-    def swagger_path_name(grape_path_name)
+    def swagger_path_name(grape_route)
+      grape_path_name = grape_route.route_path
+      grape_prefix = grape_route.route_prefix
+      grape_path_name.gsub!(/^\/#{grape_prefix}/, '') if grape_prefix
       grape_path_name.gsub!(/^\/:version/, '') #remove api version - if any
       grape_path_name.gsub!(/\(\.:format\)$/, '') #remove api format - if any
+      grape_path_name.gsub!(/\(\..+\)$/, '') #remove api format - if any
       grape_path_name.gsub!(/\/:([a-zA-Z0-9_]+)/, '/{\1}')  #convert parameters from :format into {format}
       grape_path_name
     end
