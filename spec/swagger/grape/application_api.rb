@@ -102,9 +102,6 @@ class ApplicationsAPI < Grape::API
 
     # Mix in with desc instead of api_desc
     desc "Uninstall / unsubscribe an application by its unique id or by its code name."
-    params do
-      requires :id, type: String, desc: "Unique identifier or code name of the application"
-    end
     delete "/:id" do
       present true
     end

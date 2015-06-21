@@ -124,6 +124,43 @@ describe 'Ruby::Swagger' do
 
     end
 
+    describe 'params' do
+      it 'should get parameters for applications/get.yaml' do
+        doc = open_yaml('./doc/swagger/paths/applications/get.yaml')
+
+        expect(doc['parameters'].count).to eq 3
+
+        expect(doc['parameters'][0]['name']).to eq 'limit'
+        expect(doc['parameters'][0]['in']).to eq 'formData'
+        expect(doc['parameters'][0]['description']).to eq 'Number of profiles returned. Default is 30 elements, max is 100 elements per page.'
+        expect(doc['parameters'][0]['type']).to eq 'integer'
+
+        expect(doc['parameters'][1]['name']).to eq 'offset'
+        expect(doc['parameters'][1]['in']).to eq 'formData'
+        expect(doc['parameters'][1]['description']).to eq 'Offset for pagination result. Use it combined with the limit field. Default is 0.'
+        expect(doc['parameters'][1]['type']).to eq 'integer'
+
+        expect(doc['parameters'][2]['name']).to eq 'q[service]'
+        expect(doc['parameters'][2]['in']).to eq 'formData'
+        expect(doc['parameters'][2]['description']).to eq 'Filter by application exposing a given service'
+        expect(doc['parameters'][2]['type']).to eq 'string'
+      end
+
+      it 'should get parameters for applications/{id}/delete.yaml' do
+        doc = open_yaml('./doc/swagger/paths/applications/{id}/delete.yaml')
+
+        expect(doc['parameters'].count).to eq 1
+
+        expect(doc['parameters'][0]['name']).to eq 'id'
+        expect(doc['parameters'][0]['in']).to eq 'path'
+        expect(doc['parameters'][0]['description']).to be_nil
+        expect(doc['parameters'][0]['type']).to eq 'string'
+        expect(doc['parameters'][0]['required']).to be_truthy
+      end
+
+    end
+
+
   end
 
 
