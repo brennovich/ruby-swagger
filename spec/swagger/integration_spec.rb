@@ -68,22 +68,6 @@ describe 'Ruby::Swagger' do
       expect(File.exists?('./doc/swagger/paths/applications/get.yaml')).to be_truthy
     end
 
-    it 'should include information about deprecation in applications/get.yaml' do
-      expect(open_yaml('./doc/swagger/paths/applications/get.yaml')['deprecated']).to be_truthy
-    end
-
-    it 'should include tags information in applications/get.yaml' do
-      expect(open_yaml('./doc/swagger/paths/applications/get.yaml')['tags']).to eq(['applications'])
-    end
-
-    it 'should include tags information in applications/{id}/check_access/get.yaml' do
-      expect(open_yaml('./doc/swagger/paths/applications/{id}/check_access/get.yaml')['tags']).to eq(['applications', 'getter'])
-    end
-
-    it 'should include tags information in applications/{id}/post.yaml' do
-      expect(open_yaml('./doc/swagger/paths/applications/{id}/post.yaml')['tags']).to eq(['applications', 'create', 'swag'])
-    end
-
     # the endpoint is hidden - nothing to see here
     it 'should NOT generate a ./doc/swagger/paths/applications/{id}/get.yaml file' do
       expect(File.exists?('./doc/swagger/paths/applications/{id}/get.yaml')).to be_falsey
@@ -99,6 +83,45 @@ describe 'Ruby::Swagger' do
 
     it 'should generate a ./doc/swagger/paths/applications/{id}/check_access/get.yaml file' do
       expect(File.exists?('./doc/swagger/paths/applications/{id}/check_access/get.yaml')).to be_truthy
+    end
+
+    describe 'deprecation' do
+      it 'should include information about deprecation in applications/get.yaml' do
+        expect(open_yaml('./doc/swagger/paths/applications/get.yaml')['deprecated']).to be_truthy
+      end
+    end
+
+    describe 'tags' do
+      it 'should include tags information in applications/get.yaml' do
+        expect(open_yaml('./doc/swagger/paths/applications/get.yaml')['tags']).to eq(['applications'])
+      end
+
+      it 'should include tags information in applications/{id}/check_access/get.yaml' do
+        expect(open_yaml('./doc/swagger/paths/applications/{id}/check_access/get.yaml')['tags']).to eq(['applications', 'getter'])
+      end
+
+      it 'should include tags information in applications/{id}/post.yaml' do
+        expect(open_yaml('./doc/swagger/paths/applications/{id}/post.yaml')['tags']).to eq(['applications', 'create', 'swag'])
+      end
+    end
+
+    describe 'documentation description' do
+
+      it 'should include a summary and a detail in applications/get.yaml' do
+        expect(open_yaml('./doc/swagger/paths/applications/get.yaml')['summary']).to eq "Retrieves applications list"
+        expect(open_yaml('./doc/swagger/paths/applications/get.yaml')['description']).to eq 'This API does this and that and more'
+      end
+
+      it 'should include a summary and a detail in applications/{id}/post.yaml' do
+        expect(open_yaml('./doc/swagger/paths/applications/{id}/post.yaml')['summary']).to eq "Install / buy the application by its unique id or by its code name."
+        expect(open_yaml('./doc/swagger/paths/applications/{id}/post.yaml')['description']).to eq "Install / buy the application by its unique id or by its code name."
+      end
+
+      it 'should include a summary and a detail in applications/{id}/delete.yaml' do
+        expect(open_yaml('./doc/swagger/paths/applications/{id}/delete.yaml')['summary']).to eq "Uninstall / unsubscribe an application by its unique id or by its code name."
+        expect(open_yaml('./doc/swagger/paths/applications/{id}/delete.yaml')['description']).to eq "Uninstall / unsubscribe an application by its unique id or by its code name."
+      end
+
     end
 
   end

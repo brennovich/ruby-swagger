@@ -81,8 +81,9 @@ module Swagger::Data
     def self.from_grape(route_name, route)
       operation = Swagger::Data::Operation.new
       operation.tags = grape_tags(route_name, route)
-      operation.description = route.route_description.truncate(120)
+
       operation.summary = route.route_description
+      operation.description = (route.route_detail && route.route_detail.length > 0) ? route.route_detail : route.route_description
 
       params = {}
       route_name.scan(/\{[a-zA-Z0-9\-\_]+\}/).each do |parameter| #scan all parameters in the url
