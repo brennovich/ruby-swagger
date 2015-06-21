@@ -15,6 +15,8 @@ module Swagger::Grape
 
       @routes.each do |route|
 
+        next if route.route_hidden == true  #implement custom "hidden" extension
+
         swagger_path_name = swagger_path_name(route)
         paths[swagger_path_name] ||= Swagger::Grape::RoutePath.new(swagger_path_name)
         paths[swagger_path_name].add_operation(route)

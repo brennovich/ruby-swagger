@@ -64,8 +64,9 @@ describe 'Ruby::Swagger' do
       expect(File.exists?('./doc/swagger/paths/applications/get.yaml')).to be_truthy
     end
 
-    it 'should generate a ./doc/swagger/paths/applications/{id}/get.yaml file' do
-      expect(File.exists?('./doc/swagger/paths/applications/{id}/get.yaml')).to be_truthy
+    # the endpoint is hidden - nothing to see here
+    it 'should NOT generate a ./doc/swagger/paths/applications/{id}/get.yaml file' do
+      expect(File.exists?('./doc/swagger/paths/applications/{id}/get.yaml')).to be_falsey
     end
 
     it 'should generate a ./doc/swagger/paths/applications/{id}/post.yaml file' do
