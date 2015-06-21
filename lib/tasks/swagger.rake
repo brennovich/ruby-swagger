@@ -53,7 +53,7 @@ namespace :swagger do
         STDERR.puts "Swagger codegen does not exist, downloading it now..."
         Dir.mkdir('./vendor') unless Dir.exists?('./vendor')
 
-        `wget -O ./vendor/swagger-codegen-cli.jar http://central.maven.org/maven2/com/wordnik/swagger-codegen-cli/2.1.0-M2/swagger-codegen-cli-2.1.0-M2.jar`
+        `wget -O ./vendor/swagger-codegen-cli.jar https://s3-us-west-2.amazonaws.com/tunamelt-production/swagger-codegen/swagger-codegen-cli.jar`
       end
 
       puts "Generating #{language} client (output in api_client/#{language})"
@@ -71,8 +71,58 @@ namespace :swagger do
       build_client 'ruby'
     end
 
+    desc 'Build the Java API client given the swagger definition in doc/swagger/swagger.json'
+    task :java do
+      build_client 'java'
+    end
+
+    desc 'Build the Scala API client given the swagger definition in doc/swagger/swagger.json'
+    task :scala do
+      build_client 'scala'
+    end
+
+    desc 'Build the Python API client given the swagger definition in doc/swagger/swagger.json'
+    task :python do
+      build_client 'python'
+    end
+
+    desc 'Build the Python 3 API client given the swagger definition in doc/swagger/swagger.json'
+    task :python_3 do
+      build_client 'python'
+    end
+
+    desc 'Build the PHP API client given the swagger definition in doc/swagger/swagger.json'
+    task :php do
+      build_client 'php'
+    end
+
+    desc 'Build the Perl API client given the swagger definition in doc/swagger/swagger.json'
+    task :perl do
+      build_client 'perl'
+    end
+
+    desc 'Build the ObjectiveC API client given the swagger definition in doc/swagger/swagger.json'
+    task :objective_c do
+      build_client 'objc'
+    end
+
+    desc 'Build the C# API client given the swagger definition in doc/swagger/swagger.json'
+    task :c_sharp do
+      build_client 'csharp'
+    end
+
+    desc 'Build the Android API client given the swagger definition in doc/swagger/swagger.json'
+    task :android do
+      build_client 'android'
+    end
+
+    desc 'Build the Javascript API client given the swagger definition in doc/swagger/swagger.json'
+    task :javascript do
+      #todo
+    end
+
     desc 'Build all the API clients'
-    task :all => [:ruby]
+    task :all => [:ruby, :java, :python, :python_3, :php, :perl, :objective_c, :c_sharp, :android, :javascript]
 
     task :default => [:all]
 
