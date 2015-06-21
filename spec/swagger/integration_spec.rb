@@ -134,22 +134,28 @@ describe 'Ruby::Swagger' do
       it 'should get parameters for applications/get.yaml' do
         doc = open_yaml('./doc/swagger/paths/applications/get.yaml')
 
-        expect(doc['parameters'].count).to eq 3
+        expect(doc['parameters'].count).to eq 4
 
-        expect(doc['parameters'][0]['name']).to eq 'limit'
-        expect(doc['parameters'][0]['in']).to eq 'formData'
-        expect(doc['parameters'][0]['description']).to eq 'Number of profiles returned. Default is 30 elements, max is 100 elements per page.'
-        expect(doc['parameters'][0]['type']).to eq 'integer'
+        expect(doc['parameters'][0]['name']).to eq 'Authorization'
+        expect(doc['parameters'][0]['in']).to eq 'header'
+        expect(doc['parameters'][0]['description']).to eq 'A valid user session token, in the format \'Bearer TOKEN\''
+        expect(doc['parameters'][0]['type']).to eq 'string'
+        expect(doc['parameters'][0]['required']).to eq true
 
-        expect(doc['parameters'][1]['name']).to eq 'offset'
+        expect(doc['parameters'][1]['name']).to eq 'limit'
         expect(doc['parameters'][1]['in']).to eq 'formData'
-        expect(doc['parameters'][1]['description']).to eq 'Offset for pagination result. Use it combined with the limit field. Default is 0.'
+        expect(doc['parameters'][1]['description']).to eq 'Number of profiles returned. Default is 30 elements, max is 100 elements per page.'
         expect(doc['parameters'][1]['type']).to eq 'integer'
 
-        expect(doc['parameters'][2]['name']).to eq 'q[service]'
+        expect(doc['parameters'][2]['name']).to eq 'offset'
         expect(doc['parameters'][2]['in']).to eq 'formData'
-        expect(doc['parameters'][2]['description']).to eq 'Filter by application exposing a given service'
-        expect(doc['parameters'][2]['type']).to eq 'string'
+        expect(doc['parameters'][2]['description']).to eq 'Offset for pagination result. Use it combined with the limit field. Default is 0.'
+        expect(doc['parameters'][2]['type']).to eq 'integer'
+
+        expect(doc['parameters'][3]['name']).to eq 'q[service]'
+        expect(doc['parameters'][3]['in']).to eq 'formData'
+        expect(doc['parameters'][3]['description']).to eq 'Filter by application exposing a given service'
+        expect(doc['parameters'][3]['type']).to eq 'string'
       end
 
       it 'should get parameters for applications/{id}/delete.yaml' do
