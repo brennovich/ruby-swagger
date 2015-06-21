@@ -145,6 +145,64 @@ Each time you run the swagger:compile_doc task, the swagger.json file is regener
 
 (This is WIP)
 
+### Grape extensions
+
+This gem includes a number of Grape DSL extensions and method helpers that you can use when defining your API. 
+
+#### The api_desc helper method
+
+This helper method allows you to extend the "desc" method for Grape and let you define more context for your API method. This is an example of API
+definition using the api_desc method (rather than the Grape desc method):
+
+```
+    api_desc 'Retrieves applications list', {headers: {"X-API"=>{required: true}} do
+      user_authenticated true
+      deprecated true
+      hidden false
+      scopes 'application:read'
+      tags %w(applications api swag)
+      result ApplicationEntity
+      result_root 'applications'
+      errors default_errors.merge("418" => [message: "I'm a teapot", description: "This is what happens when you hit a teapot"])
+    end
+    params do
+      ...
+    end
+    get '/' do
+    ...
+    end
+```
+
+The helper has the same syntax of the "desc" Grape method when defining an API operation. 
+It supports a short description as first parameter, an optional hash of parameters (where, for example, you can define which headers your API support) and a block.
+The block extends your definition mapping it to your Swagger documentation. The allowed extensions in the api_desc block are:
+
+  * **user_authenticated** True|False - Set whether the method requires authentication.
+  * **deprecated** True|False - If set to true, the method will be marked as deprecated in the Swagger documentation. Default: false
+  * **hidden** True|False - If set to true, the method will be excluded by the documentation
+  * **scopes** String|Array of strings - Defines OAuth2 scopes the method will need to satisfy. Default: nil
+  * **tags** String|Array of strings - List of tags used to organize your documentation. Default: nil
+  * **result** EntityObject - An object representing the expected result of the method when the operation is successful. Default: nil
+  * **result_root** String - If the result has a root key, the name of the root key. Default: nil
+  * **errors** Hash - A key/value representation of the errors the method can raise. The key is an http error code, the value is an hash. The keys are: message (the message sent to the user together with the error code), description is the documentation of the error
+
+#### The api_present helper method
+
+If you are using the api_desc method, you can use the api_present helper in your API definition instead of using the present method.
+For example:
+
+```
+    api_desc 'Retrieves applications list' do
+      result ApplicationEntity
+      result_root 'applications'
+    end
+    get '/' do
+      api_present Application.all
+    end
+```
+
+The api_present helper will take care of wrapping the Application model into an ApplicationEntity and use the 'applications' key root in the api response.
+
 
 ## Note on Patches/Pull Requests
 
