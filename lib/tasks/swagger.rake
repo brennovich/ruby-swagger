@@ -5,6 +5,12 @@ namespace :swagger do
 
   namespace :grape do
 
+    unless defined?(Rails)
+      task :environment do
+        # for non-rails environment, we do not load the env
+      end
+    end
+
     desc 'Generate a swagger meta documentation from Grape API definition and store it under doc/swagger'
     task :generate_doc, [:base_class] => :environment do |t, args|
       if args[:base_class].nil?
