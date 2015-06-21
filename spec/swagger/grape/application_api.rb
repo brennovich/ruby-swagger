@@ -1,6 +1,7 @@
 require 'grape'
 require 'ruby-swagger'
 require 'ruby-swagger/grape/grape'
+require_relative './application_entity'
 
 class ApplicationsAPI < Grape::API
 
