@@ -50,6 +50,14 @@ module Swagger::Data
       @xml = new_xml
     end
 
+    def []=(attrib, value)
+      self.send("#{attrib}=", value)
+    end
+
+    def [](attrib)
+      self.send("#{attrib}")
+    end
+
     def as_swagger
       res = super
       res['$ref'] = @ref if @ref
