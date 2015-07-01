@@ -27,13 +27,13 @@ module Grape
         end
 
         # Setting the grape :with
-        if route.route_result.present? && !options[:with].present? && route.route_result.kind_of?(Class)
-          options[:with] = route.route_result
+        if route.route_response.present? && route.route_response[:entity].present? &&!options[:with].present? && route.route_response[:entity].kind_of?(Class)
+          options[:with] = route.route_response[:entity]
         end
 
         # Setting the grape :root
-        if route.route_result_root.present? && !options[:root].present? && route.route_result_root.kind_of?(String)
-          options[:root] = route.route_result_root
+        if route.route_response.present? && route.route_response[:root].present? && !options[:root].present? && route.route_response[:root].kind_of?(String)
+          options[:root] = route.route_response[:root]
         end
 
         # Setting the :current_user extension

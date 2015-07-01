@@ -25,7 +25,34 @@ class ApplicationsAPI < Grape::API
     }
   end
 
+  def self.result_headers
+    {
+        'X-Request-Id' => {
+          description: "Unique id of the API request",
+          type: 'string'
+        },
+        'X-Runtime' => {
+          description: "Time spent processing the API request in ms",
+          type: 'string',
+
+        },
+        'X-Rate-Limit-Limit' => {
+          description: 'The number of allowed requests in the current period',
+          type: 'integer'
+        },
+        'X-Rate-Limit-Remaining'=> {
+          description: 'The number of remaining requests in the current period',
+          type: 'integer'
+        },
+        'X-Rate-Limit-Reset'=> {
+          description: 'The number of seconds left in the current period',
+          type: 'integer'
+        }
+    }
+  end
+
   default_headers authentication_headers
+  default_response_headers result_headers
 
   resource :applications do
 
@@ -37,8 +64,7 @@ class ApplicationsAPI < Grape::API
       deprecated true
       hidden false
       api_name 'get_applications'
-      result ApplicationEntity
-      result_root 'applications'
+      response ApplicationEntity, root: 'applications', headers: result_headers
       errors std_errors.merge("418" => {message: "I'm a teapot", description: "Yes, I am"})
     end
     params do
@@ -62,8 +88,7 @@ class ApplicationsAPI < Grape::API
       tags %w(applications getter)
       deprecated true
       hidden true
-      result ApplicationEntity
-      result_root 'application'
+      response ApplicationEntity, root: 'application', headers: result_headers
       errors std_errors
     end
     params do
@@ -78,8 +103,7 @@ class ApplicationsAPI < Grape::API
       headers authentication_headers
       scopes 'application:read'
       tags %w(applications getter)
-      result Virtus::Attribute::Boolean
-      result_root 'access'
+      response Virtus::Attribute::Boolean, root: 'access'
     end
     params do
       requires :id, type: String, desc: 'Unique identifier or code name of the application'

@@ -17,8 +17,14 @@ describe Grape::DSL::Configuration do
       expect(subject.route_tags).to eq ['applications']
       expect(subject.route_deprecated).to be_truthy
       expect(subject.route_hidden).to be_falsey
-      expect(subject.route_result).to eq ApplicationEntity
-      expect(subject.route_result_root).to eq 'applications'
+      expect(subject.route_response).not_to be_nil
+      expect(subject.route_response[:entity]).to eq ApplicationEntity
+      expect(subject.route_response[:root]).to eq 'applications'
+      expect(subject.route_response[:headers]).to eq({"X-Request-Id"=>{:description=>"Unique id of the API request", :type=>"string"},
+                                                      "X-Runtime"=>{:description=>"Time spent processing the API request in ms", :type=>"string"},
+                                                      "X-Rate-Limit-Limit"=>{:description=>"The number of allowed requests in the current period", :type=>"integer"},
+                                                      "X-Rate-Limit-Remaining"=>{:description=>"The number of remaining requests in the current period", :type=>"integer"},
+                                                      "X-Rate-Limit-Reset"=>{:description=>"The number of seconds left in the current period", :type=>"integer"}})
       expect(subject.route_errors).to eq({"300"=>{:message=>"Redirected", :description=>"You will be redirected"},
                                           "404"=>{:message=>"Not found", :description=>"The document is nowhere to be found"},
                                           "501"=>{:message=>"WTF?", :description=>"Shit happens"},
