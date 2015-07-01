@@ -1,5 +1,6 @@
 require 'grape'
 require 'grape-entity'
+require_relative './image_entity'
 
 class Status < Grape::Entity
   format_with(:iso_timestamp) { |dt| dt.iso8601 }
@@ -19,6 +20,16 @@ class Status < Grape::Entity
 
   expose :last_reply, using: Status do |status, options|
     status.replies.last
+  end
+
+  expose :list, documentation: {type: "Array", desc: "List of elements"} do
+
+    expose :option_a do
+      expose :option_b, documentation: {type: "Array", desc: "An option"}
+    end
+
+    expose :option_c, documentation: {type: "Integer", desc: "Last option"}
+
   end
 
   with_options(format_with: :iso_timestamp) do
