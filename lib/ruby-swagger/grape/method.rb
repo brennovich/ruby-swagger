@@ -8,6 +8,7 @@ module Swagger::Grape
     def initialize(route_name, route)
       @route_name = route_name
       @route = route
+      @types = []
 
       new_operation
       operation_params
@@ -234,7 +235,10 @@ module Swagger::Grape
           response['format'] = 'date-time'
           response['format'] = 'string'
         else
-          raise "Don't know how to convert they grape type #{type}"
+          type = (Object.const_get(param[:type].to_s))
+          @types << type
+          response['type'] = "object"
+          response['schmea'] = {"$ref" => "#/definitions/#{type.to_s}"}
       end
 
       response
