@@ -95,6 +95,23 @@ class ApplicationsAPI < Grape::API
     end
     params do
       requires :id, type: String, desc: "Unique identifier or code name of the application"
+      requires :godzilla, type: Array, desc: "Multiple options for this API"
+      optional :simple, type: Integer, desc: "A simple property", default: 'bazinga'
+      requires :options, type: Array, desc: "Multiple options for this API" do
+        optional :me, type: String, desc: 'A property of the API'
+        requires :other, type: Integer, desc: 'Another option'
+        optional :list, type: Array, desc: 'A list of options' do
+          optional :list_a, type: String, desc: 'List A'
+          optional :list_b, type: Integer, desc: 'List B'
+        end
+      end
+      optional :entry, type: Hash, desc: 'Another parameter, in hash' do
+        optional :key_1, type: String, desc: 'Key one'
+        optional :key_2, type: Hash, desc: 'Key two' do
+          optional :key_3, type: String, desc: 'Sub one'
+          optional :key_4, type: String, desc: 'Sub two'
+        end
+      end
     end
     post "/:id" do
       api_present true
