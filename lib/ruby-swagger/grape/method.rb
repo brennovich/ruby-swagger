@@ -122,8 +122,12 @@ module Swagger::Grape
 
     def query_params
       @route.route_params.each do |parameter|
+        next if @params[parameter.first.to_s]
+
         swag_param = Swagger::Data::Parameter.from_grape(parameter)
         next unless swag_param
+
+        swag_param.in = 'query'
 
         @params[parameter.first.to_s] = swag_param
       end
