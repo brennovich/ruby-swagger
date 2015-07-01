@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-require_relative '../grape/application_entity'
+require_relative '../grape/entities/application_entity'
 require_relative '../grape/application_api'
 
 describe Grape::DSL::Configuration do
