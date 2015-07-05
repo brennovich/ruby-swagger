@@ -75,6 +75,7 @@ module Grape
           response_obj = {entity: new_result}
           response_obj[:root] = options[:root] || options['root']
           response_obj[:headers] = options[:headers] || options['headers']
+          response_obj[:isArray] = options[:isArray] || options['isArray']
 
           @api_options[:response]= response_obj
         end
@@ -144,7 +145,8 @@ module Grape
               response: {
                   entity: @@response_entity,
                   root: @@response_root,
-                  headers: @@response_headers
+                  headers: @@response_headers,
+                  isArray: false
               },
               errors: @@errors,
               api_name: nil,
