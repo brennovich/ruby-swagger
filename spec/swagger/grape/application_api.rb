@@ -2,6 +2,9 @@ require 'grape'
 require 'ruby-swagger'
 require 'ruby-swagger/grape/grape'
 require_relative '../grape/entities/application_entity'
+require_relative '../grape/entities/error_redirect_entity'
+require_relative '../grape/entities/error_not_found_entity'
+require_relative '../grape/entities/error_boom_entity'
 
 class ApplicationsAPI < Grape::API
 
@@ -10,9 +13,9 @@ class ApplicationsAPI < Grape::API
   prefix :api
 
   def self.std_errors
-    { '300' => {message:'Redirected', description: 'You will be redirected' },
-      '404' => {message:'Not found', description: 'The document is nowhere to be found'},
-      '501' => {message: 'WTF?', description: 'Shit happens'}
+    { '300' => {entity: ErrorRedirectEntity, description: 'You will be redirected' },
+      '404' => {entity: ErrorNotFoundEntity, description: 'The document is nowhere to be found'},
+      '501' => {entity: ErrorBoomEntity, description: 'Shit happens'}
     }
   end
 
@@ -64,8 +67,8 @@ class ApplicationsAPI < Grape::API
       deprecated true
       hidden false
       api_name 'get_applications'
-      response ApplicationEntity, root: 'applications', headers: result_headers
-      errors std_errors.merge("418" => {message: "I'm a teapot", description: "Yes, I am"})
+      response ApplicationEntity, root: 'applications', isArray: true, headers: result_headers
+      errors std_errors.merge("418" => {entity: ErrorBoomEntity, description: "Yes, I am a teapot"})
     end
     params do
       optional :limit, type: Integer, desc: "Number of profiles returned. Default is 30 elements, max is 100 elements per page."
@@ -79,6 +82,7 @@ class ApplicationsAPI < Grape::API
           {id: '123456', name: 'An app', description: 'Great App'},
           {id: '654321', name: 'Another app', description: 'Another great App'}
       ]
+
       api_present(@applications)
     end
 
@@ -103,7 +107,7 @@ class ApplicationsAPI < Grape::API
       headers authentication_headers
       scopes 'application:read'
       tags %w(applications getter)
-      response Virtus::Attribute::Boolean, root: 'access'
+      response ApplicationEntity, root: 'access'
     end
     params do
       requires :id, type: String, desc: 'Unique identifier or code name of the application'
