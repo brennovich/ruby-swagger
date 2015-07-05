@@ -44,8 +44,68 @@ module Swagger::Grape
     def operation_responses
       @operation.responses = Swagger::Data::Responses.new
 
-      #Long TODO - document here all the possible responses
-      @operation.responses.add_response('200', Swagger::Data::Response.parse({'description' => 'Successful operation'}))
+      (@route.route_errors || {}).each do |code, response|
+        error_response = {'description' => response['description'] || response[:description]}
+
+        if entity = (response[:entity] || response['entity'])
+          type = Object.const_get entity.to_s
+
+          error_response['schema'] = {}
+          error_response['schema']['$ref'] = "#/definitions/#{type.to_s}"
+
+          @types << type
+        end
+
+        @operation.responses.add_response(code, Swagger::Data::Response.parse(error_response))
+      end
+
+      if @route.route_response.present? && @route.route_response[:entity].present?
+        rainbow_response = {'description' => 'Successful result of the operation'}
+
+        current_obj = rainbow_response['schema'] = {}
+
+        if @route.route_response[:root].present?
+
+          if @route.route_response[:isArray] == true
+            # an array that starts from a key named root
+            rainbow_response['schema']['type'] = 'object'
+            rainbow_response['schema']['properties'] = {
+              @route.route_response[:root] => {
+                  'type' => 'array',
+                  'items' => {
+                      'type' => 'object',
+                      '$ref' => "#/definitions/#{@route.route_response[:entity].to_s}"
+                  }
+              }
+            }
+          else
+            rainbow_response['schema']['type'] = 'object'
+            rainbow_response['schema']['properties'] = {
+                @route.route_response[:root] => {
+                    'type' => 'object',
+                    '$ref' => "#/definitions/#{@route.route_response[:entity].to_s}"
+                }
+            }
+          end
+
+        else
+
+          if @route.route_response[:isArray] == true
+            rainbow_response['schema']['type'] = 'array'
+            rainbow_response['schema']['items'] = {
+                'type' => 'object',
+                '$ref' => "#/definitions/#{@route.route_response[:entity].to_s}"
+            }
+          else
+            rainbow_response['schema']['type'] = 'object'
+            rainbow_response['schema']['$ref'] = "#/definitions/#{@route.route_response[:entity].to_s}"
+          end
+
+        end
+
+        @operation.responses.add_response('200', Swagger::Data::Response.parse(rainbow_response))
+      end
+
       @operation.responses.add_response('default', Swagger::Data::Response.parse({'description' => 'Unexpected error'}))
     end
 

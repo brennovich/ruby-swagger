@@ -25,10 +25,10 @@ describe Grape::DSL::Configuration do
                                                       "X-Rate-Limit-Limit"=>{:description=>"The number of allowed requests in the current period", :type=>"integer"},
                                                       "X-Rate-Limit-Remaining"=>{:description=>"The number of remaining requests in the current period", :type=>"integer"},
                                                       "X-Rate-Limit-Reset"=>{:description=>"The number of seconds left in the current period", :type=>"integer"}})
-      expect(subject.route_errors).to eq({"300"=>{:message=>"Redirected", :description=>"You will be redirected"},
-                                          "404"=>{:message=>"Not found", :description=>"The document is nowhere to be found"},
-                                          "501"=>{:message=>"WTF?", :description=>"Shit happens"},
-                                          "418"=>{:message=>"I'm a teapot", :description=>"Yes, I am"}})
+      expect(subject.route_errors).to eq({"300"=>{:entity=>ErrorRedirectEntity, :description=>"You will be redirected"},
+                                          "404"=>{:entity=>ErrorNotFoundEntity, :description=>"The document is nowhere to be found"},
+                                          "501"=>{:entity=>ErrorBoomEntity, :description=>"Shit happens"},
+                                          "418"=>{:entity=>ErrorBoomEntity, :description=>"Yes, I am a teapot"}})
     end
 
   end
