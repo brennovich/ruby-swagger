@@ -1,4 +1,5 @@
 require 'ruby-swagger/data/operation'
+require 'ruby-swagger/grape/type'
 
 module Swagger::Grape
   class Method
@@ -32,6 +33,7 @@ module Swagger::Grape
       @operation
     end
 
+    #extract all the parameters from the method definition (in path, url, body)
     def operation_params
       extract_params_and_types
 
@@ -40,7 +42,7 @@ module Swagger::Grape
       end
     end
 
-
+    #extract the data about the response of the method
     def operation_responses
       @operation.responses = Swagger::Data::Responses.new
 
@@ -230,8 +232,10 @@ module Swagger::Grape
 
         if param_name.scan(/[0-9a-zA-Z_]+/).count == 1
           #it's a simple parameter, adding it to the properties of the main object
-          schema.properties[param_name] = grape_param_to_swagger(param_value)
+          converted_param = Swagger::Grape::Param.new(param_value)
+          schema.properties[param_name] = converted_param.to_swagger
           required_parameter(schema, param_name, param_value)
+          remember_type(converted_param.type_definition) if converted_param.has_type_definition?
         else
           schema_with_subobjects(schema, param_name, parameter.last)
         end
@@ -252,7 +256,10 @@ module Swagger::Grape
     def schema_with_subobjects(schema, param_name, parameter)
       path = param_name.scan(/[0-9a-zA-Z_]+/)
       append_to = find_elem_in_schema(schema, path.dup)
-      append_to['properties'][path.last] = grape_param_to_swagger(parameter)
+      converted_param = Swagger::Grape::Param.new(parameter)
+      append_to['properties'][path.last] = converted_param.to_swagger
+
+      remember_type(converted_param.type_definition) if converted_param.has_type_definition?
 
       required_parameter(append_to, path.last, parameter)
     end
@@ -279,48 +286,7 @@ module Swagger::Grape
 
     end
 
-    def grape_param_to_swagger(param)
-      type = (param[:type] && param[:type].downcase) || 'string'
-
-      response = {}
-      response['description'] = param[:desc] if param[:desc].present?
-      response['default'] = param[:default] if param[:default].present?
-
-      case type
-        when 'string'
-          response['type'] = 'string'
-        when 'integer'
-          response['type'] = 'integer'
-        when 'array'
-          response['type'] = 'array'
-          response['items'] = {'type' => 'string'}
-        when 'hash'
-          response['type'] = 'object'
-          response['properties'] = {}
-        when 'virtus::attribute::boolean'
-          response['type'] = 'boolean'
-        when 'symbol'
-          response['type'] = 'string'
-        when 'float'
-          response['type'] = 'number'
-          response['format'] = 'float'
-        when 'rack::multipart::uploadedfile'
-          response['type'] = 'file'
-        when 'date'
-          response['type'] = 'date'
-        when 'datetime'
-          response['format'] = 'date-time'
-          response['format'] = 'string'
-        else
-          type = (Object.const_get(param[:type].to_s))
-          remember_type(type)
-          response['type'] = "object"
-          response['schmea'] = {"$ref" => "#/definitions/#{type.to_s}"}
-      end
-
-      response
-    end
-
+    # Store an object "type" seen on parameters or response types
     def remember_type(type)
       @types ||= []
 
