@@ -17,7 +17,8 @@ module Swagger::Grape
 
       routes.types.sort.each do |type|
         grape_type = Swagger::Grape::Type.new(type)
-        swagger_doc.definitions.add_definition(type.to_s, grape_type.to_swagger)
+
+        swagger_doc.definitions.add_definition(type.to_s, grape_type.to_swagger(false))
       end
 
       swagger_doc
