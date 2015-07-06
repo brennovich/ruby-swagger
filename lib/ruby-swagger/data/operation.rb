@@ -2,7 +2,6 @@ require 'ruby-swagger/object'
 require 'ruby-swagger/data/external_documentation'
 require 'ruby-swagger/data/responses'
 require 'ruby-swagger/data/security_requirement'
-require 'ruby-swagger/grape/method'
 
 module Swagger::Data
   class Operation < Swagger::Object #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#operationObject
@@ -77,10 +76,6 @@ module Swagger::Data
       end
 
       @parameters.push(new_parameter)
-    end
-
-    def self.from_grape(route_name, route)
-      Swagger::Grape::Method.new(route_name, route).operation
     end
 
   end
