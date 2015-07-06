@@ -125,7 +125,7 @@ describe 'Ruby::Swagger' do
     end
 
     describe 'operationId' do
-      it 'should include an operationId in applications/get.yaml' do
+      it 'should include an operationId in applications/{id}/check_access/get.yaml' do
         expect(open_yaml('./doc/swagger/paths/applications/get.yaml')['operationId']).to eq "get_applications"
       end
     end
@@ -255,6 +255,67 @@ describe 'Ruby::Swagger' do
         expect(doc['parameters'][0]['description']).to be_nil
         expect(doc['parameters'][0]['type']).to eq 'string'
         expect(doc['parameters'][0]['required']).to be_truthy
+      end
+
+    end
+
+    describe 'response' do
+
+      it 'should include a response applications/{id}/check_access/get.yaml' do
+        doc = open_yaml('./doc/swagger/paths/applications/{id}/check_access/get.yaml')
+
+        expect(doc['responses'].keys.count).to eq 2
+
+        expect(doc['responses']['200']['description']).to eq 'Successful result of the operation'
+        expect(doc['responses']['200']['schema']).to eq({'type' => 'object', 'properties' => {'access'=>{'type'=>'object', '$ref'=>'#/definitions/ApplicationEntity'}}})
+
+        expect(doc['responses']['default']['description']).to eq 'Unexpected error'
+      end
+
+      it 'should include a response for applications/get.yaml' do
+        doc = open_yaml('./doc/swagger/paths/applications/get.yaml')
+
+        expect(doc['responses'].keys.count).to eq 6
+
+        expect(doc['responses']['200']['description']).to eq 'Successful result of the operation'
+        expect(doc['responses']['200']['schema']).to eq({'type' => 'object', 'properties' => {'applications'=>{'type'=>'array', 'items'=>{'type'=>'object', '$ref'=>'#/definitions/ApplicationEntity'}}}})
+        expect(doc['responses']['200']['headers']).to eq({"X-Request-Id"=>{"description"=>"Unique id of the API request", "type"=>"string"},
+                                                          "X-Runtime"=>{"description"=>"Time spent processing the API request in ms", "type"=>"string"},
+                                                          "X-Rate-Limit-Limit"=>{"description"=>"The number of allowed requests in the current period", "type"=>"integer"},
+                                                          "X-Rate-Limit-Remaining"=>{"description"=>"The number of remaining requests in the current period", "type"=>"integer"},
+                                                          "X-Rate-Limit-Reset"=>{"description"=>"The number of seconds left in the current period", "type"=>"integer"}})
+
+        expect(doc['responses']['300']['description']).to eq 'You will be redirected'
+        expect(doc['responses']['300']['schema']).to eq({'$ref'=>'#/definitions/ErrorRedirectEntity'})
+
+        expect(doc['responses']['404']['description']).to eq 'The document is nowhere to be found'
+        expect(doc['responses']['404']['schema']).to eq({'$ref'=>'#/definitions/ErrorNotFoundEntity'})
+
+        expect(doc['responses']['501']['description']).to eq 'Shit happens'
+        expect(doc['responses']['501']['schema']).to eq({'$ref'=>'#/definitions/ErrorBoomEntity'})
+
+        expect(doc['responses']['418']['description']).to eq 'Yes, I am a teapot'
+        expect(doc['responses']['418']['schema']).to eq({'$ref'=>'#/definitions/ErrorBoomEntity'})
+
+        expect(doc['responses']['default']['description']).to eq 'Unexpected error'
+
+      end
+
+      it 'should include a response for applications/{id}/post.yaml' do
+        doc = open_yaml('./doc/swagger/paths/applications/{id}/post.yaml')
+
+        expect(doc['responses'].keys.count).to eq 1
+
+        expect(doc['responses']['default']['description']).to eq 'Unexpected error'
+
+      end
+
+      it 'should get parameters for applications/{id}/delete.yaml' do
+        doc = open_yaml('./doc/swagger/paths/applications/{id}/delete.yaml')
+
+        expect(doc['responses'].keys.count).to eq 1
+
+        expect(doc['responses']['default']['description']).to eq 'Unexpected error'
       end
 
     end

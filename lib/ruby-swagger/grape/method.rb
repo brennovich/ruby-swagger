@@ -64,6 +64,19 @@ module Swagger::Grape
 
         current_obj = rainbow_response['schema'] = {}
 
+        if @route.route_response[:headers].present?
+          @route.route_response[:headers].each do |header_key, header_value|
+            next unless header_value.present?
+            rainbow_response['headers'] ||= {}
+
+            rainbow_response['headers'][header_key] = {
+                'description'=> header_value['description'] || header_value[:description],
+                'type'=> header_value['type'] || header_value[:type],
+                'format'=> header_value['format'] || header_value[:format]
+            }
+          end
+        end
+
         if @route.route_response[:root].present?
 
           if @route.route_response[:isArray] == true
