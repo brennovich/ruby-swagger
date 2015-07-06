@@ -3,7 +3,7 @@ require 'ruby-swagger/data/operation'
 module Swagger::Grape
   class Method
 
-    attr_reader :operation
+    attr_reader :operation, :types
 
     def initialize(route_name, route)
       @route_name = route_name
@@ -44,6 +44,7 @@ module Swagger::Grape
     def operation_responses
       @operation.responses = Swagger::Data::Responses.new
 
+      # Include all the possible errors in the response (store the types, they are documented separately)
       (@route.route_errors || {}).each do |code, response|
         error_response = {'description' => response['description'] || response[:description]}
 
@@ -53,7 +54,7 @@ module Swagger::Grape
           error_response['schema'] = {}
           error_response['schema']['$ref'] = "#/definitions/#{type.to_s}"
 
-          @types << type
+          remember_type(type)
         end
 
         @operation.responses.add_response(code, Swagger::Data::Response.parse(error_response))
@@ -63,7 +64,9 @@ module Swagger::Grape
         rainbow_response = {'description' => 'Successful result of the operation'}
 
         current_obj = rainbow_response['schema'] = {}
+        remember_type(@route.route_response[:entity])
 
+        # Include any response headers in the documentation of the response
         if @route.route_response[:headers].present?
           @route.route_response[:headers].each do |header_key, header_value|
             next unless header_value.present?
@@ -78,6 +81,7 @@ module Swagger::Grape
         end
 
         if @route.route_response[:root].present?
+          # A case where the response contains a single key in the response
 
           if @route.route_response[:isArray] == true
             # an array that starts from a key named root
@@ -139,7 +143,7 @@ module Swagger::Grape
     end
 
     def extract_params_and_types
-      @params, @types = {}, []
+      @params = {}
 
       header_params
       path_params
@@ -309,12 +313,21 @@ module Swagger::Grape
           response['format'] = 'string'
         else
           type = (Object.const_get(param[:type].to_s))
-          @types << type
+          remember_type(type)
           response['type'] = "object"
           response['schmea'] = {"$ref" => "#/definitions/#{type.to_s}"}
       end
 
       response
+    end
+
+    def remember_type(type)
+      @types ||= []
+
+      type = Object.const_get type.to_s
+      return if @types.include?(type.to_s)
+
+      @types << type.to_s
     end
 
   end
