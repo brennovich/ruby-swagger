@@ -52,7 +52,7 @@ module Swagger::IO
     end
 
     def compile!
-      write_file(JSON.pretty_generate(@doc), 'swagger.json', true)
+      write_file(JSON.pretty_generate(@doc.to_swagger), 'swagger.json', true)
     end
 
     private
