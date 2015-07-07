@@ -30,7 +30,7 @@ module Swagger::IO
         write_subpart(doc_part, swagger.delete(doc_part))
       end
 
-      if swagger['definitions'].present?
+      if swagger['definitions']
         write_definitions(swagger.delete('definitions'))
       end
 
