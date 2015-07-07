@@ -50,7 +50,8 @@ module Swagger::Grape
           swagger_type['type'] = 'number'
           swagger_type['format'] = 'float'
         when 'rack::multipart::uploadedfile'
-          swagger_type['type'] = 'file'
+          swagger_type['type'] = 'string'
+          STDERR.puts "Warning - I have no idea how to handle the type file. Right now I will consider this a string, but we should probably handle it..."
         when 'date'
           swagger_type['type'] = 'date'
         when 'datetime'
