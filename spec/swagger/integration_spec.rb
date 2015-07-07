@@ -19,9 +19,9 @@ describe 'Ruby::Swagger' do
     FileUtils.rm_rf("./doc/swagger")
   end
 
-  # after do
-  #   FileUtils.rm_rf("./doc/swagger")
-  # end
+  after do
+    FileUtils.rm_rf("./doc/swagger")
+  end
 
   describe 'rake swagger:grape:generate_doc' do
 
