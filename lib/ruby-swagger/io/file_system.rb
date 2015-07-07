@@ -90,14 +90,14 @@ module Swagger::IO
 
     def write_definitions(definitions)
       definitions.each do |definition_name, definition|
-        write_file(definition.to_yaml, "definitions/#{definition_name}.yml")
+        write_file(definition.to_yaml, "definitions/#{definition_name}.yml", true)
       end
     end
 
     def write_paths(paths)
       paths.each do |path, path_obj|
         path_obj.each do |action, action_obj|
-          write_file(action_obj.to_yaml, "paths/#{path}/#{action}.yml")
+          write_file(action_obj.to_yaml, "paths/#{path}/#{action}.yml", true)
         end
       end
     end
@@ -112,7 +112,7 @@ module Swagger::IO
 
       return if !overwrite && File.exists?(file_path)
 
-      dir_path = File.dirname(file_path);
+      dir_path = File.dirname(file_path)
 
       FileUtils.mkdir_p(dir_path) unless Dir.exists?(dir_path)
       File.open(file_path, 'w') {|f| f.write(content) }
