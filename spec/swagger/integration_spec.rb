@@ -330,7 +330,7 @@ describe 'Ruby::Swagger' do
                              "free"=>{"type"=>"boolean", "description"=>"True if application is free"},
                              "name"=>{"type"=>"string", "description"=>"Human readable application name"},
                              "description"=>{"type"=>"string", "description"=>"Application description"},
-                             "pictures"=>{"type"=>"object", "schema"=>{"$ref"=>"#/definitions/ImageEntity"}, "description"=>"Application pictures"}}}
+                             "pictures"=>{"type"=>"object", "$ref"=>"#/definitions/ImageEntity", "description"=>"Application pictures"}}}
                        )
       end
 
@@ -389,10 +389,10 @@ describe 'Ruby::Swagger' do
                              "user_id"=>{"type"=>"string"},
                              "contact_info"=>{"type"=>"object",
                                               "properties"=>{"phone"=>{"type"=>"string"},
-                                                             "address"=>{"type"=>"object", "schema"=>{"$ref"=>"#/definitions/ImageEntity"}}}},
+                                                             "address"=>{"type"=>"object", "$ref"=>"#/definitions/ImageEntity"}}},
                              "digest"=>{"type"=>"string"},
-                             "responses"=>{"type"=>"object", "schema"=>{"$ref"=>"#/definitions/Status"}},
-                             "last_reply"=>{"type"=>"object", "schema"=>{"$ref"=>"#/definitions/Status"}},
+                             "responses"=>{"type"=>"object", "$ref"=>"#/definitions/Status"},
+                             "last_reply"=>{"type"=>"object", "$ref"=>"#/definitions/Status"},
                              "list"=>{"type"=>"array",
                                       "items"=>{"type"=>"object",
                                                 "properties"=>{
@@ -418,10 +418,10 @@ describe 'Ruby::Swagger' do
                                "user_id"=>{"type"=>"string"},
                                "contact_info"=>{"type"=>"object",
                                                 "properties"=>{"phone"=>{"type"=>"string"},
-                                                               "address"=>{"type"=>"object", "schema"=>{"$ref"=>"#/definitions/ImageEntity"}}}},
+                                                               "address"=>{"type"=>"object", "$ref"=>"#/definitions/ImageEntity"}}},
                                "digest"=>{"type"=>"string"},
-                               "responses"=>{"type"=>"object", "schema"=>{"$ref"=>"#/definitions/Status"}},
-                               "last_reply"=>{"type"=>"object", "schema"=>{"$ref"=>"#/definitions/Status"}},
+                               "responses"=>{"type"=>"object", "$ref"=>"#/definitions/Status"},
+                               "last_reply"=>{"type"=>"object", "$ref"=>"#/definitions/Status"},
                                "list"=>{"type"=>"array",
                                         "items"=>{"type"=>"object",
                                                   "properties"=>{

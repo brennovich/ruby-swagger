@@ -61,7 +61,7 @@ module Swagger::Grape
 
           if with_definition
             # I can just reference the name of the object here
-            swagger_type['schema'] = {"$ref" => "#/definitions/#{type}"}
+            swagger_type['$ref'] = "#/definitions/#{type}"
           else
             type = Object.const_get(@type)
             # I need to define the full object
