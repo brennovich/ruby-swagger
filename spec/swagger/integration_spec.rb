@@ -33,12 +33,12 @@ describe 'Ruby::Swagger' do
       rake_task.invoke('ApplicationsAPI')
     end
 
-    it 'should generate a base_doc.yaml' do
-      expect(File.exists?("./doc/swagger/base_doc.yaml")).to be_truthy
+    it 'should generate a base_doc.yml' do
+      expect(File.exists?("./doc/swagger/base_doc.yml")).to be_truthy
     end
 
-    it 'base_doc.yaml contains valid information' do
-      base_doc = open_yaml "./doc/swagger/base_doc.yaml"
+    it 'base_doc.yml contains valid information' do
+      base_doc = open_yaml "./doc/swagger/base_doc.yml"
       expect(base_doc['swagger']).to eq '2.0'
       expect(base_doc['info']['title']).to eq 'My uber-duper API'
       expect(base_doc['info']['description']).to eq 'My uber-duper API description'
@@ -64,75 +64,75 @@ describe 'Ruby::Swagger' do
       expect(Dir.exists?('./doc/swagger/paths')).to be_truthy
     end
 
-    it 'should generate a ./doc/swagger/paths/applications/get.yaml file' do
-      expect(File.exists?('./doc/swagger/paths/applications/get.yaml')).to be_truthy
+    it 'should generate a ./doc/swagger/paths/applications/get.yml file' do
+      expect(File.exists?('./doc/swagger/paths/applications/get.yml')).to be_truthy
     end
 
     # the endpoint is hidden - nothing to see here
-    it 'should NOT generate a ./doc/swagger/paths/applications/{id}/get.yaml file' do
-      expect(File.exists?('./doc/swagger/paths/applications/{id}/get.yaml')).to be_falsey
+    it 'should NOT generate a ./doc/swagger/paths/applications/{id}/get.yml file' do
+      expect(File.exists?('./doc/swagger/paths/applications/{id}/get.yml')).to be_falsey
     end
 
-    it 'should generate a ./doc/swagger/paths/applications/{id}/post.yaml file' do
-      expect(File.exists?('./doc/swagger/paths/applications/{id}/post.yaml')).to be_truthy
+    it 'should generate a ./doc/swagger/paths/applications/{id}/post.yml file' do
+      expect(File.exists?('./doc/swagger/paths/applications/{id}/post.yml')).to be_truthy
     end
 
-    it 'should generate a ./doc/swagger/paths/applications/{id}/delete.yaml file' do
-      expect(File.exists?('./doc/swagger/paths/applications/{id}/delete.yaml')).to be_truthy
+    it 'should generate a ./doc/swagger/paths/applications/{id}/delete.yml file' do
+      expect(File.exists?('./doc/swagger/paths/applications/{id}/delete.yml')).to be_truthy
     end
 
-    it 'should generate a ./doc/swagger/paths/applications/{id}/check_access/get.yaml file' do
-      expect(File.exists?('./doc/swagger/paths/applications/{id}/check_access/get.yaml')).to be_truthy
+    it 'should generate a ./doc/swagger/paths/applications/{id}/check_access/get.yml file' do
+      expect(File.exists?('./doc/swagger/paths/applications/{id}/check_access/get.yml')).to be_truthy
     end
 
     describe 'deprecation' do
-      it 'should include information about deprecation in applications/get.yaml' do
-        expect(open_yaml('./doc/swagger/paths/applications/get.yaml')['deprecated']).to be_truthy
+      it 'should include information about deprecation in applications/get.yml' do
+        expect(open_yaml('./doc/swagger/paths/applications/get.yml')['deprecated']).to be_truthy
       end
     end
 
     describe 'tags' do
-      it 'should include tags information in applications/get.yaml' do
-        expect(open_yaml('./doc/swagger/paths/applications/get.yaml')['tags']).to eq(['applications'])
+      it 'should include tags information in applications/get.yml' do
+        expect(open_yaml('./doc/swagger/paths/applications/get.yml')['tags']).to eq(['applications'])
       end
 
-      it 'should include tags information in applications/{id}/check_access/get.yaml' do
-        expect(open_yaml('./doc/swagger/paths/applications/{id}/check_access/get.yaml')['tags']).to eq(['applications', 'getter'])
+      it 'should include tags information in applications/{id}/check_access/get.yml' do
+        expect(open_yaml('./doc/swagger/paths/applications/{id}/check_access/get.yml')['tags']).to eq(['applications', 'getter'])
       end
 
-      it 'should include tags information in applications/{id}/post.yaml' do
-        expect(open_yaml('./doc/swagger/paths/applications/{id}/post.yaml')['tags']).to eq(['applications', 'create', 'swag'])
+      it 'should include tags information in applications/{id}/post.yml' do
+        expect(open_yaml('./doc/swagger/paths/applications/{id}/post.yml')['tags']).to eq(['applications', 'create', 'swag'])
       end
     end
 
     describe 'documentation description' do
 
-      it 'should include a summary and a detail in applications/get.yaml' do
-        expect(open_yaml('./doc/swagger/paths/applications/get.yaml')['summary']).to eq "Retrieves applications list"
-        expect(open_yaml('./doc/swagger/paths/applications/get.yaml')['description']).to eq 'This API does this and that and more'
+      it 'should include a summary and a detail in applications/get.yml' do
+        expect(open_yaml('./doc/swagger/paths/applications/get.yml')['summary']).to eq "Retrieves applications list"
+        expect(open_yaml('./doc/swagger/paths/applications/get.yml')['description']).to eq 'This API does this and that and more'
       end
 
-      it 'should include a summary and a detail in applications/{id}/post.yaml' do
-        expect(open_yaml('./doc/swagger/paths/applications/{id}/post.yaml')['summary']).to eq "Install / buy the application by its unique id or by its code name."
-        expect(open_yaml('./doc/swagger/paths/applications/{id}/post.yaml')['description']).to eq "Install / buy the application by its unique id or by its code name."
+      it 'should include a summary and a detail in applications/{id}/post.yml' do
+        expect(open_yaml('./doc/swagger/paths/applications/{id}/post.yml')['summary']).to eq "Install / buy the application by its unique id or by its code name."
+        expect(open_yaml('./doc/swagger/paths/applications/{id}/post.yml')['description']).to eq "Install / buy the application by its unique id or by its code name."
       end
 
-      it 'should include a summary and a detail in applications/{id}/delete.yaml' do
-        expect(open_yaml('./doc/swagger/paths/applications/{id}/delete.yaml')['summary']).to eq "Uninstall / unsubscribe an application by its unique id or by its code name."
-        expect(open_yaml('./doc/swagger/paths/applications/{id}/delete.yaml')['description']).to eq "Uninstall / unsubscribe an application by its unique id or by its code name."
+      it 'should include a summary and a detail in applications/{id}/delete.yml' do
+        expect(open_yaml('./doc/swagger/paths/applications/{id}/delete.yml')['summary']).to eq "Uninstall / unsubscribe an application by its unique id or by its code name."
+        expect(open_yaml('./doc/swagger/paths/applications/{id}/delete.yml')['description']).to eq "Uninstall / unsubscribe an application by its unique id or by its code name."
       end
 
     end
 
     describe 'operationId' do
-      it 'should include an operationId in applications/{id}/check_access/get.yaml' do
-        expect(open_yaml('./doc/swagger/paths/applications/get.yaml')['operationId']).to eq "get_applications"
+      it 'should include an operationId in applications/{id}/check_access/get.yml' do
+        expect(open_yaml('./doc/swagger/paths/applications/get.yml')['operationId']).to eq "get_applications"
       end
     end
 
     describe 'params' do
-      it 'should get parameters for applications/get.yaml' do
-        doc = open_yaml('./doc/swagger/paths/applications/{id}/check_access/get.yaml')
+      it 'should get parameters for applications/get.yml' do
+        doc = open_yaml('./doc/swagger/paths/applications/{id}/check_access/get.yml')
 
         expect(doc['parameters'].count).to eq 2
 
@@ -148,8 +148,8 @@ describe 'Ruby::Swagger' do
         expect(doc['parameters'][1]['type']).to eq 'string'
       end
 
-      it 'should get parameters for applications/get.yaml' do
-        doc = open_yaml('./doc/swagger/paths/applications/get.yaml')
+      it 'should get parameters for applications/get.yml' do
+        doc = open_yaml('./doc/swagger/paths/applications/get.yml')
 
         expect(doc['parameters'].count).to eq 4
 
@@ -175,8 +175,8 @@ describe 'Ruby::Swagger' do
         expect(doc['parameters'][3]['type']).to eq 'string'
       end
 
-      it 'should get parameters for applications/post.yaml' do
-        doc = open_yaml('./doc/swagger/paths/applications/{id}/post.yaml')
+      it 'should get parameters for applications/post.yml' do
+        doc = open_yaml('./doc/swagger/paths/applications/{id}/post.yml')
 
         expect(doc['parameters'].count).to eq 3
 
@@ -245,8 +245,8 @@ describe 'Ruby::Swagger' do
 
       end
 
-      it 'should get parameters for applications/{id}/delete.yaml' do
-        doc = open_yaml('./doc/swagger/paths/applications/{id}/delete.yaml')
+      it 'should get parameters for applications/{id}/delete.yml' do
+        doc = open_yaml('./doc/swagger/paths/applications/{id}/delete.yml')
 
         expect(doc['parameters'].count).to eq 1
 
@@ -261,8 +261,8 @@ describe 'Ruby::Swagger' do
 
     describe 'response' do
 
-      it 'should include a response applications/{id}/check_access/get.yaml' do
-        doc = open_yaml('./doc/swagger/paths/applications/{id}/check_access/get.yaml')
+      it 'should include a response applications/{id}/check_access/get.yml' do
+        doc = open_yaml('./doc/swagger/paths/applications/{id}/check_access/get.yml')
 
         expect(doc['responses'].keys.count).to eq 2
 
@@ -272,8 +272,8 @@ describe 'Ruby::Swagger' do
         expect(doc['responses']['default']['description']).to eq 'Unexpected error'
       end
 
-      it 'should include a response for applications/get.yaml' do
-        doc = open_yaml('./doc/swagger/paths/applications/get.yaml')
+      it 'should include a response for applications/get.yml' do
+        doc = open_yaml('./doc/swagger/paths/applications/get.yml')
 
         expect(doc['responses'].keys.count).to eq 6
 
@@ -301,8 +301,8 @@ describe 'Ruby::Swagger' do
 
       end
 
-      it 'should include a response for applications/{id}/post.yaml' do
-        doc = open_yaml('./doc/swagger/paths/applications/{id}/post.yaml')
+      it 'should include a response for applications/{id}/post.yml' do
+        doc = open_yaml('./doc/swagger/paths/applications/{id}/post.yml')
 
         expect(doc['responses'].keys.count).to eq 1
 
@@ -310,14 +310,129 @@ describe 'Ruby::Swagger' do
 
       end
 
-      it 'should get parameters for applications/{id}/delete.yaml' do
-        doc = open_yaml('./doc/swagger/paths/applications/{id}/delete.yaml')
+      it 'should get parameters for applications/{id}/delete.yml' do
+        doc = open_yaml('./doc/swagger/paths/applications/{id}/delete.yml')
 
         expect(doc['responses'].keys.count).to eq 1
 
         expect(doc['responses']['default']['description']).to eq 'Unexpected error'
       end
 
+    end
+
+    describe 'definitions' do
+      it 'should create a definition file ApplicationEntity.yml' do
+        doc = open_yaml('./doc/swagger/definitions/ApplicationEntity.yml')
+
+        expect(doc).to eq({"type"=>"object",
+                           "properties"=>{
+                             "id"=>{"type"=>"string", "description"=>"unique ID"},
+                             "name"=>{"type"=>"string", "description"=>"Human readable application name"},
+                             "description"=>{"type"=>"string", "description"=>"Application description"},
+                             "pictures"=>{"type"=>"object", "schema"=>{"$ref"=>"#/definitions/ImageEntity"}, "description"=>"Application pictures"}}}
+                       )
+      end
+
+      it 'should create a definition file ErrorBoomEntity.yml' do
+        doc = open_yaml('./doc/swagger/definitions/ErrorBoomEntity.yml')
+
+        expect(doc).to eq({"type"=>"object",
+                           "properties"=>{
+                             "errors"=>{"type"=>"array", "items"=>{"type"=>"string"},
+                             "description"=>"errors produced by this method"},
+                             "message"=>{"type"=>"string", "description"=>"Why? Why? Why????"}}}
+                       )
+      end
+
+      it 'should create a definition file ErrorNotFoundEntity.yml' do
+        doc = open_yaml('./doc/swagger/definitions/ErrorNotFoundEntity.yml')
+
+        expect(doc).to eq({"type"=>"object",
+                           "properties"=>{
+                               "errors"=>{"type"=>"array", "items"=>{"type"=>"string"},
+                                          "description"=>"errors produced by this method"},
+                               "message"=>{"type"=>"string", "description"=>"Why? Why? Why????"}}}
+                       )
+      end
+
+      it 'should create a definition file ErrorRedirectEntity.yml' do
+        doc = open_yaml('./doc/swagger/definitions/ErrorRedirectEntity.yml')
+
+        expect(doc).to eq({"type"=>"object",
+                           "properties"=>{
+                               "errors"=>{"type"=>"array", "items"=>{"type"=>"string"},
+                                          "description"=>"errors produced by this method"},
+                               "message"=>{"type"=>"string", "description"=>"Why? Why? Why????"}}}
+                       )
+      end
+
+      it 'should create a definition file ImageEntity.yml' do
+        doc = open_yaml('./doc/swagger/definitions/ImageEntity.yml')
+
+        expect(doc).to eq({"type"=>"object",
+                           "properties"=>{
+                             "url"=>{"type"=>"string", "description"=>"The url of the image"},
+                             "name"=>{"type"=>"string", "description"=>"The name of the image"},
+                             "size"=>{"type"=>"integer", "description"=>"Size of the picture"}}}
+                       )
+      end
+
+      it 'should create a definition file StatusDetailed.yml' do
+        doc = open_yaml('./doc/swagger/definitions/StatusDetailed.yml')
+
+        expect(doc).to eq({"type"=>"object",
+                           "properties"=>{
+                             "user_name"=>{"type"=>"string"},
+                             "text"=>{"type"=>"string", "description"=>"Status update text."},
+                             "ip"=>{"type"=>"string"}, "user_type"=>{"type"=>"string"},
+                             "user_id"=>{"type"=>"string"},
+                             "contact_info"=>{"type"=>"object",
+                                              "properties"=>{"phone"=>{"type"=>"string"},
+                                                             "address"=>{"type"=>"object", "schema"=>{"$ref"=>"#/definitions/ImageEntity"}}}},
+                             "digest"=>{"type"=>"string"},
+                             "responses"=>{"type"=>"object", "schema"=>{"$ref"=>"#/definitions/Status"}},
+                             "last_reply"=>{"type"=>"object", "schema"=>{"$ref"=>"#/definitions/Status"}},
+                             "list"=>{"type"=>"array",
+                                      "items"=>{"type"=>"object",
+                                                "properties"=>{
+                                                    "option_a"=>{"type"=>"object",
+                                                                 "properties"=>{
+                                                                     "option_b"=>{"type"=>"array",
+                                                                                  "items"=>{"type"=>"string"}, "description"=>"An option"}}},
+                                                    "option_c"=>{"type"=>"integer", "description"=>"Last option"}}}, "description"=>"List of elements"},
+                             "created_at"=>{"type"=>"string"},
+                             "updated_at"=>{"type"=>"string"},
+                             "internal_id"=>{"type"=>"string"}}}
+                       )
+      end
+
+      it 'should create a definition file Status.yml' do
+        doc = open_yaml('./doc/swagger/definitions/Status.yml')
+
+        expect(doc).to eq({"type"=>"object",
+                           "properties"=>{
+                               "user_name"=>{"type"=>"string"},
+                               "text"=>{"type"=>"string", "description"=>"Status update text."},
+                               "ip"=>{"type"=>"string"}, "user_type"=>{"type"=>"string"},
+                               "user_id"=>{"type"=>"string"},
+                               "contact_info"=>{"type"=>"object",
+                                                "properties"=>{"phone"=>{"type"=>"string"},
+                                                               "address"=>{"type"=>"object", "schema"=>{"$ref"=>"#/definitions/ImageEntity"}}}},
+                               "digest"=>{"type"=>"string"},
+                               "responses"=>{"type"=>"object", "schema"=>{"$ref"=>"#/definitions/Status"}},
+                               "last_reply"=>{"type"=>"object", "schema"=>{"$ref"=>"#/definitions/Status"}},
+                               "list"=>{"type"=>"array",
+                                        "items"=>{"type"=>"object",
+                                                  "properties"=>{
+                                                      "option_a"=>{"type"=>"object",
+                                                                   "properties"=>{
+                                                                       "option_b"=>{"type"=>"array",
+                                                                                    "items"=>{"type"=>"string"}, "description"=>"An option"}}},
+                                                      "option_c"=>{"type"=>"integer", "description"=>"Last option"}}}, "description"=>"List of elements"},
+                               "created_at"=>{"type"=>"string"},
+                               "updated_at"=>{"type"=>"string"}}}
+                       )
+      end
     end
 
 

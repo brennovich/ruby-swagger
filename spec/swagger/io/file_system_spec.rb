@@ -25,9 +25,9 @@ describe Swagger::IO::FileSystem do
       filesystem.write!
 
       expect(Dir.exists?(DOC_PATH)).to be_truthy
-      expect(File.exists?(DOC_PATH + '/base_doc.yaml')).to be_truthy
+      expect(File.exists?(DOC_PATH + '/base_doc.yml')).to be_truthy
 
-      swagger_doc = YAML.load_file(DOC_PATH + '/base_doc.yaml')
+      swagger_doc = YAML.load_file(DOC_PATH + '/base_doc.yml')
 
       expect(swagger_doc).not_to be_nil
       expect(swagger_doc['swagger']).to eq '2.0'
