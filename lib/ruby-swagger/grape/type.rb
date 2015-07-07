@@ -40,6 +40,8 @@ module Swagger::Grape
         when 'hash'
           swagger_type['type'] = 'object'
           swagger_type['properties'] = {}
+        when 'boolean'
+          swagger_type['type'] = 'boolean'
         when 'virtus::attribute::boolean'
           swagger_type['type'] = 'boolean'
         when 'symbol'

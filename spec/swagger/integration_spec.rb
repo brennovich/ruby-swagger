@@ -327,6 +327,7 @@ describe 'Ruby::Swagger' do
         expect(doc).to eq({"type"=>"object",
                            "properties"=>{
                              "id"=>{"type"=>"string", "description"=>"unique ID"},
+                             "free"=>{"type"=>"boolean", "description"=>"True if application is free"},
                              "name"=>{"type"=>"string", "description"=>"Human readable application name"},
                              "description"=>{"type"=>"string", "description"=>"Application description"},
                              "pictures"=>{"type"=>"object", "schema"=>{"$ref"=>"#/definitions/ImageEntity"}, "description"=>"Application pictures"}}}
