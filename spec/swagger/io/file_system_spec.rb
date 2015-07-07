@@ -25,9 +25,19 @@ describe Swagger::IO::FileSystem do
       filesystem.write!
 
       expect(Dir.exists?(DOC_PATH)).to be_truthy
-      expect(File.exists?(DOC_PATH + '/base_doc.yaml')).to be_truthy
+      expect(Dir.exists?("#{DOC_PATH}/paths/pets")).to be_truthy
 
-      swagger_doc = YAML.load_file(DOC_PATH + '/base_doc.yaml')
+      expect(File.exists?(DOC_PATH + '/base_doc.yml')).to be_truthy
+      expect(File.exists?(DOC_PATH + '/definitions/ErrorModel.yml')).to be_truthy
+      expect(File.exists?(DOC_PATH + '/definitions/Pet.yml')).to be_truthy
+      expect(File.exists?(DOC_PATH + '/definitions/NewPet.yml')).to be_truthy
+
+      expect(File.exists?(DOC_PATH + '/paths/pets/get.yml')).to be_truthy
+      expect(File.exists?(DOC_PATH + '/paths/pets/post.yml')).to be_truthy
+      expect(File.exists?(DOC_PATH + '/paths/pets/{id}/get.yml')).to be_truthy
+      expect(File.exists?(DOC_PATH + '/paths/pets/{id}/delete.yml')).to be_truthy
+
+      swagger_doc = YAML.load_file(DOC_PATH + '/base_doc.yml')
 
       expect(swagger_doc).not_to be_nil
       expect(swagger_doc['swagger']).to eq '2.0'
@@ -58,7 +68,7 @@ describe Swagger::IO::FileSystem do
     before do
       #stubbing the base_doc
       FileUtils.mkdir_p(DOC_PATH);
-      `cp -R #{File.dirname(__FILE__)}/../../fixtures/doc/* #{DOC_PATH}/`
+      `cp -R #{File.dirname(__FILE__)}/../../fixtures/doc/swagger/* #{DOC_PATH}/`
     end
 
     after do
@@ -86,6 +96,24 @@ describe Swagger::IO::FileSystem do
       expect(doc.info.contact.url).to eq "http://swagger.io"
       expect(doc.info.license.name).to eq "MIT"
       expect(doc.info.license.url).to eq "http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT"
+
+      expect(doc.definitions.to_swagger).to eq({"Error"=>{
+                                                   "required"=>["code", "message"],
+                                                   "type"=>"object",
+                                                   "properties"=>{
+                                                       "code"=>{"type"=>"integer", "format"=>"int32"},
+                                                       "message"=>{"type"=>"string"}}},
+                                                "NewPet"=>{
+                                                    "required"=>["name"],
+                                                    "type"=>"object",
+                                                    "properties"=>{
+                                                        "name"=>{"type"=>"string"},
+                                                        "tag"=>{"type"=>"string"}}},
+                                                "Pet"=>{
+                                                    "type"=>"object",
+                                                    "allOf"=>[{"$ref"=>"#/definitions/NewPet"},
+                                                              {"required"=>["id"],
+                                                               "properties"=>{"id"=>{"type"=>"integer", "format"=>"int64"}}}]}})
     end
   end
 
@@ -93,7 +121,7 @@ describe Swagger::IO::FileSystem do
     before do
       #stubbing the base_doc
       FileUtils.mkdir_p(DOC_PATH);
-      `cp -R #{File.dirname(__FILE__)}/../../fixtures/doc/* #{DOC_PATH}/`
+      `cp -R #{File.dirname(__FILE__)}/../../fixtures/doc/swagger/* #{DOC_PATH}/`
     end
 
     after do
@@ -123,6 +151,24 @@ describe Swagger::IO::FileSystem do
       expect(doc.info.contact.url).to eq "http://swagger.io"
       expect(doc.info.license.name).to eq "MIT"
       expect(doc.info.license.url).to eq "http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT"
+
+      expect(doc.definitions.to_swagger).to eq({"Error"=>{
+                                                   "required"=>["code", "message"],
+                                                   "type"=>"object",
+                                                   "properties"=>{
+                                                       "code"=>{"type"=>"integer", "format"=>"int32"},
+                                                       "message"=>{"type"=>"string"}}},
+                                                "NewPet"=>{
+                                                    "required"=>["name"],
+                                                    "type"=>"object",
+                                                    "properties"=>{
+                                                        "name"=>{"type"=>"string"},
+                                                        "tag"=>{"type"=>"string"}}},
+                                                "Pet"=>{
+                                                    "type"=>"object",
+                                                    "allOf"=>[{"$ref"=>"#/definitions/NewPet"},
+                                                              {"required"=>["id"],
+                                                               "properties"=>{"id"=>{"type"=>"integer", "format"=>"int64"}}}]}})
     end
   end
 

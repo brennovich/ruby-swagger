@@ -1,6 +1,7 @@
 require 'ruby-swagger/object'
 require 'ruby-swagger/data/items'
 require 'ruby-swagger/data/schema'
+require 'ruby-swagger/grape/param'
 
 module Swagger::Data
   class Parameter < Swagger::Object # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#parameter-object
@@ -54,17 +55,18 @@ module Swagger::Data
     end
 
     def self.from_grape(grape_parameter)
-      return nil unless grape_parameter && grape_parameter.last.is_a?(Hash)
+      return nil if grape_parameter.nil? || grape_parameter.last[:type].is_a?(Hash) || grape_parameter.last[:type] == 'Hash'
+
+      grape_type = Swagger::Grape::Param.new(grape_parameter.last).to_swagger
+
       parameter = Swagger::Data::Parameter.new
       parameter.name= grape_parameter.first
       parameter.in= 'formData'
-
-      if grape_parameter.last[:required] && grape_parameter.last[:required] == true
-        parameter.required = true
-      end
-
-      parameter.description = grape_parameter.last[:desc]
-      grape_type_to_swagger(parameter, grape_parameter.last[:type] || 'string')
+      parameter.description = grape_type['description']
+      parameter.required = grape_type['required']
+      parameter.default = grape_type['default']
+      parameter.type = grape_type['type']
+      parameter.format = grape_type['format']
 
       if parameter.type == 'array'
         items = Swagger::Data::Items.new
@@ -80,35 +82,7 @@ module Swagger::Data
 
     private
 
-    def self.grape_type_to_swagger(parameter, type)
-      parameter.type = case type.downcase
-        when 'string'
-          'string'
-        when 'integer'
-          'integer'
-        when 'array'
-          'array'
-        when 'hash'
-          nil #no ashes
-        when 'virtus::attribute::boolean'
-          'boolean'
-        when 'symbol'
-          'string'
-        when 'float'
-          parameter.format= 'float'
-          'number'
-        when 'rack::multipart::uploadedfile'
-          'file'
-        when 'date'
-          parameter.format = 'date'
-          'string'
-        when 'datetime'
-          parameter.format = 'date-time'
-          'string'
-        else
-          raise "Don't know how to convert they grape type #{type}"
-      end
-    end
+
 
   end
 end

@@ -69,13 +69,15 @@ module Grape
           @api_options[:tags]= new_tags
         end
 
-        def result(new_result)
-          @api_options[:result]= new_result
-        end
+        def response(new_result, options = {})
+          raise ArgumentError.new("Grape::response - response can't be nil") unless new_result
 
-        def result_root(new_root)
-          raise ArgumentError.new("Grape::result_root - unrecognized value #{new_root} - result root must be a string") unless new_root.is_a?(String)
-          @api_options[:result_root]= new_root
+          response_obj = {entity: new_result}
+          response_obj[:root] = options[:root] || options['root']
+          response_obj[:headers] = options[:headers] || options['headers']
+          response_obj[:isArray] = options[:isArray] || options['isArray']
+
+          @api_options[:response]= response_obj
         end
 
         def errors(errors_value)
@@ -113,14 +115,24 @@ module Grape
           @@result = new_value
         end
 
-        @@result_root = nil
-        def default_result_root(new_value)
-          @@result_root = new_value
-        end
-
         @@errors = nil
         def default_errors(new_value)
           @@errors = new_value
+        end
+
+        @@response_headers = nil
+        def default_response_headers(new_value)
+          @@response_headers = new_value
+        end
+
+        @@response_root = nil
+        def default_response_root(new_value)
+          @@response_root = new_value
+        end
+
+        @@response_entity = nil
+        def default_response_entity(new_value)
+          @@response_entity = new_value
         end
 
         def default_api_options!(options)
@@ -130,8 +142,12 @@ module Grape
               hidden: @@hidden,
               scopes: @@scopes,
               tags: @@tags,
-              result: @@result,
-              result_root: @@result_root,
+              response: {
+                  entity: @@response_entity,
+                  root: @@response_root,
+                  headers: @@response_headers,
+                  isArray: false
+              },
               errors: @@errors,
               api_name: nil,
               detail: ''

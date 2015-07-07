@@ -27,21 +27,26 @@ module Swagger::IO
       write_paths(swagger.delete('paths'))
 
       DOC_SUBPARTS.each do |doc_part|
-        write_subpart(swagger.delete(doc_part))
+        write_subpart(doc_part, swagger.delete(doc_part))
       end
 
-      write_file(swagger.to_yaml, 'base_doc.yaml')
+      if swagger['definitions']
+        write_definitions(swagger.delete('definitions'))
+      end
+
+      write_file(swagger.to_yaml, 'base_doc.yml')
     end
 
     def self.read
-      doc = YAML::load_file("#{@@default_path}/base_doc.yaml")
+      doc = YAML::load_file("#{@@default_path}/base_doc.yml")
 
       DOC_SUBPARTS.each do |doc_part|
-        file_path = "#{@@default_path}/#{doc_part}.yaml"
+        file_path = "#{@@default_path}/#{doc_part}.yml"
         doc[doc_part] = YAML::load_file(file_path) if File.exists?(file_path)
       end
 
       doc['paths'] = read_paths("#{@@default_path}/paths/")
+      doc['definitions'] = read_definitions("#{@@default_path}/definitions/")
  
       Swagger::Data::Document.parse(doc)
     end
@@ -58,29 +63,48 @@ module Swagger::IO
 
     def self.read_paths(base)
       paths = {}
-      all_files = Dir["#{base}/**/*.yaml"]
+      all_files = Dir["#{base}/**/*.yml"]
       l = base.length
 
       all_files.each do |file|
         content = YAML::load_file(file)
         paths[File.dirname(file[l..file.length])] ||= {}
-        paths[File.dirname(file[l..file.length])][File.basename(file, ".yaml")] = content
+        paths[File.dirname(file[l..file.length])][File.basename(file, ".yml")] = content
       end
 
       paths
     end
 
+    def self.read_definitions(base)
+      definitions = {}
+      all_files = Dir["#{base}/**/*.yml"]
+      l = base.length
+
+      all_files.each do |file|
+        content = YAML::load_file(file)
+        definitions[File.basename(file, ".yml")] = content
+      end
+
+      definitions
+    end
+
+    def write_definitions(definitions)
+      definitions.each do |definition_name, definition|
+        write_file(definition.to_yaml, "definitions/#{definition_name}.yml")
+      end
+    end
+
     def write_paths(paths)
       paths.each do |path, path_obj|
         path_obj.each do |action, action_obj|
-          write_file(action_obj.to_yaml, "paths/#{path}/#{action}.yaml")
+          write_file(action_obj.to_yaml, "paths/#{path}/#{action}.yml")
         end
       end
     end
 
-    def write_subpart(subpart)
-      return unless subpart
-      write_file(subpart.to_yaml, "#{subpart}.yaml")
+    def write_subpart(subpart, content)
+      return unless content
+      write_file(content.to_yaml, "#{subpart}.yml")
     end
 
     def write_file(content, location, overwrite = false)

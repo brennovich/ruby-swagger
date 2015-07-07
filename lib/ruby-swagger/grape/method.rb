@@ -1,13 +1,15 @@
 require 'ruby-swagger/data/operation'
+require 'ruby-swagger/grape/type'
 
 module Swagger::Grape
   class Method
 
-    attr_reader :operation
+    attr_reader :operation, :types
 
     def initialize(route_name, route)
       @route_name = route_name
       @route = route
+      @types = []
 
       new_operation
       operation_params
@@ -31,6 +33,7 @@ module Swagger::Grape
       @operation
     end
 
+    #extract all the parameters from the method definition (in path, url, body)
     def operation_params
       extract_params_and_types
 
@@ -39,12 +42,89 @@ module Swagger::Grape
       end
     end
 
-
+    #extract the data about the response of the method
     def operation_responses
       @operation.responses = Swagger::Data::Responses.new
 
-      #Long TODO - document here all the possible responses
-      @operation.responses.add_response('200', Swagger::Data::Response.parse({'description' => 'Successful operation'}))
+      # Include all the possible errors in the response (store the types, they are documented separately)
+      (@route.route_errors || {}).each do |code, response|
+        error_response = {'description' => response['description'] || response[:description]}
+
+        if entity = (response[:entity] || response['entity'])
+          type = Object.const_get entity.to_s
+
+          error_response['schema'] = {}
+          error_response['schema']['$ref'] = "#/definitions/#{type.to_s}"
+
+          remember_type(type)
+        end
+
+        @operation.responses.add_response(code, Swagger::Data::Response.parse(error_response))
+      end
+
+      if @route.route_response.present? && @route.route_response[:entity].present?
+        rainbow_response = {'description' => 'Successful result of the operation'}
+
+        current_obj = rainbow_response['schema'] = {}
+        remember_type(@route.route_response[:entity])
+
+        # Include any response headers in the documentation of the response
+        if @route.route_response[:headers].present?
+          @route.route_response[:headers].each do |header_key, header_value|
+            next unless header_value.present?
+            rainbow_response['headers'] ||= {}
+
+            rainbow_response['headers'][header_key] = {
+                'description'=> header_value['description'] || header_value[:description],
+                'type'=> header_value['type'] || header_value[:type],
+                'format'=> header_value['format'] || header_value[:format]
+            }
+          end
+        end
+
+        if @route.route_response[:root].present?
+          # A case where the response contains a single key in the response
+
+          if @route.route_response[:isArray] == true
+            # an array that starts from a key named root
+            rainbow_response['schema']['type'] = 'object'
+            rainbow_response['schema']['properties'] = {
+              @route.route_response[:root] => {
+                  'type' => 'array',
+                  'items' => {
+                      'type' => 'object',
+                      '$ref' => "#/definitions/#{@route.route_response[:entity].to_s}"
+                  }
+              }
+            }
+          else
+            rainbow_response['schema']['type'] = 'object'
+            rainbow_response['schema']['properties'] = {
+                @route.route_response[:root] => {
+                    'type' => 'object',
+                    '$ref' => "#/definitions/#{@route.route_response[:entity].to_s}"
+                }
+            }
+          end
+
+        else
+
+          if @route.route_response[:isArray] == true
+            rainbow_response['schema']['type'] = 'array'
+            rainbow_response['schema']['items'] = {
+                'type' => 'object',
+                '$ref' => "#/definitions/#{@route.route_response[:entity].to_s}"
+            }
+          else
+            rainbow_response['schema']['type'] = 'object'
+            rainbow_response['schema']['$ref'] = "#/definitions/#{@route.route_response[:entity].to_s}"
+          end
+
+        end
+
+        @operation.responses.add_response('200', Swagger::Data::Response.parse(rainbow_response))
+      end
+
       @operation.responses.add_response('default', Swagger::Data::Response.parse({'description' => 'Unexpected error'}))
     end
 
@@ -65,7 +145,7 @@ module Swagger::Grape
     end
 
     def extract_params_and_types
-      @params, @types = {}, []
+      @params = {}
 
       header_params
       path_params
@@ -152,8 +232,10 @@ module Swagger::Grape
 
         if param_name.scan(/[0-9a-zA-Z_]+/).count == 1
           #it's a simple parameter, adding it to the properties of the main object
-          schema.properties[param_name] = grape_param_to_swagger(param_value)
+          converted_param = Swagger::Grape::Param.new(param_value)
+          schema.properties[param_name] = converted_param.to_swagger
           required_parameter(schema, param_name, param_value)
+          remember_type(converted_param.type_definition) if converted_param.has_type_definition?
         else
           schema_with_subobjects(schema, param_name, parameter.last)
         end
@@ -174,7 +256,10 @@ module Swagger::Grape
     def schema_with_subobjects(schema, param_name, parameter)
       path = param_name.scan(/[0-9a-zA-Z_]+/)
       append_to = find_elem_in_schema(schema, path.dup)
-      append_to['properties'][path.last] = grape_param_to_swagger(parameter)
+      converted_param = Swagger::Grape::Param.new(parameter)
+      append_to['properties'][path.last] = converted_param.to_swagger
+
+      remember_type(converted_param.type_definition) if converted_param.has_type_definition?
 
       required_parameter(append_to, path.last, parameter)
     end
@@ -201,43 +286,14 @@ module Swagger::Grape
 
     end
 
-    def grape_param_to_swagger(param)
-      type = (param[:type] && param[:type].downcase) || 'string'
+    # Store an object "type" seen on parameters or response types
+    def remember_type(type)
+      @types ||= []
 
-      response = {}
-      response['description'] = param[:desc] if param[:desc].present?
-      response['default'] = param[:default] if param[:default].present?
+      type = Object.const_get type.to_s
+      return if @types.include?(type.to_s)
 
-      case type
-        when 'string'
-          response['type'] = 'string'
-        when 'integer'
-          response['type'] = 'integer'
-        when 'array'
-          response['type'] = 'array'
-          response['items'] = {'type' => 'string'}
-        when 'hash'
-          response['type'] = 'object'
-          response['properties'] = {}
-        when 'virtus::attribute::boolean'
-          response['type'] = 'boolean'
-        when 'symbol'
-          response['type'] = 'string'
-        when 'float'
-          response['type'] = 'number'
-          response['format'] = 'float'
-        when 'rack::multipart::uploadedfile'
-          response['type'] = 'file'
-        when 'date'
-          response['type'] = 'date'
-        when 'datetime'
-          response['format'] = 'date-time'
-          response['format'] = 'string'
-        else
-          raise "Don't know how to convert they grape type #{type}"
-      end
-
-      response
+      @types << type.to_s
     end
 
   end

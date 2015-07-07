@@ -1,7 +1,11 @@
 require 'grape'
 require 'ruby-swagger'
 require 'ruby-swagger/grape/grape'
-require_relative './application_entity'
+require_relative '../grape/entities/application_entity'
+require_relative '../grape/entities/error_redirect_entity'
+require_relative '../grape/entities/error_not_found_entity'
+require_relative '../grape/entities/error_boom_entity'
+require_relative '../grape/entities/detailed_status_entity'
 
 class ApplicationsAPI < Grape::API
 
@@ -10,9 +14,9 @@ class ApplicationsAPI < Grape::API
   prefix :api
 
   def self.std_errors
-    { '300' => {message:'Redirected', description: 'You will be redirected' },
-      '404' => {message:'Not found', description: 'The document is nowhere to be found'},
-      '501' => {message: 'WTF?', description: 'Shit happens'}
+    { '300' => {entity: ErrorRedirectEntity, description: 'You will be redirected' },
+      '404' => {entity: ErrorNotFoundEntity, description: 'The document is nowhere to be found'},
+      '501' => {entity: ErrorBoomEntity, description: 'Shit happens'}
     }
   end
 
@@ -25,7 +29,34 @@ class ApplicationsAPI < Grape::API
     }
   end
 
+  def self.result_headers
+    {
+        'X-Request-Id' => {
+          description: "Unique id of the API request",
+          type: 'string'
+        },
+        'X-Runtime' => {
+          description: "Time spent processing the API request in ms",
+          type: 'string',
+
+        },
+        'X-Rate-Limit-Limit' => {
+          description: 'The number of allowed requests in the current period',
+          type: 'integer'
+        },
+        'X-Rate-Limit-Remaining'=> {
+          description: 'The number of remaining requests in the current period',
+          type: 'integer'
+        },
+        'X-Rate-Limit-Reset'=> {
+          description: 'The number of seconds left in the current period',
+          type: 'integer'
+        }
+    }
+  end
+
   default_headers authentication_headers
+  default_response_headers result_headers
 
   resource :applications do
 
@@ -37,9 +68,8 @@ class ApplicationsAPI < Grape::API
       deprecated true
       hidden false
       api_name 'get_applications'
-      result ApplicationEntity
-      result_root 'applications'
-      errors std_errors.merge("418" => {message: "I'm a teapot", description: "Yes, I am"})
+      response ApplicationEntity, root: 'applications', isArray: true, headers: result_headers
+      errors std_errors.merge("418" => {entity: ErrorBoomEntity, description: "Yes, I am a teapot"})
     end
     params do
       optional :limit, type: Integer, desc: "Number of profiles returned. Default is 30 elements, max is 100 elements per page."
@@ -53,6 +83,7 @@ class ApplicationsAPI < Grape::API
           {id: '123456', name: 'An app', description: 'Great App'},
           {id: '654321', name: 'Another app', description: 'Another great App'}
       ]
+
       api_present(@applications)
     end
 
@@ -62,8 +93,7 @@ class ApplicationsAPI < Grape::API
       tags %w(applications getter)
       deprecated true
       hidden true
-      result ApplicationEntity
-      result_root 'application'
+      response ApplicationEntity, root: 'application', headers: result_headers
       errors std_errors
     end
     params do
@@ -78,8 +108,7 @@ class ApplicationsAPI < Grape::API
       headers authentication_headers
       scopes 'application:read'
       tags %w(applications getter)
-      result Virtus::Attribute::Boolean
-      result_root 'access'
+      response ApplicationEntity, root: 'access'
     end
     params do
       requires :id, type: String, desc: 'Unique identifier or code name of the application'
@@ -115,6 +144,22 @@ class ApplicationsAPI < Grape::API
     end
     post "/:id" do
       api_present true
+    end
+
+    api_desc "Deactivate an application." do
+      headers authentication_headers
+      scopes %w(application:read application:write application:execute)
+      tags %w(applications create swag more_swag)
+      response StatusDetailed, isArray: true, headers: result_headers
+      api_name 'put_applications'
+    end
+    params do
+      requires :id, type: String, desc: "Unique identifier or code name of the application"
+      requires :godzilla, type: Array, desc: "Multiple options for this API"
+    end
+    put "/:id" do
+      @application = {id: '123456', name: 'An app', description: 'Great App'}
+      api_present(@applications)
     end
 
     # Mix in with desc instead of api_desc
