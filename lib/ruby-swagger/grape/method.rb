@@ -65,6 +65,7 @@ module Swagger::Grape
       if @route.route_response.present? && @route.route_response[:entity].present?
         rainbow_response = {'description' => 'Successful result of the operation'}
 
+        type = Swagger::Grape::Type.new(@route.route_response[:entity].to_s)
         current_obj = rainbow_response['schema'] = {}
         remember_type(@route.route_response[:entity])
 
@@ -91,19 +92,13 @@ module Swagger::Grape
             rainbow_response['schema']['properties'] = {
               @route.route_response[:root] => {
                   'type' => 'array',
-                  'items' => {
-                      'type' => 'object',
-                      '$ref' => "#/definitions/#{@route.route_response[:entity].to_s}"
-                  }
+                  'items' => type.to_swagger
               }
             }
           else
             rainbow_response['schema']['type'] = 'object'
             rainbow_response['schema']['properties'] = {
-                @route.route_response[:root] => {
-                    'type' => 'object',
-                    '$ref' => "#/definitions/#{@route.route_response[:entity].to_s}"
-                }
+                @route.route_response[:root] => type.to_swagger
             }
           end
 
@@ -111,13 +106,9 @@ module Swagger::Grape
 
           if @route.route_response[:isArray] == true
             rainbow_response['schema']['type'] = 'array'
-            rainbow_response['schema']['items'] = {
-                'type' => 'object',
-                '$ref' => "#/definitions/#{@route.route_response[:entity].to_s}"
-            }
+            rainbow_response['schema']['items'] = type.to_swagger
           else
-            rainbow_response['schema']['type'] = 'object'
-            rainbow_response['schema']['$ref'] = "#/definitions/#{@route.route_response[:entity].to_s}"
+            rainbow_response['schema'] = type.to_swagger
           end
 
         end
