@@ -4,12 +4,13 @@ require 'ruby-swagger/grape/type'
 module Swagger::Grape
   class Method
 
-    attr_reader :operation, :types
+    attr_reader :operation, :types, :scopes
 
     def initialize(route_name, route)
       @route_name = route_name
       @route = route
       @types = []
+      @scopes = []
 
       new_operation
       operation_params
@@ -120,14 +121,15 @@ module Swagger::Grape
     end
 
     def operation_security
-      # if route.route_scopes #grape extensions
-      #   security = Swagger::Data::SecurityRequirement.new
-      #   route.route_scopes.each do |name, requirements|
-      #     security.add_requirement(name, requirements)
-      #   end
-      #
-      #   operations.security = route.route_scopes
-      # end
+      if @route.route_scopes #grape extensions
+        security = Swagger::Data::SecurityRequirement.new
+        security.add_requirement('oauth2', @route.route_scopes)
+        @operation.security = [security]
+
+        @route.route_scopes.each do |scope|
+          @scopes << scope unless @scopes.include?(scope)
+        end
+      end
     end
 
     #extract the tags

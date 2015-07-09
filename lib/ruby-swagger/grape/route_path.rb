@@ -5,12 +5,13 @@ require 'ruby-swagger/grape/method'
 module Swagger::Grape
   class RoutePath
 
-    attr_reader :types
+    attr_reader :types, :scopes
 
     def initialize(route_name)
       @name = route_name
       @operations = {}
       @types = []
+      @scopes = []
     end
 
     def add_operation(route)
@@ -18,6 +19,7 @@ module Swagger::Grape
       grape_operation = method.operation
 
       @types = (@types | method.types).uniq
+      @scopes = (@scopes | method.scopes).uniq
       @operations[route.route_method.downcase] = grape_operation
     end
 
