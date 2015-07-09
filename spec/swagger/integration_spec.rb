@@ -37,6 +37,10 @@ describe 'Ruby::Swagger' do
       expect(File.exists?("./doc/swagger/base_doc.yml")).to be_truthy
     end
 
+    it 'should generate a securityDefinitions.yml' do
+      expect(File.exists?("./doc/swagger/securityDefinitions.yml")).to be_truthy
+    end
+
     it 'base_doc.yml contains valid information' do
       base_doc = open_yaml "./doc/swagger/base_doc.yml"
       expect(base_doc['swagger']).to eq '2.0'
@@ -60,8 +64,28 @@ describe 'Ruby::Swagger' do
       expect(base_doc['produces']).to eq ['application/json']
     end
 
+    it 'securityDefinitions.yml contains valid information' do
+      base_doc = open_yaml "./doc/swagger/securityDefinitions.yml"
+      expect(base_doc['oauth2']).to eq({"type"=>"oauth2", "flow"=>"accessCode", "authorizationUrl"=>"https://", "tokenUrl"=>"https://"})
+    end
+
     it 'should generate a paths folder' do
       expect(Dir.exists?('./doc/swagger/paths')).to be_truthy
+    end
+
+    it 'should generate a scopes folder' do
+      expect(Dir.exists?('./doc/swagger/scopes')).to be_truthy
+    end
+
+    it 'should generate a scopes oauth2 file' do
+      expect(File.exists?('./doc/swagger/scopes/oauth2.yml')).to be_truthy
+    end
+
+    it 'oauth2.yml contains valid information' do
+      scopes = open_yaml "./doc/swagger/scopes/oauth2.yml"
+      expect(scopes['application:read']).not_to be_nil
+      expect(scopes['application:write']).not_to be_nil
+      expect(scopes['application:execute']).not_to be_nil
     end
 
     it 'should generate a ./doc/swagger/paths/applications/get.yml file' do

@@ -5,7 +5,7 @@ module Swagger::IO
   class FileSystem
 
     @@default_path = './doc/swagger'
-    DOC_SUBPARTS = %w(responses securityDefinitions security tags)
+    DOC_SUBPARTS = %w(responses security tags)
 
     def self.default_path=(new_path)
       @@default_path = new_path
@@ -34,6 +34,10 @@ module Swagger::IO
         write_definitions(swagger.delete('definitions'))
       end
 
+      if swagger['securityDefinitions']
+        write_security_definitions(swagger.delete('securityDefinitions'))
+      end
+
       write_file(swagger.to_yaml, 'base_doc.yml')
     end
 
@@ -47,6 +51,7 @@ module Swagger::IO
 
       doc['paths'] = read_paths("#{@@default_path}/paths/")
       doc['definitions'] = read_definitions("#{@@default_path}/definitions/")
+      doc['securityDefinitions'] = read_security_definitions("#{@@default_path}/")
  
       Swagger::Data::Document.parse(doc)
     end
@@ -78,7 +83,6 @@ module Swagger::IO
     def self.read_definitions(base)
       definitions = {}
       all_files = Dir["#{base}/**/*.yml"]
-      l = base.length
 
       all_files.each do |file|
         content = YAML::load_file(file)
@@ -86,6 +90,30 @@ module Swagger::IO
       end
 
       definitions
+    end
+
+    def self.read_security_definitions(base)
+      return nil unless File.exists?("#{base}/securityDefinitions.yml")
+      definitions = YAML::load_file("#{base}/securityDefinitions.yml")
+
+      all_files = Dir["#{base}/scopes/*.yml"]
+
+      all_files.each do |file|
+        content = YAML::load_file(file)
+        definitions[File.basename(file, ".yml")]['scopes'] = content
+      end
+
+      definitions
+    end
+
+    def write_security_definitions(definitions)
+      definitions.each do |definition_name, definition|
+        if definition['scopes']
+          write_file(definition.delete('scopes').to_yaml, "scopes/#{definition_name}.yml", true)
+        end
+      end
+
+      write_file(definitions.to_yaml, "securityDefinitions.yml", true)
     end
 
     def write_definitions(definitions)
