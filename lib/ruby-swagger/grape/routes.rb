@@ -5,11 +5,12 @@ require 'ruby-swagger/grape/route_path'
 module Swagger::Grape
   class Routes
 
-    attr_reader :types
+    attr_reader :types, :scopes
 
     def initialize(routes)
       @routes = routes
       @types = []
+      @scopes = []
     end
 
     def to_swagger
@@ -28,6 +29,7 @@ module Swagger::Grape
       paths.each do |path_name, path|
         swagger.add_path(path_name, path.to_swagger)
         @types = (@types | path.types).uniq
+        @scopes = (@scopes | path.scopes).uniq
       end
 
       swagger
