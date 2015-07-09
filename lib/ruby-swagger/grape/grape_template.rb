@@ -3,6 +3,8 @@ require 'ruby-swagger/template'
 require 'ruby-swagger/data/definitions'
 require 'ruby-swagger/grape/routes'
 require 'ruby-swagger/grape/type'
+require 'ruby-swagger/data/security_scheme'
+require 'ruby-swagger/data/security_definitions'
 
 module Swagger::Grape
   class Template
@@ -19,6 +21,22 @@ module Swagger::Grape
         grape_type = Swagger::Grape::Type.new(type)
 
         swagger_doc.definitions.add_definition(type.to_s, grape_type.to_swagger(false))
+      end
+
+      if routes.scopes.present?
+        scheme = Swagger::Data::SecurityScheme.new
+        scheme.type = 'oauth2'
+        scheme.flow = 'accessCode'
+        scheme.authorizationUrl = 'https://'
+        scheme.tokenUrl = 'https://'
+        scopes = {}
+        routes.scopes.uniq.each do |scope|
+          scopes[scope] = ""
+        end
+        scheme.scopes = scopes
+
+        swagger_doc.securityDefinitions = Swagger::Data::SecurityDefinitions.new
+        swagger_doc.securityDefinitions.add_param("oauth2", scheme)
       end
 
       swagger_doc
