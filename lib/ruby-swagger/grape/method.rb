@@ -283,6 +283,8 @@ module Swagger::Grape
     def remember_type(type)
       @types ||= []
 
+      return if %w(string integer boolean float array symbol virtus::attribute::boolean rack::multipart::uploadedfile date datetime).include?(type.to_s.downcase)
+
       type = Object.const_get type.to_s
       return if @types.include?(type.to_s)
 
