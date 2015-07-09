@@ -3,6 +3,8 @@ require 'ruby-swagger/io/file_system'
 module Swagger::IO
   class Security
 
+    SECURITY_FILE_NAME = 'securityDefinitions.yml'
+
     def self.write_security_definitions(security_definitions)
       return if security_definitions.nil? || security_definitions.empty?
 
@@ -10,7 +12,18 @@ module Swagger::IO
         Swagger::IO::Security.write_scopes(definition_name, definition)
       end
 
-      Swagger::IO::FileSystem.write_file(security_definitions.to_yaml, "securityDefinitions.yml")
+      Swagger::IO::FileSystem.write_file(security_definitions.to_yaml, SECURITY_FILE_NAME)
+    end
+
+    def self.read_security_definitions
+      return nil unless Swagger::IO::FileSystem.file_exists?(SECURITY_FILE_NAME)
+      definitions = Swagger::IO::FileSystem.read_file(SECURITY_FILE_NAME)
+
+      Swagger::IO::FileSystem.all_files("/scopes/*.yml").each do |file|
+        definitions[File.basename(file, ".yml")]['scopes'] = YAML::load_file(file)
+      end
+
+      definitions
     end
 
     def self.write_scopes(definition_name, definition)
