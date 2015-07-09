@@ -1,4 +1,5 @@
 require 'ruby-swagger/object'
+require 'ruby-swagger/data/scopes'
 
 module Swagger::Data
   class SecurityScheme < Swagger::Object #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#securitySchemeObject
@@ -49,7 +50,7 @@ module Swagger::Data
     end
 
     def tokenUrl=(new_tokenUrl)
-      raise ArgumentError.new("Security::Data::SecurityScheme#tokenUrl= - tokenUrl is nil") if @type == 'oauth2' && (@flow == 'password' || @flow == 'application' || @flow == 'accessCode') && new_tokenUrl
+      raise ArgumentError.new("Security::Data::SecurityScheme#tokenUrl= - tokenUrl is nil") if @type == 'oauth2' && (@flow == 'password' || @flow == 'application' || @flow == 'accessCode') && !new_tokenUrl
 
       @tokenUrl = new_tokenUrl
     end
