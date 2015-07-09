@@ -4,12 +4,13 @@ require 'ruby-swagger/grape/type'
 module Swagger::Grape
   class Method
 
-    attr_reader :operation, :types
+    attr_reader :operation, :types, :scopes
 
     def initialize(route_name, route)
       @route_name = route_name
       @route = route
       @types = []
+      @scopes = []
 
       new_operation
       operation_params
