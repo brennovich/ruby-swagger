@@ -2,6 +2,7 @@ require 'ruby-swagger/object'
 require 'ruby-swagger/data/document'
 require 'ruby-swagger/io/security'
 require 'ruby-swagger/io/writer'
+require 'ruby-swagger/io/definitions'
 
 module Swagger::IO
   class FileSystem
@@ -42,7 +43,11 @@ module Swagger::IO
     end
 
     def self.all_files(pattern)
-      Dir["#{base}/#{pattern}"]
+      Dir["#{@@default_path}/#{pattern}"]
+    end
+
+    def self.delete_file(file)
+      FileUtils.rm_f(file)
     end
 
     def initialize(swagger_doc)
@@ -60,10 +65,7 @@ module Swagger::IO
         write_subpart(doc_part, swagger.delete(doc_part))
       end
 
-      if swagger['definitions']
-        write_definitions(swagger.delete('definitions'))
-      end
-
+      Swagger::IO::Definitions.write_definitions(swagger.delete('definitions'))
       Swagger::IO::Security.write_security_definitions(swagger.delete('securityDefinitions'))
 
       Swagger::IO::FileSystem.write_file(swagger.to_yaml, 'base_doc.yml')
@@ -78,7 +80,7 @@ module Swagger::IO
       end
 
       doc['paths'] = read_paths("#{default_path}/paths/")
-      doc['definitions'] = read_definitions("#{default_path}/definitions/")
+      doc['definitions'] = Swagger::IO::Definitions.read_definitions
       doc['securityDefinitions'] = Swagger::IO::Security.read_security_definitions
  
       Swagger::Data::Document.parse(doc)
@@ -102,24 +104,6 @@ module Swagger::IO
       end
 
       paths
-    end
-
-    def self.read_definitions(base)
-      definitions = {}
-      all_files = Dir["#{base}/**/*.yml"]
-
-      all_files.each do |file|
-        content = YAML::load_file(file)
-        definitions[File.basename(file, ".yml")] = content
-      end
-
-      definitions
-    end
-
-    def write_definitions(definitions)
-      definitions.each do |definition_name, definition|
-        Swagger::IO::FileSystem.write_file(definition.to_yaml, "definitions/#{definition_name}.yml", true)
-      end
     end
 
     def write_paths(paths)
