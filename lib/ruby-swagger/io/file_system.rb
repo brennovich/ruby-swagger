@@ -1,8 +1,8 @@
 require 'ruby-swagger/object'
 require 'ruby-swagger/data/document'
 require 'ruby-swagger/io/security'
-require 'ruby-swagger/io/writer'
 require 'ruby-swagger/io/definitions'
+require 'ruby-swagger/io/paths'
 
 module Swagger::IO
   class FileSystem
@@ -59,15 +59,11 @@ module Swagger::IO
 
       swagger = @doc.to_swagger
 
-      write_paths(swagger.delete('paths'))
+      Swagger::IO::Paths.write_paths(swagger.delete('paths'))
 
-      DOC_SUBPARTS.each do |doc_part|
-        write_subpart(doc_part, swagger.delete(doc_part))
-      end
-
+      DOC_SUBPARTS.each {|doc_part| write_subpart(doc_part, swagger.delete(doc_part))}
       Swagger::IO::Definitions.write_definitions(swagger.delete('definitions'))
       Swagger::IO::Security.write_security_definitions(swagger.delete('securityDefinitions'))
-
       Swagger::IO::FileSystem.write_file(swagger.to_yaml, 'base_doc.yml')
     end
 
@@ -79,7 +75,7 @@ module Swagger::IO
         doc[doc_part] = YAML::load_file(file_path) if File.exists?(file_path)
       end
 
-      doc['paths'] = read_paths("#{default_path}/paths/")
+      doc['paths'] = Swagger::IO::Paths.read_paths
       doc['definitions'] = Swagger::IO::Definitions.read_definitions
       doc['securityDefinitions'] = Swagger::IO::Security.read_security_definitions
  
@@ -91,28 +87,6 @@ module Swagger::IO
     end
 
     private
-
-    def self.read_paths(base)
-      paths = {}
-      all_files = Dir["#{base}/**/*.yml"]
-      l = base.length
-
-      all_files.each do |file|
-        content = YAML::load_file(file)
-        paths[File.dirname(file[l..file.length])] ||= {}
-        paths[File.dirname(file[l..file.length])][File.basename(file, ".yml")] = content
-      end
-
-      paths
-    end
-
-    def write_paths(paths)
-      paths.each do |path, path_obj|
-        path_obj.each do |action, action_obj|
-          Swagger::IO::FileSystem.write_file(action_obj.to_yaml, "paths/#{path}/#{action}.yml", true)
-        end
-      end
-    end
 
     def write_subpart(subpart, content)
       return unless content
