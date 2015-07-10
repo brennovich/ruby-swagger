@@ -154,7 +154,7 @@ This gem includes a number of Grape DSL extensions and method helpers that you c
 This helper method allows you to extend the "desc" method for Grape and let you define more context for your API method. This is an example of API
 definition using the api_desc method (rather than the Grape desc method):
 
-```
+```ruby
     api_desc 'Retrieves applications list', {headers: {"X-API"=>{required: true}} do
       user_authenticated true
       deprecated true
