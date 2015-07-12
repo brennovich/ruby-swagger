@@ -10,7 +10,7 @@ module Swagger::IO
           definition.keys.each do |key|
             old_v = definition[key]
 
-            if key == 'description' && old_definition[key]
+            if (key == 'description' || key == 'summary') && old_definition[key]
               definition[key] = old_definition[key]
             end
 
