@@ -6,7 +6,7 @@ module Swagger::IO
     def self.read_paths
       paths = {}
 
-      l = Swagger::IO::FileSystem.default_path.length
+      l = (Swagger::IO::FileSystem.default_path + '/paths').length
 
       Swagger::IO::FileSystem.all_files('paths/**/*.yml').each do |file|
         content = YAML::load_file(file)
