@@ -24,7 +24,7 @@ module Swagger::IO
     end
 
     def self.read_file(name)
-      YAML::load_file(@@default_path + '/' + name)
+      YAML.load(ERB.new(File.read(@@default_path + '/' + name)).result)
     end
 
     def self.write_file(content, location, overwrite = false)
@@ -68,11 +68,11 @@ module Swagger::IO
     end
 
     def self.read
-      doc = YAML::load_file("#{default_path}/base_doc.yml")
+      doc = read_file('base_doc.yml')
 
       DOC_SUBPARTS.each do |doc_part|
-        file_path = "#{default_path}/#{doc_part}.yml"
-        doc[doc_part] = YAML::load_file(file_path) if File.exists?(file_path)
+        file_name = "#{doc_part}.yml"
+        doc[doc_part] = read_file(file_name) if File.exist?("#{default_path}/#{file_name}")
       end
 
       doc['paths'] = Swagger::IO::Paths.read_paths
