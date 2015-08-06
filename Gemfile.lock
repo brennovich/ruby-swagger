@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ruby-swagger (0.0.1)
+    ruby-swagger (0.0.2)
       addressable
 
 GEM
@@ -87,4 +87,4 @@ DEPENDENCIES
   ruby-swagger!
 
 BUNDLED WITH
-   1.10.0.rc
+   1.10.6
