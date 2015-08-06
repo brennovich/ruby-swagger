@@ -93,6 +93,8 @@ See below for the structure.
 
 #### YAML documentation structure
 
+Your documentation will be structured in a set of YAML files - you can edit parts of it. In the parts that you can edit, you can use the ERB syntax - for example: host: <%= ENV['host'] %>. 
+
 The ./doc/swagger is structured in the following way:
 
 * ./doc/swagger/base_doc.yaml 
@@ -226,4 +228,8 @@ The api_present helper will take care of wrapping the Application model into an 
 ## Help
 
 If you have found a bug or you want to get in touch with us, write an email to <open@gild.com>.
+
+## Special thanks
+
+* [brennovich](https://github.com/brennovich)
 
