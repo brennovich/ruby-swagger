@@ -6,6 +6,8 @@ module Swagger::Data
       'text/plain; charset=utf-8',
       'application/octet-stream',
       'application/json',
+      'application/hal+json',
+      'application/problem+json',
       'application/postscript',
       'application/pdf',
       'application/postscript',
