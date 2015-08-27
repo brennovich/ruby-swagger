@@ -32,6 +32,10 @@ module Swagger::Data
       @paths[path] = path_obj
     end
 
+    def all_paths
+      @paths.values
+    end
+
     def [](path)
       @paths[path]
     end
