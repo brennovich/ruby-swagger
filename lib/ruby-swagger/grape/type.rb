@@ -55,8 +55,8 @@ module Swagger::Grape
         when 'date'
           swagger_type['type'] = 'date'
         when 'datetime'
+          swagger_type['type'] = 'string'
           swagger_type['format'] = 'date-time'
-          swagger_type['format'] = 'string'
         else
           swagger_type['type'] = "object"
 
