@@ -43,7 +43,7 @@ This gem provides mostly 2 independent services for your ruby swagger documentat
 
 2. A set of tasks and grape extensions to convert your grape API documentation into a Swagger 2.0 documentation. Using these tasks you can:
 
-  (a) extract, from the Grape API structure, a file system representation in YAML of your documentation. 
+  (a) extract, from the Grape API structure, a file system representation in YAML of your documentation.
 This is not your final documentation (yet) but, similarly to Jakyll, you can now have other parties (technical writer) editing and maintaining
 your documentation in a yaml-like version. These tasks allow you to maintain the YAML version of your documentation up-to-date with the Grape definition of your API.
 
@@ -78,9 +78,9 @@ rake swagger:grape:generate_doc[base_class]
 ```
 
 where base_class is the root class of your API definition in Grape.
- 
+
 For example, if all your API is mounted into a "APIBase" class:
- 
+
 ```
 rake swagger:grape:generate_doc[ApiBase]  
 ```
@@ -93,19 +93,19 @@ See below for the structure.
 
 #### YAML documentation structure
 
-Your documentation will be structured in a set of YAML files - you can edit parts of it. In the parts that you can edit, you can use the ERB syntax - for example: `host: <%= ENV['host'] %>`. 
+Your documentation will be structured in a set of YAML files - you can edit parts of it. In the parts that you can edit, you can use the ERB syntax - for example: `host: <%= ENV['host'] %>`.
 
 The ./doc/swagger is structured in the following way:
 
-* ./doc/swagger/base_doc.yaml 
+* ./doc/swagger/base_doc.yml
 
   This file is written *only the first time* you execute the `rake swagger:grape:generate_doc` task and never overwritten. This file contains
 all the basic information for your API: the author, contact information, license, base URL, version, security schemes, format, etc.
 It is equivalent to the [basic object of Swagger](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#swagger-object).
 Once it is created is never updated by ruby-swagger tasks, so it is your duty to manually change any of the contact information, license, etc.
 
-* ./doc/swagger/securityDefinitions.yaml
-    
+* ./doc/swagger/securityDefinitions.yml
+
   This file is written *only the first time* you execute the `rake swagger:grape:generate_doc` task and never overwritten. This files contains the security
 definitions of your API and it is equivalent to the [securityDefinitions object of swagger](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#securityDefinitionsObject)
 Once it is created is never updated by ruby-swagger tasks, so it is your duty to manually change any of the contact information, license, etc.
@@ -119,9 +119,9 @@ Once it is created is never updated by ruby-swagger tasks, so it is your duty to
   This folder contains a structure of subfolders that is 1-1 mapped with your API. Each folder represent a path component in your route.
 Each file name is the verb whose that path is accessible from. The API version and API prefix is stripped when generating the file system structure.
 
-  **Example #1**: if you have a GET API available at /api/v1/users/activity, you will have a ./doc/swagger/paths/users/activity/get.yaml file containing the documentation for that API method.
-  
-  **Example #2**: if you have a POST API method available at /api/v1/users, you will have a ./doc/swagger/paths/users/post.yaml file containing the documentation for that API method.
+  **Example #1**: if you have a GET API available at /api/v1/users/activity, you will have a ./doc/swagger/paths/users/activity/get.yml file containing the documentation for that API method.
+
+  **Example #2**: if you have a POST API method available at /api/v1/users, you will have a ./doc/swagger/paths/users/post.yml file containing the documentation for that API method.
 
   Within each file there is the full definition of the API operation. When you execute the `rake swagger:grape:generate_doc` task,
 some properties will be overwritten by the Grape documentation - some will not. This means you can edit the documentation from the YAML file
@@ -159,7 +159,7 @@ You can use the `rake swagger:generate_client:all` task.
 
 ### Grape extensions
 
-This gem includes a number of Grape DSL extensions and method helpers that you can use when defining your API. 
+This gem includes a number of Grape DSL extensions and method helpers that you can use when defining your API.
 
 #### The api_desc helper method
 
@@ -186,7 +186,7 @@ definition using the api_desc method (rather than the Grape desc method):
     end
 ```
 
-The helper has the same syntax of the "desc" Grape method when defining an API operation. 
+The helper has the same syntax of the "desc" Grape method when defining an API operation.
 It supports a short description as first parameter, an optional hash of parameters (where, for example, you can define which headers your API support) and a block.
 The block extends your definition mapping it to your Swagger documentation. The allowed extensions in the api_desc block are:
 
@@ -231,4 +231,3 @@ If you have found a bug or you want to get in touch with us, write an email to <
 ## Special thanks
 
 * [brennovich](https://github.com/brennovich)
-
