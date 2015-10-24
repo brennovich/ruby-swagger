@@ -3,6 +3,7 @@ require 'ruby-swagger/data/document'
 require 'ruby-swagger/io/security'
 require 'ruby-swagger/io/definitions'
 require 'ruby-swagger/io/paths'
+require 'erb'
 
 module Swagger::IO
   class FileSystem
