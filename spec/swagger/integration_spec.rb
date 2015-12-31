@@ -357,7 +357,7 @@ describe 'Ruby::Swagger' do
                              "free"=>{"type"=>"boolean", "description"=>"True if application is free"},
                              "name"=>{"type"=>"string", "description"=>"Human readable application name"},
                              "description"=>{"type"=>"string", "description"=>"Application description"},
-                             "pictures"=>{"type"=>"object", "$ref"=>"#/definitions/ImageEntity", "description"=>"Application pictures"}}}
+                             "pictures"=>{"type"=>"array", "items"=>{"type"=>"object", "$ref"=>"#/definitions/ImageEntity"}, "description"=>"Application pictures"}}}
                        )
       end
 

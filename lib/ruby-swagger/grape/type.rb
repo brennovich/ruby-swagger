@@ -94,8 +94,10 @@ module Swagger::Grape
               if definition[:using].present?
                 #it's either an object or an array of object
                 using = type_convert(definition[:using].to_s, true)
-                
-                if definition['type'].present? && definition['type'] == 'array'
+
+                if definition[:documentation].present? &&
+                   definition[:documentation][:type].present? &&
+                   definition[:documentation][:type].to_s.downcase == 'array'
                   cursor['properties'][target]['items'] = using
                 else
                   cursor['properties'][target] = using
