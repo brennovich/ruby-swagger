@@ -121,6 +121,7 @@ class ApplicationsAPI < Grape::API
       headers authentication_headers
       scopes 'application:read'
       tags %w(applications create swag)
+      api_name 'post_applications'
     end
     params do
       requires :id, type: String, desc: "Unique identifier or code name of the application"
