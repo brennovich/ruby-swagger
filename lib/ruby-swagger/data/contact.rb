@@ -19,16 +19,13 @@ module Swagger::Data
 
     def self.parse(contact)
       return nil unless contact
-
       c = Swagger::Data::Contact.new.bulk_set(contact)
       c.validate_url!
-
       c
     end
 
     def url=(url)
       return nil unless url
-
       @url = Swagger::Data::Url.new(url)
     end
 
@@ -41,7 +38,7 @@ module Swagger::Data
     end
 
     def validate_url!
-      raise (ArgumentError.new('Swagger::Data::Contact - contact url is invalid')) if @url && !@url.valid?
+      raise ArgumentError.new('Swagger::Data::Contact - contact url is invalid') if @url && !@url.valid?
     end
   end
 end

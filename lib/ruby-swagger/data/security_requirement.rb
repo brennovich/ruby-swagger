@@ -15,9 +15,9 @@ module Swagger::Data
     end
 
     def add_requirement(key, requirements)
-      raise (ArgumentError.new('Swagger::Data::SecurityRequirement#add_requirement - key is nil')) unless key
-      raise (ArgumentError.new('Swagger::Data::SecurityRequirement#add_requirement - requirements is nil')) unless requirements
-      raise (ArgumentError.new('Swagger::Data::SecurityRequirement#add_requirement - requirements is not an array')) unless requirements.is_a?(Array)
+      raise ArgumentError.new('Swagger::Data::SecurityRequirement#add_requirement - key is nil') unless key
+      raise ArgumentError.new('Swagger::Data::SecurityRequirement#add_requirement - requirements is nil') unless requirements
+      raise ArgumentError.new('Swagger::Data::SecurityRequirement#add_requirement - requirements is not an array') unless requirements.is_a?(Array)
 
       @requirements[key] = requirements
     end

@@ -30,18 +30,18 @@ module Swagger::Data
     # parse an hash document into a set of Swagger objects
     #   document is a hash
     def self.parse(document)
-      raise (ArgumentError.new('Swagger::Document#parse - document object is nil')) unless document
+      raise ArgumentError.new('Swagger::Document#parse - document object is nil') unless document
 
       Swagger::Data::Document.new.bulk_set(document)
     end
 
     def swagger=(new_swagger)
-      raise (ArgumentError.new("Swagger::Document#swagger= - the document is not a swagger #{SPEC_VERSION} version")) unless '2.0' == new_swagger
+      raise ArgumentError.new("Swagger::Document#swagger= - the document is not a swagger #{SPEC_VERSION} version") unless '2.0' == new_swagger
       @swagger = new_swagger
     end
 
     def info=(new_info)
-      raise (ArgumentError.new('Swagger::Document#info= - info object is nil')) unless new_info
+      raise ArgumentError.new('Swagger::Document#info= - info object is nil') unless new_info
 
       new_info = Swagger::Data::Info.parse(new_info) unless new_info.is_a?(Swagger::Data::Info)
 
@@ -62,7 +62,7 @@ module Swagger::Data
       return nil unless new_schemes
 
       new_schemes.each do |scheme|
-        raise (ArgumentError.new("Swagger::Data::Document#schemes= - unrecognized scheme #{scheme}")) unless %w(http https ws wss).include?(scheme)
+        raise ArgumentError.new("Swagger::Data::Document#schemes= - unrecognized scheme #{scheme}") unless %w(http https ws wss).include?(scheme)
       end
 
       @schemes = new_schemes
@@ -72,7 +72,7 @@ module Swagger::Data
       return nil unless new_produces
 
       new_produces.each do |produce|
-        raise (ArgumentError.new("Swagger::Data::Document#produces= - unrecognized produce type #{produce}")) unless Swagger::Data::Mime.valid?(produce)
+        raise ArgumentError.new("Swagger::Data::Document#produces= - unrecognized produce type #{produce}") unless Swagger::Data::Mime.valid?(produce)
       end
 
       @produces = new_produces
@@ -82,7 +82,7 @@ module Swagger::Data
       return nil unless new_consumes
 
       new_consumes.each do |consume|
-        raise (ArgumentError.new("Swagger::Data::Document#consumes= - unrecognized consume type #{consume}]")) unless Swagger::Data::Mime.valid?(consume)
+        raise ArgumentError.new("Swagger::Data::Document#consumes= - unrecognized consume type #{consume}]") unless Swagger::Data::Mime.valid?(consume)
       end
 
       @consumes = new_consumes

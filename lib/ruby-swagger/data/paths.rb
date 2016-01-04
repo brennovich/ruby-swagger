@@ -8,8 +8,8 @@ module Swagger::Data
     end
 
     def self.parse(paths)
-      raise (ArgumentError.new('Swagger::Data::Paths#parse - paths object is nil')) unless paths
-      raise (ArgumentError.new('Swagger::Data::Paths#parse - paths object is not an hash')) unless paths.is_a?(Hash)
+      raise ArgumentError.new('Swagger::Data::Paths#parse - paths object is nil') unless paths
+      raise ArgumentError.new('Swagger::Data::Paths#parse - paths object is not an hash') unless paths.is_a?(Hash)
 
       pts = Swagger::Data::Paths.new
 

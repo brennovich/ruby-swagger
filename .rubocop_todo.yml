@@ -6,21 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-
-# Offense count: 21
-Lint/ParenthesesAsGroupedExpression:
-  Exclude:
-    - 'lib/ruby-swagger/data/contact.rb'
-    - 'lib/ruby-swagger/data/document.rb'
-    - 'lib/ruby-swagger/data/external_documentation.rb'
-    - 'lib/ruby-swagger/data/info.rb'
-    - 'lib/ruby-swagger/data/license.rb'
-    - 'lib/ruby-swagger/data/path.rb'
-    - 'lib/ruby-swagger/data/paths.rb'
-    - 'lib/ruby-swagger/data/reference.rb'
-    - 'lib/ruby-swagger/data/security_requirement.rb'
-
-
 # Offense count: 24
 Style/ClassVars:
   Exclude:

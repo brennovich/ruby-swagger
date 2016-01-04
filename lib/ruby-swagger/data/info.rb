@@ -17,13 +17,13 @@ module Swagger::Data
     end
 
     def self.parse(info)
-      raise (ArgumentError.new('Swagger::Data::Info#parse - info object is nil')) unless info
+      raise ArgumentError.new('Swagger::Data::Info#parse - info object is nil') unless info
 
       Swagger::Data::Info.new.bulk_set(info)
     end
 
     def title=(new_title)
-      raise (ArgumentError.new('Swagger::Data::Info#title= - title is invalid')) if new_title.nil? || new_title.empty?
+      raise ArgumentError.new('Swagger::Data::Info#title= - title is invalid') if new_title.nil? || new_title.empty?
       @title = new_title
     end
 

@@ -13,7 +13,7 @@ module Swagger::Data
     end
 
     def ref=(new_ref)
-      raise (ArgumentError.new('Swagger::Data::Reference#ref= $ref is nil')) unless new_ref
+      raise ArgumentError.new('Swagger::Data::Reference#ref= $ref is nil') unless new_ref
       @ref = new_ref
     end
 

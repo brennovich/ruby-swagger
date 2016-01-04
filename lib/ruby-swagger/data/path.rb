@@ -9,7 +9,7 @@ module Swagger::Data
     @ref = nil
 
     def self.parse(path)
-      raise (ArgumentError.new('Swagger::Data::Path - path is nil')) unless path
+      raise ArgumentError.new('Swagger::Data::Path - path is nil') unless path
 
       res = Swagger::Data::Path.new.bulk_set(path)
       res.ref = path['$ref'] if path['$ref']
@@ -76,7 +76,7 @@ module Swagger::Data
 
     def parameters=(new_parameters)
       return nil unless new_parameters
-      raise (ArgumentError.new('Swagger::Data::Path#parameters= - parameters is not an array')) unless new_parameters.is_a?(Array)
+      raise ArgumentError.new('Swagger::Data::Path#parameters= - parameters is not an array') unless new_parameters.is_a?(Array)
 
       @parameters = []
 
@@ -95,7 +95,7 @@ module Swagger::Data
 
     def ref=(new_ref)
       return nil unless new_ref
-      raise (ArgumentError.new('Swagger::Data::Path#ref= - $ref is not a string')) unless new_ref.is_a?(String)
+      raise ArgumentError.new('Swagger::Data::Path#ref= - $ref is not a string') unless new_ref.is_a?(String)
 
       @ref = new_ref
     end
