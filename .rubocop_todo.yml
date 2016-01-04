@@ -20,10 +20,6 @@ Lint/ParenthesesAsGroupedExpression:
     - 'lib/ruby-swagger/data/reference.rb'
     - 'lib/ruby-swagger/data/security_requirement.rb'
 
-# Offense count: 1
-Lint/UselessAccessModifier:
-  Exclude:
-    - 'lib/ruby-swagger/data/parameter.rb'
 
 # Offense count: 24
 Style/ClassVars:

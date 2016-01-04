@@ -78,7 +78,5 @@ module Swagger::Data
       puts "error processing parameter #{grape_parameter} [#{e}]"
       raise e
     end
-
-    private
   end
 end
