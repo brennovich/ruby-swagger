@@ -91,7 +91,7 @@ describe Swagger::Data::Operation do
     end
 
     it 'should convert it to a valid YAML' do
-      parsed = OpenStruct.new YAML.load(object.to_yaml)
+      expect { OpenStruct.new(YAML.load(object.to_yaml)) }.to_not raise_error
     end
   end
 end
