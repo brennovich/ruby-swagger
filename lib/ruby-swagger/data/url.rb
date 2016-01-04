@@ -2,7 +2,6 @@ require 'addressable/uri'
 
 module Swagger::Data
   class Url
-
     SCHEMES = %w(http https)
 
     attr_reader :url
@@ -21,6 +20,5 @@ module Swagger::Data
     def to_swagger
       url
     end
-
   end
 end

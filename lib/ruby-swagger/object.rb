@@ -1,11 +1,10 @@
 module Swagger
   class Object
-
     @@swagger_attribs = {}
 
     def self.attr_swagger(*attributes)
       attr_accessor(*attributes)
-      @@swagger_attribs[self.to_s] = *attributes
+      @@swagger_attribs[to_s] = *attributes
     end
 
     def swagger_attributes
@@ -26,7 +25,7 @@ module Swagger
 
     def bulk_set(object)
       swagger_attributes.each do |attribute|
-        self.send("#{attribute}=", object[attribute.to_s])
+        send("#{attribute}=", object[attribute.to_s])
       end
 
       self
@@ -40,10 +39,10 @@ module Swagger
       return swagger unless swagger_attributes
 
       swagger_attributes.each do |property|
-        obj = self.send(property)
+        obj = send(property)
         obj = swaggerify(obj)
 
-        swagger[property.to_s] = obj if !obj.nil?
+        swagger[property.to_s] = obj unless obj.nil?
       end
 
       swagger
@@ -62,6 +61,5 @@ module Swagger
 
       object
     end
-
   end
 end

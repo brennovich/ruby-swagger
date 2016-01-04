@@ -1,8 +1,7 @@
 require 'ruby-swagger/object'
 
 module Swagger::Data
-  class Scopes < Swagger::Object #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#scopesObject
-
+  class Scopes < Swagger::Object # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#scopesObject
     def initialize
       @scopes = {}
     end
@@ -20,8 +19,8 @@ module Swagger::Data
     end
 
     def add_scope(scope_name, scope_value)
-      raise ArgumentError.new("Swagger::Data::Scopes#add_scope - scope_name is nil") unless scope_name
-      raise ArgumentError.new("Swagger::Data::Scopes#add_scope - scope_value is nil") unless scope_value
+      raise ArgumentError.new('Swagger::Data::Scopes#add_scope - scope_name is nil') unless scope_name
+      raise ArgumentError.new('Swagger::Data::Scopes#add_scope - scope_value is nil') unless scope_value
 
       @scopes[scope_name] = scope_value
     end
@@ -39,6 +38,5 @@ module Swagger::Data
 
       swagger_scopes
     end
-
   end
 end

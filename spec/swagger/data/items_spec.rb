@@ -3,15 +3,14 @@ require 'yaml'
 require 'ruby-swagger/data/items'
 
 describe Swagger::Data::Items do
-
   let(:payload) do
     {
-        "type"=> "array",
-        "items"=> {
-          "type"=> "integer",
-          "minimum"=> 0,
-          "maximum"=> 63
-        }
+      'type' => 'array',
+      'items' => {
+        'type' => 'integer',
+        'minimum' => 0,
+        'maximum' => 63
+      }
     }
   end
 
@@ -49,5 +48,4 @@ describe Swagger::Data::Items do
       expect(parsed.items['maximum']).to eq 63
     end
   end
-
 end

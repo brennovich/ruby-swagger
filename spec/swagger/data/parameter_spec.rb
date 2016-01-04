@@ -3,17 +3,16 @@ require 'yaml'
 require 'ruby-swagger/data/parameter'
 
 describe Swagger::Data::Parameter do
-
   context 'A body parameter with a referenced schema definition' do
     let(:payload) do
       {
-          "name" => "user",
-          "in" => "body",
-          "description" => "user to add to the system",
-          "required" => true,
-          "schema" => {
-            "$ref" => "#/definitions/User"
-          }
+        'name' => 'user',
+        'in' => 'body',
+        'description' => 'user to add to the system',
+        'required' => true,
+        'schema' => {
+          '$ref' => '#/definitions/User'
+        }
       }
     end
 
@@ -59,16 +58,16 @@ describe Swagger::Data::Parameter do
   context 'A body parameter that is an array of string values' do
     let(:payload) do
       {
-          "name"=> "user",
-          "in"=> "body",
-          "description"=> "user to add to the system",
-          "required"=> true,
-          "schema"=> {
-            "type"=> "array",
-            "items"=> {
-              "type"=> "string"
-            }
+        'name' => 'user',
+        'in' => 'body',
+        'description' => 'user to add to the system',
+        'required' => true,
+        'schema' => {
+          'type' => 'array',
+          'items' => {
+            'type' => 'string'
           }
+        }
       }
     end
 
@@ -117,16 +116,16 @@ describe Swagger::Data::Parameter do
   context 'A header parameter with an array of 64 bit integer numbers' do
     let(:payload) do
       {
-          "name"=> "token",
-          "in"=> "header",
-          "description"=> "token to be passed as a header",
-          "required"=> true,
-          "type"=> "array",
-          "items"=> {
-            "type"=> "integer",
-            "format"=> "int64"
-          },
-          "collectionFormat"=> "csv"
+        'name' => 'token',
+        'in' => 'header',
+        'description' => 'token to be passed as a header',
+        'required' => true,
+        'type' => 'array',
+        'items' => {
+          'type' => 'integer',
+          'format' => 'int64'
+        },
+        'collectionFormat' => 'csv'
       }
     end
 
@@ -181,11 +180,11 @@ describe Swagger::Data::Parameter do
   context 'A path parameter of a string value' do
     let(:payload) do
       {
-          "name"=> "username",
-          "in"=> "path",
-          "description"=> "username to fetch",
-          "required"=> true,
-          "type"=> "string"
+        'name' => 'username',
+        'in' => 'path',
+        'description' => 'username to fetch',
+        'required' => true,
+        'type' => 'string'
       }
     end
 
@@ -231,15 +230,15 @@ describe Swagger::Data::Parameter do
   context 'An optional query parameter of a string value, allowing multiple values by repeating the query parameter' do
     let(:payload) do
       {
-          "name"=> "id",
-          "in"=> "query",
-          "description"=> "ID of the object to fetch",
-          "required"=> false,
-          "type"=> "array",
-          "items"=> {
-            "type"=> "string"
-          },
-          "collectionFormat"=> "multi"
+        'name' => 'id',
+        'in' => 'query',
+        'description' => 'ID of the object to fetch',
+        'required' => false,
+        'type' => 'array',
+        'items' => {
+          'type' => 'string'
+        },
+        'collectionFormat' => 'multi'
       }
     end
 
@@ -291,11 +290,11 @@ describe Swagger::Data::Parameter do
   context 'A form data with file type for a file upload' do
     let(:payload) do
       {
-          "name"=> "avatar",
-          "in"=> "formData",
-          "description"=> "The avatar of the user",
-          "required"=> true,
-          "type"=> "file"
+        'name' => 'avatar',
+        'in' => 'formData',
+        'description' => 'The avatar of the user',
+        'required' => true,
+        'type' => 'file'
       }
     end
 
@@ -324,7 +323,6 @@ describe Swagger::Data::Parameter do
         expect(parsed.description).to eq 'The avatar of the user'
         expect(parsed.required).to be_truthy
         expect(parsed.type).to eq 'file'
-
       end
 
       it 'should convert it to a valid YAML' do
@@ -338,5 +336,4 @@ describe Swagger::Data::Parameter do
       end
     end
   end
-
 end

@@ -3,11 +3,10 @@ require 'yaml'
 require 'ruby-swagger/data/security_scheme'
 
 describe Swagger::Data::SecurityScheme do
-
   context 'Basic Authentication Sample' do
     let(:payload) do
       {
-          "type" => "basic"
+        'type' => 'basic'
       }
     end
 
@@ -18,7 +17,6 @@ describe Swagger::Data::SecurityScheme do
         expect(parsed.type).to eq 'basic'
       end
     end
-
 
     context 'when creating the object' do
       let(:object) do
@@ -37,15 +35,14 @@ describe Swagger::Data::SecurityScheme do
         expect(parsed.type).to eq 'basic'
       end
     end
-
   end
 
   context 'API Key Sample' do
     let(:payload) do
       {
-          "type" => "apiKey",
-          "name" => "api_key",
-          "in" => "header"
+        'type' => 'apiKey',
+        'name' => 'api_key',
+        'in' => 'header'
       }
     end
 
@@ -80,19 +77,18 @@ describe Swagger::Data::SecurityScheme do
         expect(parsed.in).to eq 'header'
       end
     end
-
   end
 
   context 'Implicit OAuth2 Sample' do
     let(:payload) do
       {
-          "type" => "oauth2",
-          "authorizationUrl" => "http://swagger.io/api/oauth/dialog",
-          "flow" => "implicit",
-          "scopes" => {
-            "write:pets" => "modify pets in your account",
-            "read:pets" => "read your pets"
-          }
+        'type' => 'oauth2',
+        'authorizationUrl' => 'http://swagger.io/api/oauth/dialog',
+        'flow' => 'implicit',
+        'scopes' => {
+          'write:pets' => 'modify pets in your account',
+          'read:pets' => 'read your pets'
+        }
       }
     end
 
@@ -133,7 +129,5 @@ describe Swagger::Data::SecurityScheme do
         expect(parsed.scopes['read:pets']).to eq 'read your pets'
       end
     end
-
   end
-
 end

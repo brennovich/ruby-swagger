@@ -8,7 +8,6 @@ require 'ruby-swagger/data/security_definitions'
 
 module Swagger::Grape
   class Template
-
     def self.generate(base_class)
       swagger_doc = Swagger::Template.generate
 
@@ -31,12 +30,12 @@ module Swagger::Grape
         scheme.tokenUrl = 'https://'
         scopes = {}
         routes.scopes.uniq.each do |scope|
-          scopes[scope] = ""
+          scopes[scope] = ''
         end
         scheme.scopes = scopes
 
         swagger_doc.securityDefinitions = Swagger::Data::SecurityDefinitions.new
-        swagger_doc.securityDefinitions.add_param("oauth2", scheme)
+        swagger_doc.securityDefinitions.add_param('oauth2', scheme)
       end
 
       swagger_doc
@@ -62,6 +61,5 @@ module Swagger::Grape
 
       extract_all_types(new_types, all_types)
     end
-
   end
 end

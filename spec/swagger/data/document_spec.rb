@@ -1,9 +1,8 @@
 require 'spec_helper'
 
 describe Swagger::Data::Document do
-
   context 'as an empty document' do
-    subject { OpenStruct.new(JSON.parse(Swagger::Data::Document.new.to_json)) } #encoding and decoding - like a client would
+    subject { OpenStruct.new(JSON.parse(Swagger::Data::Document.new.to_json)) } # encoding and decoding - like a client would
 
     it 'should have a valid version' do
       expect(subject.swagger).to eq '2.0'
@@ -23,7 +22,7 @@ describe Swagger::Data::Document do
       it 'should create a valid Swagger::Data::Document' do
         doc = Swagger::Data::Document.parse(payload)
 
-        expect(doc.swagger).to eq "2.0"
+        expect(doc.swagger).to eq '2.0'
         expect(doc.schemes).to eq ['http']
         expect(doc.consumes).to eq ['application/json']
         expect(doc.produces).to eq ['application/json']
@@ -31,16 +30,15 @@ describe Swagger::Data::Document do
         expect(doc.host).to eq 'petstore.swagger.io'
         expect(doc.basePath).to eq '/api'
 
-        expect(doc.info.version).to eq "1.0.0"
-        expect(doc.info.title).to eq "Swagger Petstore"
-        expect(doc.info.description).to eq "A sample API that uses a petstore as an example to demonstrate features in the swagger-2.0 specification"
-        expect(doc.info.termsOfService).to eq "http://swagger.io/terms/"
-        expect(doc.info.contact.name).to eq "Swagger API Team"
-        expect(doc.info.contact.email).to eq "apiteam@swagger.io"
-        expect(doc.info.contact.url).to eq "http://swagger.io"
-        expect(doc.info.license.name).to eq "MIT"
-        expect(doc.info.license.url).to eq "http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT"
-
+        expect(doc.info.version).to eq '1.0.0'
+        expect(doc.info.title).to eq 'Swagger Petstore'
+        expect(doc.info.description).to eq 'A sample API that uses a petstore as an example to demonstrate features in the swagger-2.0 specification'
+        expect(doc.info.termsOfService).to eq 'http://swagger.io/terms/'
+        expect(doc.info.contact.name).to eq 'Swagger API Team'
+        expect(doc.info.contact.email).to eq 'apiteam@swagger.io'
+        expect(doc.info.contact.url).to eq 'http://swagger.io'
+        expect(doc.info.license.name).to eq 'MIT'
+        expect(doc.info.license.url).to eq 'http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT'
       end
 
       context 'with an invalid title' do
@@ -51,8 +49,5 @@ describe Swagger::Data::Document do
         end
       end
     end
-
   end
-
-
 end

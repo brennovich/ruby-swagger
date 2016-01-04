@@ -2,8 +2,7 @@ require 'ruby-swagger/object'
 require 'ruby-swagger/data/external_documentation'
 
 module Swagger::Data
-  class Tag < Swagger::Object #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#tag-object
-
+  class Tag < Swagger::Object # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#tag-object
     attr_swagger :name, :description, :externalDocs
 
     def self.parse(xml_object)
@@ -17,8 +16,7 @@ module Swagger::Data
 
       newDoc = Swagger::Data::ExternalDocumentation.parse(newDoc) unless newDoc.is_a?(Swagger::Data::ExternalDocumentation)
 
-      @externalDocs=newDoc
+      @externalDocs = newDoc
     end
-
   end
 end

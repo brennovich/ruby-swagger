@@ -3,31 +3,30 @@ require 'yaml'
 require 'ruby-swagger/data/definitions'
 
 describe Swagger::Data::Definitions do
-
   let(:payload) do
     {
-        "Category"=> {
-          "properties"=> {
-            "id"=> {
-              "type"=> "integer",
-              "format"=> "int64"
-            },
-            "name"=> {
-              "type"=> "string"
-            }
-          }
-        },
-        "Tag"=> {
-          "properties"=> {
-            "id"=> {
-              "type"=> "integer",
-              "format"=> "int64"
-            },
-            "name"=> {
-              "type"=> "string"
-            }
+      'Category' => {
+        'properties' => {
+          'id' => {
+            'type' => 'integer',
+            'format' => 'int64'
+          },
+          'name' => {
+            'type' => 'string'
           }
         }
+      },
+      'Tag' => {
+        'properties' => {
+          'id' => {
+            'type' => 'integer',
+            'format' => 'int64'
+          },
+          'name' => {
+            'type' => 'string'
+          }
+        }
+      }
     }
   end
 
@@ -74,5 +73,4 @@ describe Swagger::Data::Definitions do
       expect(parsed['Tag']['properties']['name']['type']).to eq 'string'
     end
   end
-
 end

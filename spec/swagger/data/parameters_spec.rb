@@ -3,25 +3,24 @@ require 'yaml'
 require 'ruby-swagger/data/parameters'
 
 describe Swagger::Data::Parameters do
-
   let(:payload) do
     {
-        "skipParam"=> {
-          "name"=> "skip",
-          "in"=> "query",
-          "description"=> "number of items to skip",
-          "required"=> true,
-          "type"=> "integer",
-          "format"=> "int32"
-        },
-        "limitParam"=> {
-          "name"=> "limit",
-          "in"=> "query",
-          "description"=> "max records to return",
-          "required"=> true,
-          "type"=> "integer",
-          "format"=> "int32"
-        }
+      'skipParam' => {
+        'name' => 'skip',
+        'in' => 'query',
+        'description' => 'number of items to skip',
+        'required' => true,
+        'type' => 'integer',
+        'format' => 'int32'
+      },
+      'limitParam' => {
+        'name' => 'limit',
+        'in' => 'query',
+        'description' => 'max records to return',
+        'required' => true,
+        'type' => 'integer',
+        'format' => 'int32'
+      }
     }
   end
 
@@ -29,7 +28,7 @@ describe Swagger::Data::Parameters do
     it 'should create a valid Swagger::Data::Parameters' do
       parsed = Swagger::Data::Parameters.parse(payload)
 
-      expect(parsed.params).to eq ['skipParam', 'limitParam']
+      expect(parsed.params).to eq %w(skipParam limitParam)
 
       expect(parsed['skipParam'].name).to eq 'skip'
       expect(parsed['skipParam'].in).to eq 'query'
@@ -88,5 +87,4 @@ describe Swagger::Data::Parameters do
       expect(parsed['limitParam']['format']).to eq 'int32'
     end
   end
-
 end

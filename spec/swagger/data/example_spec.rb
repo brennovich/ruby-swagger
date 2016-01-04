@@ -3,16 +3,15 @@ require 'yaml'
 require 'ruby-swagger/data/example'
 
 describe Swagger::Data::Example do
-
   let(:payload) do
     {
-        "application/json"=> {
-          "name"=> "Puma",
-          "type"=> "Dog",
-          "color"=> "Black",
-          "gender"=> "Female",
-          "breed"=> "Mixed"
-        }
+      'application/json' => {
+        'name' => 'Puma',
+        'type' => 'Dog',
+        'color' => 'Black',
+        'gender' => 'Female',
+        'breed' => 'Mixed'
+      }
     }
   end
 
@@ -44,8 +43,4 @@ describe Swagger::Data::Example do
       expect(obj['application/json']).to eq payload['application/json']
     end
   end
-
-
-
-
 end

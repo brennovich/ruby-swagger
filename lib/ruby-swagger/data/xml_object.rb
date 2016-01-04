@@ -1,8 +1,7 @@
 require 'ruby-swagger/object'
 
 module Swagger::Data
-  class XMLObject < Swagger::Object #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#xmlObject
-
+  class XMLObject < Swagger::Object # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#xmlObject
     attr_swagger :name, :namespace, :prefix, :attribute, :wrapped
 
     def self.parse(xml_object)
@@ -10,6 +9,5 @@ module Swagger::Data
 
       Swagger::Data::XMLObject.new.bulk_set(xml_object)
     end
-
   end
 end

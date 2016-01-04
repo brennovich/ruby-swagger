@@ -2,8 +2,7 @@ require 'ruby-swagger/object'
 require 'ruby-swagger/data/schema'
 
 module Swagger::Data
-  class Definitions < Swagger::Object #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#definitionsObject
-
+  class Definitions < Swagger::Object # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#definitionsObject
     def initialize
       @definitions = {}
     end
@@ -21,10 +20,10 @@ module Swagger::Data
     end
 
     def add_definition(definition_name, definition_value)
-      raise ArgumentError.new("Swagger::Data::Definitions#add_definition - definition_name is nil") unless definition_name
-      raise ArgumentError.new("Swagger::Data::Definitions#add_definition - definition_value is nil") unless definition_value
+      raise ArgumentError.new('Swagger::Data::Definitions#add_definition - definition_name is nil') unless definition_name
+      raise ArgumentError.new('Swagger::Data::Definitions#add_definition - definition_value is nil') unless definition_value
 
-      if !definition_value.is_a?(Swagger::Data::Schema)
+      unless definition_value.is_a?(Swagger::Data::Schema)
         definition_value = Swagger::Data::Schema.parse(definition_value)
       end
 
@@ -44,6 +43,5 @@ module Swagger::Data
 
       swagger_defs
     end
-
   end
 end

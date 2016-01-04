@@ -1,12 +1,11 @@
 require 'ruby-swagger/object'
 
 module Swagger::Data
-  class ExternalDocumentation < Swagger::Object #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#externalDocumentationObject
-
+  class ExternalDocumentation < Swagger::Object # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#externalDocumentationObject
     attr_swagger :url, :description
 
     def initialize
-      @url = "http://localhost"
+      @url = 'http://localhost'
     end
 
     def self.parse(external)
@@ -16,9 +15,8 @@ module Swagger::Data
     end
 
     def url=(new_url)
-      raise (ArgumentError.new("Swagger::Data::ExternalDocumentation#url - url is nil")) unless new_url
+      raise (ArgumentError.new('Swagger::Data::ExternalDocumentation#url - url is nil')) unless new_url
       @url = new_url
     end
-
   end
 end

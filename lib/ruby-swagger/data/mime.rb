@@ -1,6 +1,5 @@
 module Swagger::Data
   class Mime
-
     @@types = [
       'text/plain',
       'text/plain; charset=utf-8',
@@ -28,6 +27,5 @@ module Swagger::Data
     def self.valid?(type)
       @@types.include?(type)
     end
-
   end
 end

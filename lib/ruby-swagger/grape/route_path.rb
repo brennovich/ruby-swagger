@@ -4,7 +4,6 @@ require 'ruby-swagger/grape/method'
 
 module Swagger::Grape
   class RoutePath
-
     attr_reader :types, :scopes
 
     def initialize(route_name)
@@ -32,6 +31,5 @@ module Swagger::Grape
 
       path
     end
-
   end
 end

@@ -4,8 +4,7 @@ require 'ruby-swagger/data/xml_object'
 require 'ruby-swagger/data/external_documentation'
 
 module Swagger::Data
-  class Schema < Swagger::Object #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#schemaObject
-
+  class Schema < Swagger::Object # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#schemaObject
     attr_swagger :discriminator, :readOnly, :xml, :externalDocs, :example,
                  :format, :title, :description, :default,
                  :multipleOf, :maximum, :exclusiveMaximum, :minimum,
@@ -20,7 +19,7 @@ module Swagger::Data
       return nil if schema.nil?
 
       sc = Swagger::Data::Schema.new.bulk_set(schema)
-      sc.ref= schema['$ref']
+      sc.ref = schema['$ref']
       sc
     end
 
@@ -33,7 +32,7 @@ module Swagger::Data
     def externalDocs=(new_doc)
       return nil unless new_doc
 
-      if !new_doc.is_a?(Swagger::Data::ExternalDocumentation)
+      unless new_doc.is_a?(Swagger::Data::ExternalDocumentation)
         new_doc = Swagger::Data::ExternalDocumentation.parse(new_doc)
       end
 
@@ -43,7 +42,7 @@ module Swagger::Data
     def xml=(new_xml)
       return nil unless new_xml
 
-      if !new_xml.is_a?(Swagger::Data::XMLObject)
+      unless new_xml.is_a?(Swagger::Data::XMLObject)
         new_xml = Swagger::Data::XMLObject.parse(new_xml)
       end
 
@@ -51,11 +50,11 @@ module Swagger::Data
     end
 
     def []=(attrib, value)
-      self.send("#{attrib}=", value)
+      send("#{attrib}=", value)
     end
 
     def [](attrib)
-      self.send("#{attrib}")
+      send("#{attrib}")
     end
 
     def as_swagger
@@ -63,6 +62,5 @@ module Swagger::Data
       res['$ref'] = @ref if @ref
       res
     end
-
   end
 end

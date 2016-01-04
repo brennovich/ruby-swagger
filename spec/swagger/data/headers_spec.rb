@@ -3,21 +3,20 @@ require 'yaml'
 require 'ruby-swagger/data/headers'
 
 describe Swagger::Data::Headers do
-
   let(:payload) do
     {
-        "X-Rate-Limit-Limit"=> {
-          "description"=> "The number of allowed requests in the current period",
-          "type"=> "integer"
-        },
-        "X-Rate-Limit-Remaining"=> {
-          "description"=> "The number of remaining requests in the current period",
-          "type"=> "integer"
-        },
-        "X-Rate-Limit-Reset"=> {
-          "description"=> "The number of seconds left in the current period",
-          "type"=> "integer"
-        }
+      'X-Rate-Limit-Limit' => {
+        'description' => 'The number of allowed requests in the current period',
+        'type' => 'integer'
+      },
+      'X-Rate-Limit-Remaining' => {
+        'description' => 'The number of remaining requests in the current period',
+        'type' => 'integer'
+      },
+      'X-Rate-Limit-Reset' => {
+        'description' => 'The number of seconds left in the current period',
+        'type' => 'integer'
+      }
     }
   end
 
@@ -67,5 +66,4 @@ describe Swagger::Data::Headers do
       expect(parsed['X-Rate-Limit-Reset']['type']).to eq 'integer'
     end
   end
-
 end

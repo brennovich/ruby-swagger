@@ -1,8 +1,7 @@
 require 'ruby-swagger/object'
 
 module Swagger::Data
-  class Reference < Swagger::Object #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#referenceObject
-
+  class Reference < Swagger::Object # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#referenceObject
     @ref = nil
 
     def self.parse(reference)
@@ -14,17 +13,14 @@ module Swagger::Data
     end
 
     def ref=(new_ref)
-      raise (ArgumentError.new("Swagger::Data::Reference#ref= $ref is nil")) unless new_ref
+      raise (ArgumentError.new('Swagger::Data::Reference#ref= $ref is nil')) unless new_ref
       @ref = new_ref
     end
 
-    def ref
-      @ref
-    end
+    attr_reader :ref
 
     def as_swagger
       @ref.nil? ? {} : { '$ref' => @ref }
     end
-
   end
 end
