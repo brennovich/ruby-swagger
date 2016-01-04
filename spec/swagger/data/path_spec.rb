@@ -3,48 +3,47 @@ require 'yaml'
 require 'ruby-swagger/data/path'
 
 describe Swagger::Data::Path do
-
   let(:payload) do
     {
-        "get"=> {
-          "description"=> "Returns pets based on ID",
-          "summary"=> "Find pets by ID",
-          "operationId"=> "getPetsById",
-          "produces"=> [
-            "application/json",
-            "text/html"
-          ],
-          "responses"=> {
-            "200"=> {
-              "description"=> "pet response",
-              "schema"=> {
-                "type"=> "array",
-                "items"=> {
-                  "$ref"=> "#/definitions/Pet"
-                }
-              }
-            },
-            "default"=> {
-              "description"=> "error payload",
-              "schema"=> {
-                "$ref"=> "#/definitions/ErrorModel"
+      'get' => {
+        'description' => 'Returns pets based on ID',
+        'summary' => 'Find pets by ID',
+        'operationId' => 'getPetsById',
+        'produces' => [
+          'application/json',
+          'text/html'
+        ],
+        'responses' => {
+          '200' => {
+            'description' => 'pet response',
+            'schema' => {
+              'type' => 'array',
+              'items' => {
+                '$ref' => '#/definitions/Pet'
               }
             }
+          },
+          'default' => {
+            'description' => 'error payload',
+            'schema' => {
+              '$ref' => '#/definitions/ErrorModel'
+            }
           }
-        },
-        "parameters"=> [
-          {
-            "name"=> "id",
-            "in"=> "path",
-            "description"=> "ID of pet to use",
-            "required"=> true,
-            "type"=> "array",
-            "items"=> {
-              "type"=> "string"
-            },
-            "collectionFormat"=> "csv"
-          }
-        ]
+        }
+      },
+      'parameters' => [
+        {
+          'name' => 'id',
+          'in' => 'path',
+          'description' => 'ID of pet to use',
+          'required' => true,
+          'type' => 'array',
+          'items' => {
+            'type' => 'string'
+          },
+          'collectionFormat' => 'csv'
+        }
+      ]
     }
   end
 
@@ -55,7 +54,7 @@ describe Swagger::Data::Path do
       expect(parsed.get.description).to eq 'Returns pets based on ID'
       expect(parsed.get.summary).to eq 'Find pets by ID'
       expect(parsed.get.operationId).to eq 'getPetsById'
-      expect(parsed.get.produces).to eq ["application/json", "text/html"]
+      expect(parsed.get.produces).to eq ['application/json', 'text/html']
 
       expect(parsed.get.responses['200'].description).to eq 'pet response'
       expect(parsed.get.responses['200'].schema.type).to eq 'array'
@@ -84,7 +83,7 @@ describe Swagger::Data::Path do
       expect(parsed.get['description']).to eq 'Returns pets based on ID'
       expect(parsed.get['summary']).to eq 'Find pets by ID'
       expect(parsed.get['operationId']).to eq 'getPetsById'
-      expect(parsed.get['produces']).to eq ["application/json", "text/html"]
+      expect(parsed.get['produces']).to eq ['application/json', 'text/html']
 
       expect(parsed.get['responses']['200']['description']).to eq 'pet response'
       expect(parsed.get['responses']['200']['schema']['type']).to eq 'array'
@@ -107,7 +106,7 @@ describe Swagger::Data::Path do
       expect(parsed.get['description']).to eq 'Returns pets based on ID'
       expect(parsed.get['summary']).to eq 'Find pets by ID'
       expect(parsed.get['operationId']).to eq 'getPetsById'
-      expect(parsed.get['produces']).to eq ["application/json", "text/html"]
+      expect(parsed.get['produces']).to eq ['application/json', 'text/html']
 
       expect(parsed.get['responses']['200']['description']).to eq 'pet response'
       expect(parsed.get['responses']['200']['schema']['type']).to eq 'array'
@@ -124,5 +123,4 @@ describe Swagger::Data::Path do
       expect(parsed.parameters.first['collectionFormat']).to eq 'csv'
     end
   end
-
 end

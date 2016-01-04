@@ -2,8 +2,7 @@ require 'ruby-swagger/data/url'
 require 'ruby-swagger/object'
 
 module Swagger::Data
-  class License < Swagger::Object #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#license-object
-
+  class License < Swagger::Object # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#license-object
     DEFAULT_NAME = 'Apache 2.0'
     DEFAULT_URL = 'http://www.apache.org/licenses/LICENSE-2.0.html'
 
@@ -21,7 +20,7 @@ module Swagger::Data
     end
 
     def name=(new_name)
-      raise (ArgumentError.new("Swagger::Data::License - license name is invalid ")) if new_name.nil? || new_name.empty?
+      raise (ArgumentError.new('Swagger::Data::License - license name is invalid ')) if new_name.nil? || new_name.empty?
       @name = new_name
     end
 
@@ -44,8 +43,7 @@ module Swagger::Data
     private
 
     def validate_url!
-      raise (ArgumentError.new("Swagger::Data::License - contact url is invalid")) unless @url.valid?
+      raise (ArgumentError.new('Swagger::Data::License - contact url is invalid')) unless @url.valid?
     end
-
   end
 end

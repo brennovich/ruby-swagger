@@ -7,7 +7,6 @@ require 'erb'
 
 module Swagger::IO
   class FileSystem
-
     DOC_SUBPARTS = %w(responses security tags)
 
     @@default_path = './doc/swagger'
@@ -21,7 +20,7 @@ module Swagger::IO
     end
 
     def self.init_fs_structure
-      FileUtils.mkdir_p(@@default_path) unless Dir.exists?(@@default_path)
+      FileUtils.mkdir_p(@@default_path) unless Dir.exist?(@@default_path)
     end
 
     def self.read_file(name)
@@ -31,16 +30,16 @@ module Swagger::IO
     def self.write_file(content, location, overwrite = false)
       file_path = @@default_path + '/' + location
 
-      return if !overwrite && File.exists?(file_path)
+      return if !overwrite && File.exist?(file_path)
 
       dir_path = File.dirname(file_path)
 
-      FileUtils.mkdir_p(dir_path) unless Dir.exists?(dir_path)
-      File.open(file_path, 'w') {|f| f.write(content) }
+      FileUtils.mkdir_p(dir_path) unless Dir.exist?(dir_path)
+      File.open(file_path, 'w') { |f| f.write(content) }
     end
 
     def self.file_exists?(name)
-      File.exists?(@@default_path + '/' + name)
+      File.exist?(@@default_path + '/' + name)
     end
 
     def self.all_files(pattern)
@@ -62,7 +61,7 @@ module Swagger::IO
 
       Swagger::IO::Paths.write_paths(swagger.delete('paths'))
 
-      DOC_SUBPARTS.each {|doc_part| write_subpart(doc_part, swagger.delete(doc_part))}
+      DOC_SUBPARTS.each { |doc_part| write_subpart(doc_part, swagger.delete(doc_part)) }
       Swagger::IO::Definitions.write_definitions(swagger.delete('definitions'))
       Swagger::IO::Security.write_security_definitions(swagger.delete('securityDefinitions'))
       Swagger::IO::FileSystem.write_file(swagger.to_yaml, 'base_doc.yml')
@@ -79,7 +78,7 @@ module Swagger::IO
       doc['paths'] = Swagger::IO::Paths.read_paths
       doc['definitions'] = Swagger::IO::Definitions.read_definitions
       doc['securityDefinitions'] = Swagger::IO::Security.read_security_definitions
- 
+
       Swagger::Data::Document.parse(doc)
     end
 
@@ -93,6 +92,5 @@ module Swagger::IO
       return unless content
       write_file(content.to_yaml, "#{subpart}.yml")
     end
-
   end
 end

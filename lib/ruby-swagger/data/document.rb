@@ -12,9 +12,8 @@ require 'ruby-swagger/data/tag'
 require 'ruby-swagger/data/external_documentation'
 
 module Swagger::Data
-  class Document < Swagger::Object  #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#swagger-object
-
-    SPEC_VERSION = '2.0'  #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#fixed-fields
+  class Document < Swagger::Object # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#swagger-object
+    SPEC_VERSION = '2.0' # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#fixed-fields
     DEFAULT_HOST = 'localhost:80'
 
     attr_swagger :swagger, :info, :host, :basePath, :schemes, :consumes,
@@ -31,18 +30,18 @@ module Swagger::Data
     # parse an hash document into a set of Swagger objects
     #   document is a hash
     def self.parse(document)
-      raise (ArgumentError.new("Swagger::Document#parse - document object is nil")) unless document
+      raise (ArgumentError.new('Swagger::Document#parse - document object is nil')) unless document
 
       Swagger::Data::Document.new.bulk_set(document)
     end
 
     def swagger=(new_swagger)
-      raise (ArgumentError.new("Swagger::Document#swagger= - the document is not a swagger #{SPEC_VERSION} version")) unless "2.0" == new_swagger
+      raise (ArgumentError.new("Swagger::Document#swagger= - the document is not a swagger #{SPEC_VERSION} version")) unless '2.0' == new_swagger
       @swagger = new_swagger
     end
 
     def info=(new_info)
-      raise (ArgumentError.new("Swagger::Document#info= - info object is nil")) unless new_info
+      raise (ArgumentError.new('Swagger::Document#info= - info object is nil')) unless new_info
 
       new_info = Swagger::Data::Info.parse(new_info) unless new_info.is_a?(Swagger::Data::Info)
 
@@ -52,8 +51,8 @@ module Swagger::Data
     def basePath=(new_path)
       new_path = new_path.nil? ? '/' : new_path
 
-      if !(new_path =~ /^\/.+$/)
-        new_path = "/#{new_path}" #new path must start with a /
+      unless new_path =~ /^\/.+$/
+        new_path = "/#{new_path}" # new path must start with a /
       end
 
       @basePath ||= new_path
@@ -86,13 +85,13 @@ module Swagger::Data
         raise (ArgumentError.new("Swagger::Data::Document#consumes= - unrecognized consume type #{consume}]")) unless Swagger::Data::Mime.valid?(consume)
       end
 
-      @consumes= new_consumes
+      @consumes = new_consumes
     end
 
     def paths=(new_paths)
-      raise ArgumentError.new("Swagger::Data::Document#paths= - paths is nil") unless paths
+      raise ArgumentError.new('Swagger::Data::Document#paths= - paths is nil') unless paths
 
-      new_paths = Swagger::Data::Paths.parse(new_paths) if(!new_paths.is_a?(Swagger::Data::Paths))
+      new_paths = Swagger::Data::Paths.parse(new_paths) unless new_paths.is_a?(Swagger::Data::Paths)
 
       @paths = new_paths
     end
@@ -100,7 +99,7 @@ module Swagger::Data
     def definitions=(new_definitions)
       return nil unless new_definitions
 
-      if (!new_definitions.is_a?(Swagger::Data::Definitions))
+      unless new_definitions.is_a?(Swagger::Data::Definitions)
         new_definitions = Swagger::Data::Definitions.parse(new_definitions)
       end
 
@@ -110,7 +109,7 @@ module Swagger::Data
     def parameters=(new_parameters)
       return nil unless new_parameters
 
-      if (!new_parameters.is_a?(Swagger::Data::Parameters))
+      unless new_parameters.is_a?(Swagger::Data::Parameters)
         new_parameters = Swagger::Data::Parameters.parse(new_parameters)
       end
 
@@ -120,7 +119,7 @@ module Swagger::Data
     def responses=(new_responses)
       return nil unless new_responses
 
-      if (!new_responses.is_a?(Swagger::Data::Responses))
+      unless new_responses.is_a?(Swagger::Data::Responses)
         new_responses = Swagger::Data::Responses.parse(new_responses)
       end
 
@@ -130,17 +129,17 @@ module Swagger::Data
     def securityDefinitions=(newSecurityDef)
       return nil unless newSecurityDef
 
-      if (!newSecurityDef.is_a?(Swagger::Data::SecurityDefinitions))
+      unless newSecurityDef.is_a?(Swagger::Data::SecurityDefinitions)
         newSecurityDef = Swagger::Data::SecurityDefinitions.parse(newSecurityDef)
       end
 
-      @securityDefinitions= newSecurityDef
+      @securityDefinitions = newSecurityDef
     end
 
     def security=(new_security)
       return nil unless new_security
 
-      if (!new_security.is_a?(Swagger::Data::SecurityRequirement))
+      unless new_security.is_a?(Swagger::Data::SecurityRequirement)
         new_security = Swagger::Data::SecurityRequirement.parse(new_security)
       end
 
@@ -160,7 +159,7 @@ module Swagger::Data
     def add_tag(new_tag)
       return nil unless new_tag
 
-      if (!new_tag.is_a?(Swagger::Data::Tag))
+      unless new_tag.is_a?(Swagger::Data::Tag)
         new_tag = Swagger::Data::Tag.parse(new_tag)
       end
 
@@ -170,12 +169,11 @@ module Swagger::Data
     def externalDocs=(new_externalDocs)
       return nil unless new_externalDocs
 
-      if (!new_externalDocs.is_a?(Swagger::Data::ExternalDocumentation))
+      unless new_externalDocs.is_a?(Swagger::Data::ExternalDocumentation)
         new_externalDocs = Swagger::Data::ExternalDocumentation.parse(new_externalDocs)
       end
 
       @externalDocs = new_externalDocs
     end
-
   end
 end

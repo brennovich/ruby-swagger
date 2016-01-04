@@ -6,7 +6,6 @@ module Grape
       extend ActiveSupport::Concern
 
       module ClassMethods
-
         def api_desc(description, options = {}, &block)
           default_api_options!(options)
           block.call if block_given?
@@ -62,27 +61,25 @@ module Grape
         def tags(new_tags)
           raise ArgumentError.new("Grape::tags - unrecognized value #{new_tags} - tags can only be an array of strings or a string") unless new_tags.is_a?(Array) || new_tags.is_a?(String)
 
-          if new_tags.is_a?(String)
-            new_tags = [new_tags]
-          end
+          new_tags = [new_tags] if new_tags.is_a?(String)
 
-          @api_options[:tags]= new_tags
+          @api_options[:tags] = new_tags
         end
 
         def response(new_result, options = {})
           raise ArgumentError.new("Grape::response - response can't be nil") unless new_result
 
-          response_obj = {entity: new_result}
+          response_obj = { entity: new_result }
           response_obj[:root] = options[:root] || options['root']
           response_obj[:headers] = options[:headers] || options['headers']
           response_obj[:isArray] = options[:isArray] || options['isArray']
 
-          @api_options[:response]= response_obj
+          @api_options[:response] = response_obj
         end
 
         def errors(errors_value)
           raise ArgumentError.new("Grape::errors - unrecognized value #{errors_value} - errors root must be a hash of errors") unless errors_value.is_a?(Hash)
-          @api_options[:errors]= errors_value
+          @api_options[:errors] = errors_value
         end
 
         @@headers = {}
@@ -137,20 +134,20 @@ module Grape
 
         def default_api_options!(options)
           @api_options = {
-              headers: @@headers,
-              deprecated: @@deprecated,
-              hidden: @@hidden,
-              scopes: @@scopes,
-              tags: @@tags,
-              response: {
-                  entity: @@response_entity,
-                  root: @@response_root,
-                  headers: @@response_headers,
-                  isArray: false
-              },
-              errors: @@errors,
-              api_name: nil,
-              detail: ''
+            headers: @@headers,
+            deprecated: @@deprecated,
+            hidden: @@hidden,
+            scopes: @@scopes,
+            tags: @@tags,
+            response: {
+              entity: @@response_entity,
+              root: @@response_root,
+              headers: @@response_headers,
+              isArray: false
+            },
+            errors: @@errors,
+            api_name: nil,
+            detail: ''
           }.merge(options)
           @description = ''
         end

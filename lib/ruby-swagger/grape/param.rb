@@ -2,7 +2,6 @@ require 'ruby-swagger/grape/type'
 
 module Swagger::Grape
   class Param
-
     def initialize(param)
       @param = param
     end
@@ -11,7 +10,7 @@ module Swagger::Grape
       swagger_param = {}
       swagger_param['description'] = @param[:desc]  if @param[:desc].present?
       swagger_param['default'] = @param[:default]   if @param[:default].present?
-      swagger_param['required'] = @param[:required]   if @param.has_key?(:required)
+      swagger_param['required'] = @param[:required] if @param.key?(:required)
 
       swagger_param.merge! Swagger::Grape::Type.new(@param[:type]).to_swagger
 
@@ -29,6 +28,5 @@ module Swagger::Grape
     def type
       @param[:type].to_s || 'string'
     end
-
   end
 end

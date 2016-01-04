@@ -2,9 +2,7 @@ require 'ruby-swagger/io/file_system'
 require 'ruby-swagger/grape/grape_template'
 
 namespace :swagger do
-
   namespace :grape do
-
     unless defined?(Rails)
       task :environment do
         # for non-rails environment, we do not load the env
@@ -12,9 +10,9 @@ namespace :swagger do
     end
 
     desc 'Generate a swagger meta documentation from Grape API definition and store it under doc/swagger'
-    task :generate_doc, [:base_class] => :environment do |t, args|
+    task :generate_doc, [:base_class] => :environment do |_t, args|
       if args[:base_class].nil?
-        STDERR.puts "You need to pass a base class for your API"
+        STDERR.puts 'You need to pass a base class for your API'
         STDERR.puts "For example: rake 'swagger:grape:generate_doc[ApiBase]'"
         exit -1
       end
@@ -28,12 +26,11 @@ namespace :swagger do
       Swagger::IO::FileSystem.new(swagger_doc).write!
       puts "You should check your swagger meta documentation under #{Swagger::IO::FileSystem.default_path}"
     end
-
   end
 
   desc 'Generate a swagger 2.0-compatible documentation from the metadata stored into doc/swagger'
   task :compile_doc do
-    puts "Compiling documentation"
+    puts 'Compiling documentation'
 
     Swagger::IO::FileSystem.new(Swagger::IO::FileSystem.read).compile!
 
@@ -42,23 +39,22 @@ namespace :swagger do
 
   desc 'Build an API client given the swagger definition in doc/swagger/swagger.json'
   namespace :generate_client do
-
     def build_client(language)
-      unless File.exists?('./doc/swagger/swagger.json')
-        STDERR.puts "File ./doc/swagger/swagger.json does not exist"
+      unless File.exist?('./doc/swagger/swagger.json')
+        STDERR.puts 'File ./doc/swagger/swagger.json does not exist'
         exit -1
       end
 
-      unless File.exists?('vendor/swagger-codegen-cli.jar')
-        STDERR.puts "Swagger codegen does not exist, downloading it now..."
-        Dir.mkdir('./vendor') unless Dir.exists?('./vendor')
+      unless File.exist?('vendor/swagger-codegen-cli.jar')
+        STDERR.puts 'Swagger codegen does not exist, downloading it now...'
+        Dir.mkdir('./vendor') unless Dir.exist?('./vendor')
 
         `wget -O ./vendor/swagger-codegen-cli.jar https://s3-us-west-2.amazonaws.com/tunamelt-production/swagger-codegen/swagger-codegen-cli.jar`
       end
 
       puts "Generating #{language} client (output in api_client/#{language})"
 
-      FileUtils.rm_rf("./api_client/#{language}") if Dir.exists?("./api_client/#{language}")
+      FileUtils.rm_rf("./api_client/#{language}") if Dir.exist?("./api_client/#{language}")
 
       `java -jar ./vendor/swagger-codegen-cli.jar generate \
             -i ./doc/swagger/swagger.json \
@@ -117,9 +113,8 @@ namespace :swagger do
     end
 
     desc 'Build all the API clients'
-    task :all => [:ruby, :java, :python, :python_3, :php, :perl, :objective_c, :c_sharp, :android]
+    task all: [:ruby, :java, :python, :python_3, :php, :perl, :objective_c, :c_sharp, :android]
 
-    task :default => [:all]
-
+    task default: [:all]
   end
 end

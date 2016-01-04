@@ -3,22 +3,21 @@ require 'yaml'
 require 'ruby-swagger/data/responses'
 
 describe Swagger::Data::Responses do
-
   context 'Response of an array of a complex type' do
     let(:payload) do
       {
-          "200"=> {
-            "description"=> "a pet to be returned",
-            "schema"=> {
-              "$ref"=> "#/definitions/Pet"
-            }
-          },
-          "default"=> {
-            "description"=> "Unexpected error",
-            "schema"=> {
-              "$ref"=> "#/definitions/ErrorModel"
-            }
+        '200' => {
+          'description' => 'a pet to be returned',
+          'schema' => {
+            '$ref' => '#/definitions/Pet'
           }
+        },
+        'default' => {
+          'description' => 'Unexpected error',
+          'schema' => {
+            '$ref' => '#/definitions/ErrorModel'
+          }
+        }
       }
     end
 
@@ -60,5 +59,4 @@ describe Swagger::Data::Responses do
       end
     end
   end
-
 end

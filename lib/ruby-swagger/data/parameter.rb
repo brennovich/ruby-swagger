@@ -5,7 +5,6 @@ require 'ruby-swagger/grape/param'
 
 module Swagger::Data
   class Parameter < Swagger::Object # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#parameter-object
-
     attr_swagger :name, :in, :description, :required, :schema,
                  :type, :format, :allowEmptyValue, :items,
                  :collectionFormat, :default, :maximum,
@@ -46,7 +45,7 @@ module Swagger::Data
     end
 
     def items=(new_items)
-      raise ArgumentError.new("Swagger::Data::Parameter#items= items is nil") if new_items.nil? && @type == 'array'
+      raise ArgumentError.new('Swagger::Data::Parameter#items= items is nil') if new_items.nil? && @type == 'array'
       if !new_items.nil? && !new_items.is_a?(Swagger::Data::Items)
         new_items = Swagger::Data::Items.parse(new_items)
       end
@@ -60,8 +59,8 @@ module Swagger::Data
       grape_type = Swagger::Grape::Param.new(grape_parameter.last).to_swagger
 
       parameter = Swagger::Data::Parameter.new
-      parameter.name= grape_parameter.first
-      parameter.in= 'formData'
+      parameter.name = grape_parameter.first
+      parameter.in = 'formData'
       parameter.description = grape_type['description']
       parameter.required = grape_type['required']
       parameter.default = grape_type['default']
@@ -81,8 +80,5 @@ module Swagger::Data
     end
 
     private
-
-
-
   end
 end

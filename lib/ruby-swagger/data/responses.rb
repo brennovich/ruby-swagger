@@ -4,7 +4,6 @@ require 'ruby-swagger/data/response'
 
 module Swagger::Data
   class Responses < Swagger::Object # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#responsesObject
-
     def initialize
       @responses = {}
     end
@@ -45,6 +44,5 @@ module Swagger::Data
 
       res
     end
-
   end
 end

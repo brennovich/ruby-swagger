@@ -3,13 +3,11 @@ require 'yaml'
 require 'ruby-swagger/data/schema'
 
 describe Swagger::Data::Schema do
-
   context 'Primitive Sample' do
-
     let(:payload) do
       {
-          "type" => "string",
-          "format" => "email"
+        'type' => 'string',
+        'format' => 'email'
       }
     end
 
@@ -41,29 +39,26 @@ describe Swagger::Data::Schema do
         expect(parsed.format).to eq 'email'
       end
     end
-
-
   end
 
   context 'Simple Model' do
-
     let(:payload) do
       {
-          "type" => "object",
-          "required"=> [ "name"],
-          "properties"=> {
-            "name"=> {
-              "type"=> "string"
-            },
-            "address"=> {
-              "$ref"=> "#/definitions/Address"
-            },
-            "age"=> {
-              "type"=> "integer",
-              "format"=> "int32",
-              "minimum"=> 0
-            }
+        'type' => 'object',
+        'required' => ['name'],
+        'properties' => {
+          'name' => {
+            'type' => 'string'
+          },
+          'address' => {
+            '$ref' => '#/definitions/Address'
+          },
+          'age' => {
+            'type' => 'integer',
+            'format' => 'int32',
+            'minimum' => 0
           }
+        }
       }
     end
 
@@ -110,17 +105,15 @@ describe Swagger::Data::Schema do
         expect(parsed.properties['age']['minimum']).to eq 0
       end
     end
-
-
   end
 
   context 'Model with Map/Dictionary Properties' do
     let(:payload) do
       {
-          "type" => "object",
-          "additionalProperties" => {
-            "type" => "string"
-          }
+        'type' => 'object',
+        'additionalProperties' => {
+          'type' => 'string'
+        }
       }
     end
 
@@ -152,16 +145,15 @@ describe Swagger::Data::Schema do
         expect(parsed.additionalProperties['type']).to eq 'string'
       end
     end
-
   end
 
   context 'For a string to model mapping' do
     let(:payload) do
       {
-          "type" => "object",
-          "additionalProperties" => {
-            "$ref" => "#/definitions/ComplexModel"
-          }
+        'type' => 'object',
+        'additionalProperties' => {
+          '$ref' => '#/definitions/ComplexModel'
+        }
       }
     end
 
@@ -193,28 +185,27 @@ describe Swagger::Data::Schema do
         expect(parsed.additionalProperties['$ref']).to eq '#/definitions/ComplexModel'
       end
     end
-
   end
 
   context 'Model with Example' do
     let(:payload) do
       {
-          "properties" => {
-            "id" => {
-              "type" => "integer",
-              "format"=> "int64"
-            },
-            "name" => {
-              "type" => "string"
-            }
+        'properties' => {
+          'id' => {
+            'type' => 'integer',
+            'format' => 'int64'
           },
-          "required" => [
-            "name"
-          ],
-          "example" => {
-            "name" => "Puma",
-            "id" => 1
+          'name' => {
+            'type' => 'string'
           }
+        },
+        'required' => [
+          'name'
+        ],
+        'example' => {
+          'name' => 'Puma',
+          'id' => 1
+        }
       }
     end
 
@@ -263,37 +254,36 @@ describe Swagger::Data::Schema do
   context 'Model with composition' do
     let(:payload) do
       {
-          "definitions"=> {
-            "ErrorModel"=> {
-              "type"=> "object",
-              "required"=> [
-                "message",
-                "code"
-              ],
-              "properties"=> {
-                "message"=> {
-                  "type"=> "string"
-                },
-                "code"=> {
-                  "type"=> "integer",
-                  "minimum"=> 100,
-                  "maximum"=> 600
-                }
+        'definitions' => {
+          'ErrorModel' => {
+            'type' => 'object',
+            'required' => %w(
+              message
+              code),
+            'properties' => {
+              'message' => {
+                'type' => 'string'
+              },
+              'code' => {
+                'type' => 'integer',
+                'minimum' => 100,
+                'maximum' => 600
               }
-            },
-          "ExtendedErrorModel"=> {
-            "allOf"=> [
+            }
+          },
+          'ExtendedErrorModel' => {
+            'allOf' => [
               {
-                "$ref"=> "#/definitions/ErrorModel"
+                '$ref' => '#/definitions/ErrorModel'
               },
               {
-                "type"=> "object",
-                "required"=> [
-                  "rootCause"
+                'type' => 'object',
+                'required' => [
+                  'rootCause'
                 ],
-                "properties"=> {
-                  "rootCause"=> {
-                    "type"=> "string"
+                'properties' => {
+                  'rootCause' => {
+                    'type' => 'string'
                   }
                 }
               }
@@ -308,7 +298,7 @@ describe Swagger::Data::Schema do
         parsed = Swagger::Data::Schema.parse(payload['definitions']['ErrorModel'])
 
         expect(parsed.type).to eq 'object'
-        expect(parsed.required).to eq ['message', 'code']
+        expect(parsed.required).to eq %w(message code)
         expect(parsed.properties['message']['type']).to eq 'string'
         expect(parsed.properties['code']['type']).to eq 'integer'
         expect(parsed.properties['code']['minimum']).to eq 100
@@ -327,71 +317,69 @@ describe Swagger::Data::Schema do
   context 'Models with Polymorphism Support' do
     let(:payload) do
       {
-          "definitions"=> {
-            "Pet"=> {
-              "discriminator"=> "petType",
-              "properties"=> {
-                "name"=> {
-                  "type"=> "string"
-                },
-                "petType"=> {
-                  "type"=> "string"
+        'definitions' => {
+          'Pet' => {
+            'discriminator' => 'petType',
+            'properties' => {
+              'name' => {
+                'type' => 'string'
+              },
+              'petType' => {
+                'type' => 'string'
+              }
+            },
+            'required' => %w(
+              name
+              petType)
+          }
+        },
+        'Cat' => {
+          'description' => 'A representation of a cat',
+          'allOf' => [
+            {
+              '$ref' => '#/definitions/Pet'
+            },
+            {
+              'properties' => {
+                'huntingSkill' => {
+                  'type' => 'string',
+                  'description' => 'The measured skill for hunting',
+                  'default' => 'lazy',
+                  'enum' => %w(
+                    clueless
+                    lazy
+                    adventurous
+                    aggressive)
                 }
               },
-              "required"=> [
-                "name",
-                "petType"
+              'required' => [
+                'huntingSkill'
               ]
             }
-          },
-          "Cat"=> {
-            "description"=> "A representation of a cat",
-            "allOf"=> [
-              {
-                "$ref"=> "#/definitions/Pet"
+          ]
+        },
+        'Dog' => {
+          'description' => 'A representation of a dog',
+          'allOf' => [
+            {
+              '$ref' => '#/definitions/Pet'
+            },
+            {
+              'properties' => {
+                'packSize' => {
+                  'type' => 'integer',
+                  'format' => 'int32',
+                  'description' => 'the size of the pack the dog is from',
+                  'default' => 0,
+                  'minimum' => 0
+                }
               },
-              {
-                "properties"=> {
-                  "huntingSkill"=> {
-                    "type"=> "string",
-                    "description"=> "The measured skill for hunting",
-                    "default"=> "lazy",
-                    "enum"=> [
-                      "clueless",
-                      "lazy",
-                      "adventurous",
-                      "aggressive"
-                    ]
-                  }
-                },
-                "required"=> [
-                  "huntingSkill"
-                ]
-              }
-            ]
-          },
-          "Dog"=> {
-            "description"=> "A representation of a dog",
-            "allOf"=> [
-              {
-                "$ref"=> "#/definitions/Pet"
-              },
-              {
-                "properties"=> {
-                    "packSize"=> {
-                      "type"=> "integer",
-                      "format"=> "int32",
-                      "description"=> "the size of the pack the dog is from",
-                      "default"=> 0,
-                      "minimum"=> 0
-                    }
-                },
-                "required"=> [
-                  "packSize"
-                ]
-              }
-            ]
-          }
+              'required' => [
+                'packSize'
+              ]
+            }
+          ]
+        }
       }
     end
 
@@ -402,7 +390,7 @@ describe Swagger::Data::Schema do
         expect(parsed.discriminator).to eq 'petType'
         expect(parsed.properties['name']['type']).to eq 'string'
         expect(parsed.properties['petType']['type']).to eq 'string'
-        expect(parsed.required).to eq ["name", "petType"]
+        expect(parsed.required).to eq %w(name petType)
 
         parsed = Swagger::Data::Schema.parse(payload['Cat'])
         expect(parsed.description).to eq 'A representation of a cat'
@@ -410,7 +398,7 @@ describe Swagger::Data::Schema do
         expect(parsed.allOf.last['properties']['huntingSkill']['type']).to eq 'string'
         expect(parsed.allOf.last['properties']['huntingSkill']['description']).to eq 'The measured skill for hunting'
         expect(parsed.allOf.last['properties']['huntingSkill']['default']).to eq 'lazy'
-        expect(parsed.allOf.last['properties']['huntingSkill']['enum']).to eq [ "clueless", "lazy", "adventurous", "aggressive"]
+        expect(parsed.allOf.last['properties']['huntingSkill']['enum']).to eq %w(clueless lazy adventurous aggressive)
         expect(parsed.allOf.last['required']).to eq ['huntingSkill']
 
         parsed = Swagger::Data::Schema.parse(payload['Dog'])
@@ -424,8 +412,4 @@ describe Swagger::Data::Schema do
       end
     end
   end
-
-
-
-
 end

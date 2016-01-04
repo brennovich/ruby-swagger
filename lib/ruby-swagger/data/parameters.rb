@@ -3,7 +3,6 @@ require 'ruby-swagger/data/parameter'
 
 module Swagger::Data
   class Parameters < Swagger::Object # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#parametersDefinitionsObject
-
     def initialize
       @parameters = {}
     end
@@ -21,10 +20,10 @@ module Swagger::Data
     end
 
     def add_param(pname, pvalue)
-      raise ArgumentError.new("Swagger::Data::Parameters#add_param - parameter name is nil") unless pname
-      raise ArgumentError.new("Swagger::Data::Parameters#add_param - parameter value is nil") unless pvalue
+      raise ArgumentError.new('Swagger::Data::Parameters#add_param - parameter name is nil') unless pname
+      raise ArgumentError.new('Swagger::Data::Parameters#add_param - parameter value is nil') unless pvalue
 
-      if !pvalue.is_a?(Swagger::Data::Parameter)
+      unless pvalue.is_a?(Swagger::Data::Parameter)
         pvalue = Swagger::Data::Parameter.parse(pvalue)
       end
 
@@ -48,6 +47,5 @@ module Swagger::Data
 
       swagger_params
     end
-
   end
 end
