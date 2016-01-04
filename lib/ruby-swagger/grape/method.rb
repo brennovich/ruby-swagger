@@ -50,7 +50,7 @@ module Swagger::Grape
       (@route.route_errors || {}).each do |code, response|
         error_response = { 'description' => response['description'] || response[:description] }
 
-        if entity = (response[:entity] || response['entity'])
+        if (entity = (response[:entity] || response['entity']))
           type = Object.const_get entity.to_s
 
           error_response['schema'] = {}
