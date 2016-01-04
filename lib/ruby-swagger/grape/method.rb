@@ -210,7 +210,8 @@ module Swagger::Grape
       #include all the parameters that are in the content-body
       return unless @route.route_params && @route.route_params.length > 0
 
-      root_param = Swagger::Data::Parameter.parse({'name' => 'body',
+      body_name = @operation.operationId ? "#{@operation.operationId}_body" : 'body'
+      root_param = Swagger::Data::Parameter.parse({'name' => body_name,
                                                    'in' => 'body',
                                                    'description' => 'the content of the request',
                                                    'schema' => {'type' => 'object', 'properties' => {}}})

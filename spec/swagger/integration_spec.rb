@@ -152,6 +152,14 @@ describe 'Ruby::Swagger' do
       it 'should include an operationId in applications/{id}/check_access/get.yml' do
         expect(open_yaml('./doc/swagger/paths/applications/get.yml')['operationId']).to eq "get_applications"
       end
+
+      it 'should include an operationId in applications/{id}/check_access/post.yml' do
+        expect(open_yaml('./doc/swagger/paths/applications/{id}/post.yml')['operationId']).to eq "post_applications"
+      end
+
+      it 'should include an operationId in applications/{id}/check_access/put.yml' do
+        expect(open_yaml('./doc/swagger/paths/applications/{id}/put.yml')['operationId']).to eq "put_applications"
+      end
     end
 
     describe 'params' do
@@ -218,7 +226,7 @@ describe 'Ruby::Swagger' do
         expect(doc['parameters'][1]['type']).to eq 'string'
         expect(doc['parameters'][1]['required']).to be_truthy
 
-        expect(doc['parameters'][2]['name']).to eq 'body'
+        expect(doc['parameters'][2]['name']).to eq 'post_applications_body'
         expect(doc['parameters'][2]['in']).to eq 'body'
         expect(doc['parameters'][2]['description']).to eq 'the content of the request'
         expect(doc['parameters'][2]['schema']).not_to be_nil
