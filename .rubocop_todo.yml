@@ -36,12 +36,6 @@ Lint/UselessAccessModifier:
   Exclude:
     - 'lib/ruby-swagger/data/parameter.rb'
 
-# Offense count: 2
-Lint/UselessAssignment:
-  Exclude:
-    - 'lib/ruby-swagger/grape/method.rb'
-    - 'spec/swagger/data/operation_spec.rb'
-
 # Offense count: 24
 Style/ClassVars:
   Exclude:

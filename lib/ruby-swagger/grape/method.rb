@@ -66,7 +66,7 @@ module Swagger::Grape
         rainbow_response = { 'description' => 'Successful result of the operation' }
 
         type = Swagger::Grape::Type.new(@route.route_response[:entity].to_s)
-        current_obj = rainbow_response['schema'] = {}
+        rainbow_response['schema'] = {}
         remember_type(@route.route_response[:entity])
 
         # Include any response headers in the documentation of the response
