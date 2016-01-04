@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Gild/ruby-swagger.svg?branch=master)](https://travis-ci.org/Gild/ruby-swagger)
+
 # Ruby Swagger
 
 A super simple library to read or create [Swagger](http://swagger.io/) API documents.
