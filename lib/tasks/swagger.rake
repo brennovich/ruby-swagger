@@ -14,7 +14,7 @@ namespace :swagger do
       if args[:base_class].nil?
         STDERR.puts 'You need to pass a base class for your API'
         STDERR.puts "For example: rake 'swagger:grape:generate_doc[ApiBase]'"
-        exit -1
+        exit(-1)
       end
 
       puts "Exporting from Grape - base class #{args[:base_class]}"
@@ -42,7 +42,7 @@ namespace :swagger do
     def build_client(language)
       unless File.exist?('./doc/swagger/swagger.json')
         STDERR.puts 'File ./doc/swagger/swagger.json does not exist'
-        exit -1
+        exit(-1)
       end
 
       unless File.exist?('vendor/swagger-codegen-cli.jar')

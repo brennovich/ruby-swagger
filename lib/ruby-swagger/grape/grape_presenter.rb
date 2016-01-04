@@ -38,7 +38,7 @@ module Grape
         # Setting the :current_user extension
         options[:current_user] = current_user if defined?(current_user)
 
-        present *args_list
+        present(*args_list)
       end
     end
   end
