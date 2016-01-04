@@ -231,3 +231,4 @@ If you have found a bug or you want to get in touch with us, write an email to <
 ## Special thanks
 
 * [brennovich](https://github.com/brennovich)
+* [alexagranov](https://github.com/alexagranov)
