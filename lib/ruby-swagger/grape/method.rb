@@ -227,6 +227,7 @@ module Swagger::Grape
           converted_param = Swagger::Grape::Param.new(param_value)
           schema.properties[param_name] = converted_param.to_swagger
           required_parameter(schema, param_name, param_value)
+          documented_paramter(schema, param_name, param_value)
           remember_type(converted_param.type_definition) if converted_param.has_type_definition?
         else
           schema_with_subobjects(schema, param_name, parameter.last)
@@ -235,6 +236,16 @@ module Swagger::Grape
 
       schema = root_param.schema
       @params['body'] = root_param if !schema.properties.nil? && schema.properties.keys.length > 0
+    end
+
+    # Can potentionelly be used for per-param documentation, for now used for example values
+    def documented_paramter(schema, name, parameter)
+      return if parameter.nil? || parameter[:documentation].nil?
+
+      unless parameter[:documentation][:example].nil?
+        schema['example'] ||= {}
+        schema['example'][name] = parameter[:documentation][:example]
+      end
     end
 
     def required_parameter(schema, name, parameter)
@@ -253,6 +264,7 @@ module Swagger::Grape
       remember_type(converted_param.type_definition) if converted_param.has_type_definition?
 
       required_parameter(append_to, path.last, parameter)
+      documented_paramter(append_to, path.last, parameter)
     end
 
     def find_elem_in_schema(root, schema_path)
