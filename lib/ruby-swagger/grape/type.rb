@@ -12,22 +12,35 @@ module Swagger::Grape
 
     def sub_types
       type = Object.const_get(@type)
-      return [] unless type.respond_to?(:exposures)
+
+      return [] unless type <= Grape::Entity
 
       types = []
 
-      type.exposures.each do |_property, definition|
-        types << definition[:using] if definition[:using].present?
-      end
+      type.root_exposures.each do |property|
+        options = exposure_options(property)
+        types << options[:using] if options[:using].present?
 
+        next unless property.is_a?(Grape::Entity::Exposure::NestingExposure)
+
+        property.nested_exposures.each do |nested_property|
+          options = exposure_options(nested_property)
+          types << options[:using] if options[:using].present?
+        end
+      end
       types.uniq
     end
 
     private
 
+    def exposure_options(exposure)
+      exposure.send(:options)
+    rescue
+      []
+    end
+
     def type_convert(type, with_definition = true)
       swagger_type = {}
-
       case type.downcase
       when 'string'
         swagger_type['type'] = 'string'
@@ -66,74 +79,64 @@ module Swagger::Grape
         else
           type = Object.const_get(@type)
           # I need to define the full object
-          raise ArgumentError.new("Don't know how to translate the object #{@type}") unless type.respond_to?(:exposures)
+          raise ArgumentError.new("Don't know how to translate the object #{@type}") unless type.respond_to?(:root_exposures)
 
           swagger_type['properties'] = {}
 
-          type.exposures.each do |property, definition|
-            cursor = swagger_type
-            target = property.to_s
-
-            if definition[:nested]
-              # it's a nested parameter
-              path = target.split('__')
-              cursor = find_elem_in_schema(cursor, path.dup)
-              target = path.last
-            end
-
-            target = definition[:as].to_s if definition[:as].present?
-
-            cursor['properties'][target] = {}
-
-            if definition[:documentation].present? && definition[:documentation][:type].present?
-              cursor['properties'][target] = type_convert(definition[:documentation][:type].to_s, true)
-            end
-
-            if definition[:using].present?
-              # it's either an object or an array of object
-              using = type_convert(definition[:using].to_s, true)
-
-              if definition[:documentation].present? &&
-                 definition[:documentation][:type].present? &&
-                 definition[:documentation][:type].to_s.downcase == 'array'
-                cursor['properties'][target]['items'] = using
-              else
-                cursor['properties'][target] = using
-              end
-            end
-
-            cursor['properties'][target]['description'] = definition[:documentation][:desc] if definition[:documentation].present?
-            cursor['properties'][target]['type'] ||= 'string' # no type defined, assuming it's a string
-          end
+          swagger_type = process_exposures(type.root_exposures, swagger_type)
         end
       end
 
       swagger_type
     end
 
-    def find_elem_in_schema(root, schema_path)
-      return root if schema_path.nil? || schema_path.empty?
-
-      next_elem = schema_path.shift
-
-      return root if root['properties'][next_elem].nil?
-
-      case root['properties'][next_elem]['type']
-      when 'array'
-        # to descend an array this must be an array of objects
-        root['properties'][next_elem]['items']['type'] = 'object'
-        root['properties'][next_elem]['items']['properties'] ||= {}
-
-        find_elem_in_schema(root['properties'][next_elem]['items'], schema_path)
-      when 'object'
-        find_elem_in_schema(root['properties'][next_elem], schema_path)
-      else
-        # I'm discending an object that before I assumed was something else
-        root['properties'][next_elem]['type'] = 'object'
-        root['properties'][next_elem]['properties'] ||= {}
-
-        find_elem_in_schema(root['properties'][next_elem], schema_path)
+    def process_exposures(exposures, swagger_type)
+      exposures.each do |exposure|
+        swagger_type['properties'].merge!(translate_property(exposure))
       end
+
+      swagger_type
+    end
+
+    def translate_property(exposure)
+      property = {}
+      options = exposure.send(:options)
+      target = options[:as].present? ? options[:as].to_s : exposure.attribute.to_s
+
+      property[target] = {}
+
+      # process nested exposures
+      if exposure.is_a?(Grape::Entity::Exposure::NestingExposure)
+
+        property[target].merge!('type' => 'object', 'properties' => {})
+
+        exposure.nested_exposures.each do |prop|
+          property[target]['properties'].merge!(translate_property(prop))
+        end
+      # process top level exposures
+      else
+        if options[:documentation].present? && options[:documentation][:type].present?
+          property[target].merge!(type_convert(options[:documentation][:type].to_s, true))
+        end
+
+        if options[:using].present?
+          # it's either an object or an array of object
+          using = type_convert(options[:using].to_s, true)
+
+          if options[:documentation].present? &&
+             options[:documentation][:type].present? &&
+             options[:documentation][:type].to_s.downcase == 'array'
+            property[target]['items'] = using
+          else
+            property[target] = using
+          end
+        end
+
+        property[target]['description'] = options[:documentation][:desc] if options[:documentation].present?
+        property[target]['type'] ||= 'string' # no type defined, assuming it's a string
+
+      end
+      property
     end
   end
 end
