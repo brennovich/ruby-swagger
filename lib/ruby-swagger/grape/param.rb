@@ -11,6 +11,7 @@ module Swagger::Grape
       swagger_param['description'] = @param[:desc]  if @param[:desc].present?
       swagger_param['default'] = @param[:default]   if @param[:default].present?
       swagger_param['required'] = @param[:required] if @param.key?(:required)
+      swagger_param['enum'] = @param[:values] if @param[:values].present?
 
       swagger_param.merge! Swagger::Grape::Type.new(@param[:type]).to_swagger
 
