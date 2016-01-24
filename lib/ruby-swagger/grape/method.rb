@@ -251,7 +251,7 @@ module Swagger::Grape
     def required_parameter(schema, name, parameter)
       return if parameter.nil? || parameter[:required].nil? || parameter[:required] == false
 
-      schema['required'] ||= []
+      schema['required'] = [] unless schema['required'].is_a?(Array)
       schema['required'] << name
     end
 
