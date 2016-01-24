@@ -10,3 +10,4 @@
 /tmp/
 /assets/
 .DS_Store
+*.gem
