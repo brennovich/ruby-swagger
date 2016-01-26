@@ -239,12 +239,18 @@ module Swagger::Grape
     end
 
     # Can potentionelly be used for per-param documentation, for now used for example values
-    def documented_paramter(schema, name, parameter)
+    def documented_paramter(schema, target, parameter)
       return if parameter.nil? || parameter[:documentation].nil?
-
       unless parameter[:documentation][:example].nil?
         schema['example'] ||= {}
-        schema['example'][name] = parameter[:documentation][:example]
+        if target.is_a? Array
+          nesting = target[0]
+          target = target[1]
+          schema['example'][nesting] ||= {}
+          schema['example'][nesting][target] = parameter[:documentation][:example]
+        else
+          schema['example'][target] = parameter[:documentation][:example]
+        end
       end
     end
 
@@ -259,12 +265,12 @@ module Swagger::Grape
       path = param_name.scan(/[0-9a-zA-Z_]+/)
       append_to = find_elem_in_schema(schema, path.dup)
       converted_param = Swagger::Grape::Param.new(parameter)
+
       append_to['properties'][path.last] = converted_param.to_swagger
 
       remember_type(converted_param.type_definition) if converted_param.has_type_definition?
-
       required_parameter(append_to, path.last, parameter)
-      documented_paramter(append_to, path.last, parameter)
+      documented_paramter(schema, path, parameter)
     end
 
     def find_elem_in_schema(root, schema_path)
