@@ -234,3 +234,5 @@ If you have found a bug or you want to get in touch with us, write an email to <
 
 * [brennovich](https://github.com/brennovich)
 * [alexagranov](https://github.com/alexagranov)
+* [oliverzeyen](https://github.com/oliverzeyen)
+* [rngtng](https://github.com/rngtng)
