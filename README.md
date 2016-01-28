@@ -200,7 +200,7 @@ The block extends your definition mapping it to your Swagger documentation. The 
   * **tags** String|Array of strings - List of tags used to organize your documentation. Default: nil
   * **api_name** String - A unique name for the API. Used in building the documentation or the auto-clients
   * **response** Entity and Hash - An object representing the expected result of the method when the operation is successful. You can optionally provide the root of the object and if the result is an array. You can also include the response headers. Default: nil
-  * **errors** Hash - A key/value representation of the errors the method can raise. The key is an http error code, the value is an hash. The keys are: entity (the object used to incapuslate the error), description is the documentation of the error
+  * **errors** Hash - A key/value representation of the errors the method can raise. The key is an http error code, the value is an hash. The keys are: entity (the object used to incapsulate the error), description is the documentation of the error
 
 #### The api_present helper method
 
