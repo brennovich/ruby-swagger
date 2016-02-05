@@ -2,8 +2,7 @@ require 'ruby-swagger/object'
 require 'ruby-swagger/data/security_scheme'
 
 module Swagger::Data
-  class SecurityDefinitions < Swagger::Object #https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#securityDefinitionsObject
-    
+  class SecurityDefinitions < Swagger::Object # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#securityDefinitionsObject
     def initialize
       @security = {}
     end
@@ -21,10 +20,10 @@ module Swagger::Data
     end
 
     def add_param(pname, pvalue)
-      raise ArgumentError.new("Swagger::Data::SecurityDefinitions#add_param - parameter name is nil") unless pname
-      raise ArgumentError.new("Swagger::Data::SecurityDefinitions#add_param - parameter value is nil") unless pvalue
+      raise ArgumentError.new('Swagger::Data::SecurityDefinitions#add_param - parameter name is nil') unless pname
+      raise ArgumentError.new('Swagger::Data::SecurityDefinitions#add_param - parameter value is nil') unless pvalue
 
-      if !pvalue.is_a?(Swagger::Data::SecurityScheme)
+      unless pvalue.is_a?(Swagger::Data::SecurityScheme)
         pvalue = Swagger::Data::SecurityScheme.parse(pvalue)
       end
 
@@ -44,6 +43,5 @@ module Swagger::Data
 
       swagger_params
     end
-
   end
 end

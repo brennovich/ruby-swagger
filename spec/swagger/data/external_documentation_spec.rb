@@ -3,11 +3,10 @@ require 'yaml'
 require 'ruby-swagger/data/external_documentation'
 
 describe Swagger::Data::ExternalDocumentation do
-
   let(:payload) do
     {
-        "description" => "Find more info here",
-        "url"=> "https://swagger.io"
+      'description' => 'Find more info here',
+      'url' => 'https://swagger.io'
     }
   end
 
@@ -23,8 +22,8 @@ describe Swagger::Data::ExternalDocumentation do
   context 'when creating the object' do
     let(:object) do
       obj = Swagger::Data::ExternalDocumentation.new
-      obj.description = "Find more info here"
-      obj.url = "https://swagger.io"
+      obj.description = 'Find more info here'
+      obj.url = 'https://swagger.io'
 
       obj
     end
@@ -43,8 +42,4 @@ describe Swagger::Data::ExternalDocumentation do
       expect(obj.url).to eq 'https://swagger.io'
     end
   end
-
-
-
-
 end

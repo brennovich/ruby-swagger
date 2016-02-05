@@ -2,11 +2,10 @@ require 'spec_helper'
 require 'yaml'
 
 describe Swagger::Data::License do
-
   let(:payload) do
     {
-        "name"=> "Apache 2.0",
-        "url"=> "http://www.apache.org/licenses/LICENSE-2.0.html"
+      'name' => 'Apache 2.0',
+      'url' => 'http://www.apache.org/licenses/LICENSE-2.0.html'
     }
   end
 
@@ -39,8 +38,8 @@ describe Swagger::Data::License do
   context 'when creating the object' do
     let(:license) do
       l = Swagger::Data::License.new
-      l.name = "MIT"
-      l.url = "http://mit.com/mit.html"
+      l.name = 'MIT'
+      l.url = 'http://mit.com/mit.html'
       l
     end
 
@@ -58,5 +57,4 @@ describe Swagger::Data::License do
       expect(obj.url).to eq 'http://mit.com/mit.html'
     end
   end
-
 end

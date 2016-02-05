@@ -2,12 +2,11 @@ require 'spec_helper'
 require 'yaml'
 
 describe Swagger::Data::Contact do
-
   let(:payload) do
     {
-        "name"=> "API Support",
-        "url"=> "http://www.swagger.io/support",
-        "email"=> "support@swagger.io"
+      'name' => 'API Support',
+      'url' => 'http://www.swagger.io/support',
+      'email' => 'support@swagger.io'
     }
   end
 
@@ -32,9 +31,9 @@ describe Swagger::Data::Contact do
   context 'when creating the object' do
     let(:contact) do
       c = Swagger::Data::Contact.new
-      c.name = "API Support"
-      c.url = "http://www.swagger.io/support"
-      c.email = "support@swagger.io"
+      c.name = 'API Support'
+      c.url = 'http://www.swagger.io/support'
+      c.email = 'support@swagger.io'
 
       c
     end
@@ -55,8 +54,4 @@ describe Swagger::Data::Contact do
       expect(obj.email).to eq 'support@swagger.io'
     end
   end
-
-
-
-
 end

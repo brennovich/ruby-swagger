@@ -3,15 +3,14 @@ require 'yaml'
 require 'ruby-swagger/data/tag'
 
 describe Swagger::Data::Tag do
-
   let(:payload) do
     {
-        "name"=> "pet",
-        "description"=> "Pets operations",
-        "externalDocs"=> {
-          "description" => "Find more info here",
-          "url"=> "https://swagger.io"
-        }
+      'name' => 'pet',
+      'description' => 'Pets operations',
+      'externalDocs' => {
+        'description' => 'Find more info here',
+        'url' => 'https://swagger.io'
+      }
     }
   end
 
@@ -21,7 +20,7 @@ describe Swagger::Data::Tag do
 
       expect(parsed.name).to eq 'pet'
       expect(parsed.description).to eq 'Pets operations'
-      expect(parsed.externalDocs.description).to eq "Find more info here"
+      expect(parsed.externalDocs.description).to eq 'Find more info here'
       expect(parsed.externalDocs.url).to eq 'https://swagger.io'
     end
   end
@@ -36,7 +35,7 @@ describe Swagger::Data::Tag do
 
       expect(parsed.name).to eq 'pet'
       expect(parsed.description).to eq 'Pets operations'
-      expect(parsed.externalDocs['description']).to eq "Find more info here"
+      expect(parsed.externalDocs['description']).to eq 'Find more info here'
       expect(parsed.externalDocs['url']).to eq 'https://swagger.io'
     end
 
@@ -45,9 +44,8 @@ describe Swagger::Data::Tag do
 
       expect(parsed.name).to eq 'pet'
       expect(parsed.description).to eq 'Pets operations'
-      expect(parsed.externalDocs['description']).to eq "Find more info here"
+      expect(parsed.externalDocs['description']).to eq 'Find more info here'
       expect(parsed.externalDocs['url']).to eq 'https://swagger.io'
     end
   end
-
 end

@@ -1,2 +1,13 @@
 .idea/*
+/.bundle/
+/.yardoc
+/Gemfile.lock
+/_yardoc/
+/coverage/
 /doc/
+/pkg/
+/spec/reports/
+/tmp/
+/assets/
+.DS_Store
+*.gem

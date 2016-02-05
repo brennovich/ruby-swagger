@@ -2,7 +2,6 @@ require 'ruby-swagger/data/document'
 
 module Swagger
   class Template
-
     def self.generate
       swagger_doc = Swagger::Data::Document.new
 
@@ -14,7 +13,7 @@ module Swagger
       swagger_doc.host = 'localhost:80'
       swagger_doc.basePath = '/api/v1'
 
-      swagger_doc.schemes = ['https', 'http']
+      swagger_doc.schemes = %w(https http)
       swagger_doc.produces = ['application/json']
       swagger_doc.consumes = ['application/json']
 
@@ -24,6 +23,5 @@ module Swagger
 
       swagger_doc
     end
-
   end
 end

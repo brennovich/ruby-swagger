@@ -2,22 +2,21 @@ require 'spec_helper'
 require 'yaml'
 
 describe Swagger::Data::Info do
-
   let(:payload) do
     {
-        "title"=> "Swagger Sample App",
-        "description"=> "This is a sample server Petstore server.",
-        "termsOfService"=> "http=>:swagger.io/terms/",
-        "contact"=> {
-            "name"=> "API Support",
-            "url"=> "http://www.swagger.io/support",
-            "email"=> "support@swagger.io"
-        },
-        "license"=> {
-            "name"=> "Apache 2.0",
-            "url"=> "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
-        "version"=> "1.0.1"
+      'title' => 'Swagger Sample App',
+      'description' => 'This is a sample server Petstore server.',
+      'termsOfService' => 'http=>:swagger.io/terms/',
+      'contact' => {
+        'name' => 'API Support',
+        'url' => 'http://www.swagger.io/support',
+        'email' => 'support@swagger.io'
+      },
+      'license' => {
+        'name' => 'Apache 2.0',
+        'url' => 'http://www.apache.org/licenses/LICENSE-2.0.html'
+      },
+      'version' => '1.0.1'
     }
   end
 
@@ -25,15 +24,15 @@ describe Swagger::Data::Info do
     it 'should create a valid Swagger::Data::Info' do
       info = Swagger::Data::Info.parse(payload)
 
-      expect(info.title).to eq "Swagger Sample App"
-      expect(info.description).to eq "This is a sample server Petstore server."
-      expect(info.termsOfService).to eq "http=>:swagger.io/terms/"
+      expect(info.title).to eq 'Swagger Sample App'
+      expect(info.description).to eq 'This is a sample server Petstore server.'
+      expect(info.termsOfService).to eq 'http=>:swagger.io/terms/'
       expect(info.contact.name).to eq 'API Support'
       expect(info.contact.url).to eq 'http://www.swagger.io/support'
       expect(info.contact.email).to eq 'support@swagger.io'
       expect(info.license.name).to eq 'Apache 2.0'
       expect(info.license.url).to eq 'http://www.apache.org/licenses/LICENSE-2.0.html'
-      expect(info.version).to eq "1.0.1"
+      expect(info.version).to eq '1.0.1'
     end
 
     context 'with an invalid title' do
@@ -48,12 +47,12 @@ describe Swagger::Data::Info do
   context 'when creating the object' do
     let(:info) do
       i = Swagger::Data::Info.new
-      i.title = "API Support"
-      i.description = "Bazinga!"
-      i.version = "7.4"
+      i.title = 'API Support'
+      i.description = 'Bazinga!'
+      i.version = '7.4'
       i.license = Swagger::Data::License.new
-      i.license.name = "MIT"
-      i.license.url = "http://mit.com/mit.html"
+      i.license.name = 'MIT'
+      i.license.url = 'http://mit.com/mit.html'
 
       i
     end
@@ -61,9 +60,9 @@ describe Swagger::Data::Info do
     it 'should convert it to a valid JSON' do
       obj = OpenStruct.new JSON.parse(info.to_json)
 
-      expect(obj.title).to eq "API Support"
-      expect(obj.description).to eq "Bazinga!"
-      expect(obj.version).to eq "7.4"
+      expect(obj.title).to eq 'API Support'
+      expect(obj.description).to eq 'Bazinga!'
+      expect(obj.version).to eq '7.4'
       expect(obj.license['name']).to eq 'MIT'
       expect(obj.license['url']).to eq 'http://mit.com/mit.html'
     end
@@ -71,15 +70,11 @@ describe Swagger::Data::Info do
     it 'should convert it to a valid YAML' do
       obj = OpenStruct.new YAML.load(info.to_yaml)
 
-      expect(obj.title).to eq "API Support"
-      expect(obj.description).to eq "Bazinga!"
-      expect(obj.version).to eq "7.4"
+      expect(obj.title).to eq 'API Support'
+      expect(obj.description).to eq 'Bazinga!'
+      expect(obj.version).to eq '7.4'
       expect(obj.license['name']).to eq 'MIT'
       expect(obj.license['url']).to eq 'http://mit.com/mit.html'
     end
   end
-
-
-
-
 end

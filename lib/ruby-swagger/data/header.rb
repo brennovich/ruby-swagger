@@ -3,7 +3,6 @@ require 'ruby-swagger/data/items'
 
 module Swagger::Data
   class Header < Swagger::Object # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#header-object
-
     attr_swagger :description, :type, :format, :items,
                  :collectionFormat, :default, :maximum,
                  :exclusiveMaximum, :minimum, :exclusiveMinimum,
@@ -22,13 +21,12 @@ module Swagger::Data
     end
 
     def items=(new_items)
-      raise ArgumentError.new("Swagger::Data::Header#items= items is nil") if new_items.nil? && @type == 'array'
+      raise ArgumentError.new('Swagger::Data::Header#items= items is nil') if new_items.nil? && @type == 'array'
       if !new_items.nil? && !new_items.is_a?(Swagger::Data::Items)
         new_items = Swagger::Data::Items.parse(new_items)
       end
 
       @items = new_items
     end
-
   end
 end

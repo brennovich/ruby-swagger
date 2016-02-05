@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.name      = "ruby-swagger"
+  s.name      = 'ruby-swagger'
   s.version   = `cat #{File.dirname(__FILE__)}/VERSION`
   s.authors   = ['Luca Bonmassar']
   s.email     = ['luca@gild.com']
@@ -12,9 +12,9 @@ This is the engine used in other gems to translate API definitions (grape, rails
 
   s.add_dependency 'addressable'
 
-  s.add_development_dependency "rake", ">= 0.9.2"
+  s.add_development_dependency 'rake', '>= 0.9.2'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'grape'
-  s.add_development_dependency 'grape-entity'
+  s.add_development_dependency 'grape-entity', '~> 0.5'
   s.add_development_dependency 'rack-test'
 end

@@ -5,7 +5,6 @@ require 'ruby-swagger/data/example'
 
 module Swagger::Data
   class Response < Swagger::Object # https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#responseObject
-
     attr_swagger :description, :schema, :headers, :examples
 
     def self.parse(response)
@@ -20,6 +19,5 @@ module Swagger::Data
 
       r
     end
-
   end
 end
