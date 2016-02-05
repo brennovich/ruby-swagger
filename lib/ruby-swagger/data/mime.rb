@@ -26,7 +26,6 @@ module Swagger::Data
 
     def self.valid?(type)
       @@types.include?(type)
-      true
     end
   end
 end
