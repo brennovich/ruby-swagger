@@ -16,10 +16,8 @@ module Swagger::Data
       res
     end
 
-    def all_methods()
-      [@get, @put, @post, @delete, @options, @head, @patch].reject do |method|
-        method.nil?
-      end
+    def all_methods
+      [@get, @put, @post, @delete, @options, @head, @patch].compact
     end
 
     def get=(new_get)
