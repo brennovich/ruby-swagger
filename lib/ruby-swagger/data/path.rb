@@ -16,6 +16,10 @@ module Swagger::Data
       res
     end
 
+    def all_methods
+      [@get, @put, @post, @delete, @options, @head, @patch].compact
+    end
+
     def get=(new_get)
       return nil unless new_get
       unless new_get.is_a?(Swagger::Data::Operation)
@@ -25,7 +29,7 @@ module Swagger::Data
       @get = new_get
     end
 
-    def self.put=(new_put)
+    def put=(new_put)
       return nil unless new_put
       unless new_put.is_a?(Swagger::Data::Operation)
         new_put = Swagger::Data::Operation.parse(new_put)
