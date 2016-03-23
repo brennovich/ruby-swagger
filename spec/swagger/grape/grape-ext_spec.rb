@@ -1,7 +1,6 @@
 require 'spec_helper'
 
-require_relative '../grape/entities/application_entity'
-require_relative '../grape/application_api'
+require_relative '../../fixtures/grape/applications_api'
 
 describe Grape::DSL::Configuration do
   context 'with no overridden default values' do

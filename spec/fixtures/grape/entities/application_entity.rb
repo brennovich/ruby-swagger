@@ -1,5 +1,5 @@
-require 'grape'
 require 'grape-entity'
+
 require_relative './image_entity'
 
 class ApplicationEntity < Grape::Entity

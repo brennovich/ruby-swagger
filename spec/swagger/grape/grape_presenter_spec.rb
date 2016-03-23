@@ -1,8 +1,7 @@
 require 'spec_helper'
 
 require 'rack/test'
-require_relative '../grape/entities/application_entity'
-require_relative '../grape/application_api'
+require_relative '../../fixtures/grape/applications_api'
 
 describe Grape::DSL::InsideRoute do
   include Rack::Test::Methods

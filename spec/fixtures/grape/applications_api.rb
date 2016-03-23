@@ -1,11 +1,10 @@
 require 'grape'
 require 'ruby-swagger'
 require 'ruby-swagger/grape/grape'
-require_relative '../grape/entities/application_entity'
-require_relative '../grape/entities/error_redirect_entity'
-require_relative '../grape/entities/error_not_found_entity'
-require_relative '../grape/entities/error_boom_entity'
-require_relative '../grape/entities/detailed_status_entity'
+
+require_relative './entities/errors'
+require_relative './entities/application_entity'
+require_relative './entities/status_detailed_entity'
 
 class ApplicationsAPI < Grape::API
   version 'v1'
@@ -149,7 +148,7 @@ class ApplicationsAPI < Grape::API
       headers authentication_headers
       scopes %w(application:read application:write application:execute)
       tags %w(applications create swag more_swag)
-      response StatusDetailed, isArray: true, headers: result_headers
+      response StatusDetailedEntity, isArray: true, headers: result_headers
       api_name 'put_applications'
     end
     params do

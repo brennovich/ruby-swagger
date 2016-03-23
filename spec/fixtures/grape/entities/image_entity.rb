@@ -1,4 +1,3 @@
-require 'grape'
 require 'grape-entity'
 
 class ImageEntity < Grape::Entity
