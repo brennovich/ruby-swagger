@@ -13,11 +13,15 @@ module Swagger::Grape
 
       routes = Swagger::Grape::Routes.new(base_class.routes)
 
+
       swagger_doc.paths = routes.to_swagger
       swagger_doc.definitions = Swagger::Data::Definitions.new
 
-      extract_all_types(routes.types).sort.each do |type|
+      extract_all_types(routes.types).sort { |a, b| a.to_s <=> b.to_s }.each do |type|
         grape_type = Swagger::Grape::Type.new(type)
+
+        # Skip runtime defintions
+        next if type.to_s.include?('Class')
 
         swagger_doc.definitions.add_definition(type.to_s, grape_type.to_swagger(false))
       end
@@ -47,14 +51,14 @@ module Swagger::Grape
       new_types = []
 
       types.each do |type|
-        all_types << type.to_s unless all_types.include?(type.to_s)
+        all_types << type unless all_types.map(&:to_s).include?(type.to_s)
 
         grape_type = Swagger::Grape::Type.new(type)
 
         grape_type.sub_types.each do |new_type|
-          unless all_types.include?(new_type.to_s)
-            new_types << new_type.to_s
-            all_types << new_type.to_s
+          unless all_types.map(&:to_s).include?(new_type.to_s)
+            new_types << new_type
+            all_types << new_type
           end
         end
       end

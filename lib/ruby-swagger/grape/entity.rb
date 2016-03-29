@@ -1,9 +1,13 @@
+require 'ruby-swagger/grape/entity_exposure'
+require 'ruby-swagger/grape/entity_nesting_exposure'
+
 module Swagger::Grape
   class Entity
     def initialize(type)
-      raise ArgumentError.new("Expecting a Grape::Entity - Can't translate this!") unless Object.const_get(type) < Grape::Entity
+      @type = type.to_s
 
-      @type = type
+      raise ArgumentError.new("Expecting a Grape::Entity - Can't translate this!") unless Object.const_get(@type) < Grape::Entity
+
       @swagger_type = { 'type' => 'object', 'properties' => {} }
     end
 
@@ -11,12 +15,12 @@ module Swagger::Grape
       root_exposures.each do |exposure|
         @swagger_type['properties'].merge!(Swagger::Grape::EntityExposure.new(exposure).to_swagger)
       end
+
       @swagger_type
     end
 
     def sub_types
-      collection = []
-      root_exposures.each do |exposure|
+      root_exposures.each_with_object([]) do |exposure, collection|
         exposure = Swagger::Grape::EntityExposure.new(exposure)
         collection << exposure.sub_type if exposure.sub_type
 
@@ -24,8 +28,7 @@ module Swagger::Grape
           nested_exposure = Swagger::Grape::EntityExposure.new(nested_exposure)
           collection << nested_exposure.sub_type if nested_exposure.sub_type
         end if exposure.nested?
-      end
-      collection.uniq
+      end.uniq
     end
 
     private

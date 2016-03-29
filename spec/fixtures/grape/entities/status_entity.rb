@@ -1,8 +1,7 @@
-require 'grape'
 require 'grape-entity'
 require_relative './image_entity'
 
-class Status < Grape::Entity
+class StatusEntity < Grape::Entity
   format_with(:iso_timestamp, &:iso8601)
 
   expose :user_name
@@ -16,9 +15,9 @@ class Status < Grape::Entity
   expose :digest do |status, _options|
     Digest::MD5.hexdigest status.txt
   end
-  expose :replies, using: Status, as: :responses
+  expose :replies, using: StatusEntity, as: :responses
 
-  expose :last_reply, using: Status do |status, _options|
+  expose :last_reply, using: StatusEntity do |status, _options|
     status.replies.last
   end
 

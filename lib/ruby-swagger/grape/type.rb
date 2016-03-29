@@ -1,13 +1,10 @@
 require 'ruby-swagger/grape/entity'
-require 'ruby-swagger/grape/entity_exposure'
-require 'ruby-swagger/grape/entity_nesting_exposure'
+require 'ruby-swagger/grape/representer'
 
 module Swagger::Grape
   class Type
-    attr_reader :discovered_types # needed?
-
     def initialize(type)
-      @type = type.to_s || 'String'
+      @type = type || 'String'
     end
 
     def to_swagger(with_definition = true)
@@ -15,17 +12,21 @@ module Swagger::Grape
     end
 
     def sub_types
-      Swagger::Grape::Entity.new(@type).sub_types
+      return [] if basic_type?
+
+      object_translation.sub_types
     end
 
     private
+
+    attr_reader :type, :object_translator
 
     def translate(with_definition)
       swagger_type = {}
 
       # basic type
       if basic_type?
-        swagger_type = basic_type_schemes[@type.downcase]
+        swagger_type = basic_type_schemes[type.to_s.downcase]
 
       # grape shorthand array eg. `Array[Integer]`
       elsif short_hand_array?
@@ -37,27 +38,29 @@ module Swagger::Grape
           # I can just reference the name of the representer here
           swagger_type = {
             'type' => 'object',
-            '$ref' => "#/definitions/#{@type}"
+            '$ref' => "#/definitions/#{type}"
           }
 
-        # grape-entity object
+        # translator object (Grape::Entity or Roar)
         else
-          swagger_type = Swagger::Grape::Entity.new(@type).to_swagger
+          swagger_type = object_translation.to_swagger
         end
       end
+
       swagger_type
     end
 
     def short_hand_array?
-      !(@type.downcase =~ /\[[a-zA-Z]+\]/).nil?
+      !(type.to_s.downcase =~ /\[[a-zA-Z]+\]/).nil?
     end
 
     def basic_type?
-      basic_type_schemes.key? @type.downcase
+      basic_type_schemes.key? type.to_s.downcase
     end
 
     def shorthand_array_scheme
-      match = @type.downcase.match(/\[(.*?)\]/)
+      match = type.to_s.downcase.match(/\[(.*?)\]/)
+
       @swagger_type = {
         'type' => 'array',
         'items' => {
@@ -108,6 +111,17 @@ module Swagger::Grape
         }
 
       }.freeze
+    end
+
+    def object_translation
+      @object_translation ||= object_translator.new(type)
+    end
+
+    def object_translator
+      type_class = type.is_a?(String) ? Object.const_get(type) : type
+
+      return Entity if defined?(Grape::Entity) && type_class < Grape::Entity
+      return Representer if defined?(Representable) && type_class < Representable || type_class < Virtus::Attribute
     end
   end
 end

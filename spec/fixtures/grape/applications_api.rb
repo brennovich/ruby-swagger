@@ -1,11 +1,12 @@
 require 'grape'
 require 'ruby-swagger'
 require 'ruby-swagger/grape/grape'
-require_relative '../grape/entities/application_entity'
-require_relative '../grape/entities/error_redirect_entity'
-require_relative '../grape/entities/error_not_found_entity'
-require_relative '../grape/entities/error_boom_entity'
-require_relative '../grape/entities/detailed_status_entity'
+
+require_relative './entities/errors'
+require_relative './entities/application_entity'
+require_relative './entities/status_detailed_entity'
+
+require_relative './representers/status_representer'
 
 class ApplicationsAPI < Grape::API
   version 'v1'
@@ -145,11 +146,27 @@ class ApplicationsAPI < Grape::API
       api_present true
     end
 
+    api_desc 'Roar translation' do
+      headers authentication_headers
+      scopes %w(application:read application:write application:execute)
+      tags %w(applications create swag more_swag)
+      response StatusRepresenter, isArray: true, headers: result_headers
+      api_name 'put_applications'
+    end
+    params do
+      requires :id, type: String, desc: 'Unique identifier or code name of the application'
+      requires :godzilla, type: Array, desc: 'Multiple options for this API'
+    end
+    put '/:id/roar' do
+      @application = { id: '123456', name: 'An app', description: 'Great App' }
+      api_present(@applications)
+    end
+
     api_desc 'Deactivate an application.' do
       headers authentication_headers
       scopes %w(application:read application:write application:execute)
       tags %w(applications create swag more_swag)
-      response StatusDetailed, isArray: true, headers: result_headers
+      response StatusDetailedEntity, isArray: true, headers: result_headers
       api_name 'put_applications'
     end
     params do
