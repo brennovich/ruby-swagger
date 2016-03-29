@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-require_relative '../../fixtures/grape/entities/status_entity'
+require_relative '../../fixtures/grape/representers/status_representer'
 
-RSpec.describe Swagger::Grape::Entity do
+RSpec.describe Swagger::Grape::Representer do
   describe '#to_swagger' do
     it 'converts exposures definition into swagger definition' do
-      object_translator = described_class.new(StatusEntity.to_s)
+      object_translator = described_class.new(StatusRepresenter.to_s)
 
       expect(object_translator.to_swagger).to eq({
         'type' => 'object',
@@ -34,7 +34,7 @@ RSpec.describe Swagger::Grape::Entity do
               },
               'address' => {
                 'type' => 'object',
-                '$ref' => '#/definitions/ImageEntity'
+                '$ref' => '#/definitions/ImageRepresenter'
               }
             }
           },
@@ -43,11 +43,11 @@ RSpec.describe Swagger::Grape::Entity do
           },
           'responses' => {
             'type' => 'object',
-            '$ref' => '#/definitions/StatusEntity'
+            '$ref' => '#/definitions/StatusRepresenter'
           },
           'last_reply' => {
             'type' => 'object',
-            '$ref' => '#/definitions/StatusEntity'
+            '$ref' => '#/definitions/StatusRepresenter'
           },
           'list' => {
             'type' => 'array',
@@ -87,9 +87,9 @@ RSpec.describe Swagger::Grape::Entity do
 
   describe '#sub_types' do
     it 'returns nested objects of a given entity' do
-      object_translator = described_class.new(StatusEntity.to_s)
+      object_translator = described_class.new(StatusRepresenter.to_s)
 
-      expect(object_translator.sub_types).to eq([ImageEntity, StatusEntity])
+      expect(object_translator.sub_types).to eq([ImageRepresenter, StatusRepresenter])
     end
   end
 end

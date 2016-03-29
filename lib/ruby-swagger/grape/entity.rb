@@ -1,9 +1,13 @@
+require 'ruby-swagger/grape/entity_exposure'
+require 'ruby-swagger/grape/entity_nesting_exposure'
+
 module Swagger::Grape
   class Entity
     def initialize(type)
-      raise ArgumentError.new("Expecting a Grape::Entity - Can't translate this!") unless Object.const_get(type) < Grape::Entity
+      @type = type.to_s
 
-      @type = type
+      raise ArgumentError.new("Expecting a Grape::Entity - Can't translate this!") unless Object.const_get(@type) < Grape::Entity
+
       @swagger_type = { 'type' => 'object', 'properties' => {} }
     end
 

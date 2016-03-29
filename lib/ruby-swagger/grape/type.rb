@@ -1,12 +1,10 @@
 require 'ruby-swagger/grape/entity'
-require 'ruby-swagger/grape/entity_exposure'
-require 'ruby-swagger/grape/entity_nesting_exposure'
+require 'ruby-swagger/grape/representer'
 
 module Swagger::Grape
   class Type
-    def initialize(type, object_translator = Swagger::Grape::Entity)
-      @type = type.to_s || 'String'
-      @object_translator = object_translator
+    def initialize(type)
+      @type = type || 'String'
     end
 
     def to_swagger(with_definition = true)
@@ -14,6 +12,8 @@ module Swagger::Grape
     end
 
     def sub_types
+      return [] if basic_type?
+
       object_translation.sub_types
     end
 
@@ -26,7 +26,7 @@ module Swagger::Grape
 
       # basic type
       if basic_type?
-        swagger_type = basic_type_schemes[type.downcase]
+        swagger_type = basic_type_schemes[type.to_s.downcase]
 
       # grape shorthand array eg. `Array[Integer]`
       elsif short_hand_array?
@@ -41,7 +41,7 @@ module Swagger::Grape
             '$ref' => "#/definitions/#{type}"
           }
 
-        # grape-entity object
+        # translator object (Grape::Entity or Roar)
         else
           swagger_type = object_translation.to_swagger
         end
@@ -51,15 +51,16 @@ module Swagger::Grape
     end
 
     def short_hand_array?
-      !(@type.downcase =~ /\[[a-zA-Z]+\]/).nil?
+      !(type.to_s.downcase =~ /\[[a-zA-Z]+\]/).nil?
     end
 
     def basic_type?
-      basic_type_schemes.key? type.downcase
+      basic_type_schemes.key? type.to_s.downcase
     end
 
     def shorthand_array_scheme
-      match = type.downcase.match(/\[(.*?)\]/)
+      match = type.to_s.downcase.match(/\[(.*?)\]/)
+
       @swagger_type = {
         'type' => 'array',
         'items' => {
@@ -114,6 +115,13 @@ module Swagger::Grape
 
     def object_translation
       @object_translation ||= object_translator.new(type)
+    end
+
+    def object_translator
+      type_class = type.is_a?(String) ? Object.const_get(type) : type
+
+      return Entity if defined?(Grape::Entity) && type_class < Grape::Entity
+      return Representer if defined?(Representable) && type_class < Representable || type_class < Virtus::Attribute
     end
   end
 end

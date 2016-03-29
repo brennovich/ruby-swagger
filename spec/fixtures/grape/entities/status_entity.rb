@@ -34,4 +34,3 @@ class StatusEntity < Grape::Entity
     expose :updated_at
   end
 end
-

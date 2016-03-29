@@ -460,5 +460,33 @@ describe 'Ruby::Swagger' do
                          )
       end
     end
+
+    it 'should create a definition file StatusRepresenter.yml' do
+      doc = open_yaml('./doc/swagger/definitions/StatusRepresenter.yml')
+
+      expect(doc).to eq({ 'type' => 'object',
+                          'properties' => {
+        'user_name' => { 'type' => 'string' },
+        'text' => { 'type' => 'string', 'description' => 'Status update text.' },
+        'ip' => { 'type' => 'string' }, 'user_type' => { 'type' => 'string' },
+        'user_id' => { 'type' => 'string' },
+        'contact_info' => { 'type' => 'object',
+                            'properties' => { 'phone' => { 'type' => 'string' },
+                                              'address' => { 'type' => 'object', '$ref' => '#/definitions/ImageRepresenter' } } },
+        'digest' => { 'type' => 'string' },
+        'responses' => { 'type' => 'object', '$ref' => '#/definitions/StatusRepresenter' },
+        'last_reply' => { 'type' => 'object', '$ref' => '#/definitions/StatusRepresenter' },
+        'list' => { 'type' => 'array',
+                    'items' => { 'type' => 'object',
+                                 'properties' => {
+                      'option_a' => { 'type' => 'object',
+                                      'properties' => {
+                        'option_b' => { 'type' => 'array',
+                                        'items' => { 'type' => 'string' }, 'description' => 'An option' } } },
+                      'option_c' => { 'type' => 'integer', 'description' => 'Last option' } } }, 'description' => 'List of elements' },
+        'created_at' => { 'type' => 'string' },
+        'updated_at' => { 'type' => 'string' } } }
+                       )
+    end
   end
 end
